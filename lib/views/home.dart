@@ -7,26 +7,36 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context);
-    final tips = userProvider.user == null ? 'pleae Login' : 'user data: ${userProvider.user?.toJson()}';
     return Scaffold(
       appBar: AppBar(
         title: Text('Home'),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(tips),
-            MaterialButton(
-              onPressed: userProvider.getUser,
-              child: Text('Login'),
-              color: Colors.blue,
-              textColor: Colors.white,
-            )
-          ],
-        ),
+        child: Consumer<UserProvider>(builder: (_, userProvider, __) {
+          final tips = userProvider.user == null ? 'pleae Login' : 'user name: ${userProvider.user?.realName}';
+          final btnText = userProvider.user == null ? 'login' : 'logout';
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(tips),
+              MaterialButton(
+                onPressed: () {
+                  if (userProvider.user == null) {
+                    userProvider.getUser();
+                  } else {
+                    userProvider.setUser(null);
+                  }
+                },
+                child: Text(btnText),
+                color: Colors.blue,
+                textColor: Colors.white,
+              )
+            ],
+          );
+        }),
       ),
     );
   }
+
+  loginAndOut() {}
 }

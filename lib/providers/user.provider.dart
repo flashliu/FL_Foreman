@@ -10,4 +10,9 @@ class UserProvider extends ChangeNotifier {
     user = value;
     notifyListeners();
   }
+
+  setUser(User value) async {
+    user = value;
+    notifyListeners();
+  }
 }

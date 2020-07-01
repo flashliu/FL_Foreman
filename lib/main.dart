@@ -3,16 +3,18 @@ import 'package:FL_User/views/home.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-main() => runApp(MyApp());
+main() => runApp(App());
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key key}) : super(key: key);
+class App extends StatelessWidget {
+  const App({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: ChangeNotifierProvider(
-        create: (context) => UserProvider(),
+      home: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => UserProvider()),
+        ],
         child: Home(),
       ),
     );
