@@ -22,9 +22,9 @@ class Home extends StatelessWidget {
               MaterialButton(
                 onPressed: () {
                   if (userProvider.user == null) {
-                    userProvider.getUser();
+                    userProvider.login();
                   } else {
-                    userProvider.setUser(null);
+                    userProvider.logout();
                   }
                 },
                 child: Text(btnText),
@@ -37,6 +37,4 @@ class Home extends StatelessWidget {
       ),
     );
   }
-
-  loginAndOut() {}
 }
