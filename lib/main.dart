@@ -1,4 +1,7 @@
+import 'package:FL_User/providers/user.provider.dart';
+import 'package:FL_User/views/home.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 main() => runApp(MyApp());
 
@@ -8,10 +11,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: Center(
-          child: Text('FL_User'),
-        ),
+      home: ChangeNotifierProvider(
+        create: (context) => UserProvider(),
+        child: Home(),
       ),
     );
   }
