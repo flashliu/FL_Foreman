@@ -59,13 +59,10 @@ class _TabNavBarState extends State<TabNavBar> {
 
   BottomNavigationBarItem createItem({String name, String imgPath}) {
     return BottomNavigationBarItem(
-      icon: Padding(
-        padding: EdgeInsets.only(bottom: 3),
-        child: Image.asset(
-          imgPath,
-          width: 24,
-          height: 24,
-        ),
+      icon: Image.asset(
+        imgPath,
+        width: 24,
+        height: 24,
       ),
       title: Text(name),
     );
