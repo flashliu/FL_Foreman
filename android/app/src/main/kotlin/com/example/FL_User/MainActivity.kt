@@ -1,4 +1,4 @@
-package com.example.FL_User
+package com.example.FL_Foreman
 
 import io.flutter.embedding.android.FlutterActivity
 

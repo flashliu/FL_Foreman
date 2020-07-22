@@ -1,5 +1,5 @@
-import 'package:FL_User/common/global.dart';
-import 'package:FL_User/models/user.model.dart';
+import 'package:FL_Foreman/common/global.dart';
+import 'package:FL_Foreman/models/user.model.dart';
 import 'package:flutter/material.dart';
 
 class UserApi {

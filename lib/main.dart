@@ -1,7 +1,8 @@
-import 'package:FL_User/providers/user.provider.dart';
-import 'package:FL_User/views/tabnavbar.dart';
+import 'package:FL_Foreman/providers/user.provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'views/home/home.dart';
 
 main() => runApp(App());
 
@@ -15,7 +16,7 @@ class App extends StatelessWidget {
         providers: [
           ChangeNotifierProvider(create: (context) => UserProvider()),
         ],
-        child: TabNavBar(),
+        child: Home(),
       ),
     );
   }

@@ -1,5 +1,5 @@
-import 'package:FL_User/apis/user.api.dart';
-import 'package:FL_User/models/user.model.dart';
+import 'package:FL_Foreman/apis/user.api.dart';
+import 'package:FL_Foreman/models/user.model.dart';
 import 'package:flutter/material.dart';
 
 class UserProvider with ChangeNotifier {
