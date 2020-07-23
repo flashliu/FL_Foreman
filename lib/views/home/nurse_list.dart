@@ -1,16 +1,17 @@
 import 'package:FL_Foreman/res/colors.dart';
-import 'package:FL_Foreman/widget/order_item.dart';
+import 'package:FL_Foreman/res/svgs.dart';
+import 'package:FL_Foreman/widget/nurse_item.dart';
 import 'package:flutter/material.dart';
 
-class NeedList extends StatefulWidget {
-  NeedList({Key key}) : super(key: key);
+class NurseList extends StatefulWidget {
+  NurseList({Key key}) : super(key: key);
 
   @override
-  _NeedListState createState() => _NeedListState();
+  _NurseListState createState() => _NurseListState();
 }
 
-class _NeedListState extends State<NeedList> {
-  final List<String> serverSites = ['推荐', '医院', '居家', '敬老院'];
+class _NurseListState extends State<NurseList> {
+  final List<String> levels = ['全部', '特级', '一级', '二级', '三级'];
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -24,9 +25,9 @@ class _NeedListState extends State<NeedList> {
               children: [
                 Expanded(
                   child: DefaultTabController(
-                    length: 4,
+                    length: 5,
                     child: TabBar(
-                      tabs: serverSites.map((e) => Text(e)).toList(),
+                      tabs: levels.map((e) => Text(e)).toList(),
                       isScrollable: true,
                       indicatorSize: TabBarIndicatorSize.label,
                       indicatorColor: ColorCenter.themeColor,
@@ -43,20 +44,14 @@ class _NeedListState extends State<NeedList> {
                 ),
                 InkWell(
                   onTap: () {},
-                  child: Hero(
-                    tag: 'search',
-                    child: Icon(
-                      Icons.search,
-                      color: Colors.grey,
-                    ),
-                  ),
+                  child: Svgs.show,
                 ),
               ],
             ),
           ),
-          OrderItem(),
-          OrderItem(),
-          OrderItem(),
+          NurseItem(),
+          NurseItem(),
+          NurseItem(),
         ],
       ),
     );

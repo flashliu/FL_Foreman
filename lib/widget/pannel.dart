@@ -2,23 +2,36 @@ import 'package:flutter/material.dart';
 
 class Pannel extends StatelessWidget {
   final Widget child;
-  const Pannel({Key key, this.child}) : super(key: key);
+  final Function onTap;
+  final EdgeInsetsGeometry margin;
+  final Color color;
+  const Pannel({
+    Key key,
+    this.child,
+    this.onTap,
+    this.margin = const EdgeInsets.only(bottom: 16),
+    this.color = Colors.white,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
-      padding: EdgeInsets.all(16),
-      margin: EdgeInsets.only(bottom: 16),
-      alignment: Alignment.centerLeft,
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(
-          Radius.circular(12),
-        ),
         boxShadow: [BoxShadow(color: Colors.grey[100], blurRadius: 15)],
       ),
-      child: child,
+      margin: margin,
+      child: Material(
+        color: color,
+        borderRadius: BorderRadius.circular(12),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          child: Padding(
+            child: child,
+            padding: EdgeInsets.all(16),
+          ),
+          onTap: onTap,
+        ),
+      ),
     );
   }
 }

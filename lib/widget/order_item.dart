@@ -2,6 +2,7 @@ import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
 import 'package:FL_Foreman/widget/pannel.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 class OrderItem extends StatefulWidget {
   OrderItem({Key key}) : super(key: key);
@@ -11,10 +12,64 @@ class OrderItem extends StatefulWidget {
 }
 
 class _OrderItemState extends State<OrderItem> {
+  bool isLoading = true;
+  @override
+  void initState() {
+    super.initState();
+    loaded();
+  }
+
+  void loaded() async {
+    await Future.delayed(Duration(seconds: 2));
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  Widget buildShimmer() {
+    return Pannel(
+      onTap: () {},
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey[200],
+        highlightColor: Colors.grey[50],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(color: Colors.grey[800], width: 70, height: 15),
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(color: Colors.grey[800], width: 150, height: 15),
+                Container(color: Colors.grey[800], width: 70, height: 15),
+              ],
+            ),
+            Container(
+              height: 40,
+              margin: EdgeInsets.symmetric(vertical: 16),
+              color: Colors.grey[800],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(color: Colors.grey[800], width: 150, height: 15),
+                Container(color: Colors.grey[800], width: 80, height: 20),
+              ],
+            ),
+            SizedBox(height: 10),
+            Container(color: Colors.grey[800], width: 150, height: 15),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final nomalText = TextStyle(fontSize: 12, color: ColorCenter.textGrey);
+    if (isLoading) return buildShimmer();
     return Pannel(
+      onTap: () {},
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

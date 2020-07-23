@@ -268,4 +268,25 @@ class Svgs {
     width: 24,
     height: 24,
   );
+
+  static final Widget show = SvgPicture.asset(
+    'assets/svgs/icon_show.svg',
+    semanticsLabel: '',
+    width: 18,
+    height: 18,
+  );
+
+  static final Widget menu = SvgPicture.asset(
+    'assets/svgs/icon_menu.svg',
+    semanticsLabel: '',
+    width: 16,
+    height: 16,
+  );
+
+  static final Widget start = SvgPicture.asset(
+    'assets/svgs/icon_start.svg',
+    semanticsLabel: '',
+    width: 12,
+    height: 12,
+  );
 }

@@ -257,7 +257,7 @@ class _ProfitState extends State<Profit> {
             height: 320,
             margin: EdgeInsets.only(bottom: 16),
             decoration: BoxDecoration(
-              color: Colors.grey,
+              color: Colors.grey[800],
               borderRadius: BorderRadius.all(
                 Radius.circular(12),
               ),

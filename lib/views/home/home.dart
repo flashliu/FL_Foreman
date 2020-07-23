@@ -1,6 +1,7 @@
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/svgs.dart';
 import 'package:FL_Foreman/views/home/need_list.dart';
+import 'package:FL_Foreman/views/home/nurse_list.dart';
 import 'package:FL_Foreman/views/home/profit.dart';
 import 'package:flutter/material.dart';
 
@@ -208,13 +209,7 @@ class TabView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TabBarView(
-      children: [
-        Profit(),
-        NeedList(),
-        Center(
-          child: Text('3'),
-        )
-      ],
+      children: [Profit(), NeedList(), NurseList()],
       controller: tabController,
     );
   }
