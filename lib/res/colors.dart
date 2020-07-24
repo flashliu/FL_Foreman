@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class ColorCenter {
   static final Color whiteSmoke = Color.fromARGB(255, 245, 245, 245);
-  static final Color background = Color(0xF4F6F7);
+  static final Color background = Color(0xFFF4F6F7);
   static final Color themeColor = Color(0xFF00A2E6);
   static final Color themeColor2 = Color(0xFF5DA0D7);
   static final Color red = Color(0xFFF04C42);

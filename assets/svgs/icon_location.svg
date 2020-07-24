@@ -1,11 +1,4 @@
-<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<circle cx="8" cy="8" r="8" fill="url(#paint0_linear)"/>
-<path d="M11.1875 6.91248C11.1875 8.67498 8.86875 12.2875 8 12.2875C7.13125 12.2875 4.8125 8.67498 4.8125 6.91248C4.8125 5.14998 6.2375 3.72498 8 3.72498C9.7625 3.72498 11.1875 5.14998 11.1875 6.91248Z" stroke="white" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M7.99993 7.8375C8.61089 7.8375 9.10618 7.34221 9.10618 6.73125C9.10618 6.12028 8.61089 5.625 7.99993 5.625C7.38896 5.625 6.89368 6.12028 6.89368 6.73125C6.89368 7.34221 7.38896 7.8375 7.99993 7.8375Z" stroke="white" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-<defs>
-<linearGradient id="paint0_linear" x1="1.17333" y1="1" x2="8.75767" y2="2.13824" gradientUnits="userSpaceOnUse">
-<stop stop-color="#38B6EB"/>
-<stop offset="1" stop-color="#00A2E6"/>
-</linearGradient>
-</defs>
+<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M9.82505 4.69512C9.82505 6.81012 7.04255 11.1451 6.00005 11.1451C4.95755 11.1451 2.17505 6.81012 2.17505 4.69512C2.17505 2.58012 3.88505 0.870117 6.00005 0.870117C8.11505 0.870117 9.82505 2.58012 9.82505 4.69512Z" stroke="#999999" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M6.00011 5.8049C6.73327 5.8049 7.32761 5.21056 7.32761 4.4774C7.32761 3.74424 6.73327 3.1499 6.00011 3.1499C5.26695 3.1499 4.67261 3.74424 4.67261 4.4774C4.67261 5.21056 5.26695 5.8049 6.00011 5.8049Z" stroke="#999999" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

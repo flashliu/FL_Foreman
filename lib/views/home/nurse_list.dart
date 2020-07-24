@@ -12,6 +12,7 @@ class NurseList extends StatefulWidget {
 
 class _NurseListState extends State<NurseList> {
   final List<String> levels = ['全部', '特级', '一级', '二级', '三级'];
+  bool showLocation = false;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -43,15 +44,25 @@ class _NurseListState extends State<NurseList> {
                   ),
                 ),
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    setState(() {
+                      showLocation = !showLocation;
+                    });
+                  },
                   child: Svgs.show,
                 ),
               ],
             ),
           ),
-          NurseItem(),
-          NurseItem(),
-          NurseItem(),
+          NurseItem(
+            showLocation: showLocation,
+          ),
+          NurseItem(
+            showLocation: showLocation,
+          ),
+          NurseItem(
+            showLocation: showLocation,
+          ),
         ],
       ),
     );

@@ -2,17 +2,18 @@ import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/svgs.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
 import 'package:FL_Foreman/widget/pannel.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class NurseItem extends StatefulWidget {
-  NurseItem({Key key}) : super(key: key);
+  final bool showLocation;
+  NurseItem({Key key, this.showLocation = false}) : super(key: key);
 
   @override
   _NurseItemState createState() => _NurseItemState();
 }
 
 class _NurseItemState extends State<NurseItem> with SingleTickerProviderStateMixin {
-  bool showLocation = false;
   AnimationController animationController;
   Animation animation;
   @override
@@ -23,14 +24,12 @@ class _NurseItemState extends State<NurseItem> with SingleTickerProviderStateMix
       duration: Duration(
         milliseconds: 500,
       ),
-    )..addListener(() {
-        setState(() {});
-      });
+    );
     animation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
         parent: animationController,
         curve: Curves.bounceOut,
-        reverseCurve: Curves.linear,
+        reverseCurve: Curves.easeInOutBack,
       ),
     );
   }
@@ -42,6 +41,18 @@ class _NurseItemState extends State<NurseItem> with SingleTickerProviderStateMix
   }
 
   @override
+  void didUpdateWidget(NurseItem oldWidget) {
+    if (widget.showLocation != oldWidget.showLocation) {
+      if (widget.showLocation) {
+        animationController.forward();
+      } else {
+        animationController.reverse();
+      }
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: animation,
@@ -50,31 +61,56 @@ class _NurseItemState extends State<NurseItem> with SingleTickerProviderStateMix
           children: [
             Positioned(
               child: Container(
-                height: 56,
+                height: 60,
                 decoration: BoxDecoration(
                   color: Color(0xFFDDE7EC),
                   borderRadius: BorderRadius.vertical(
                     bottom: Radius.circular(12),
                   ),
                 ),
-                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '母婴护理',
+                          style: TextStyles.title.copyWith(fontSize: 12),
+                        ),
+                        SizedBox(height: 6),
+                        Row(
+                          children: [
+                            Image.asset(
+                              'assets/images/icon_location.png',
+                              width: 12,
+                              height: 12,
+                            ),
+                            Text(
+                              '昆明市-五华区-第二人民医院',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: ColorCenter.textGrey,
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                    Text(
+                      '13:00 结束',
+                      style: TextStyle(fontSize: 14, color: Color(0xFF333333)),
+                    )
+                  ],
+                ),
               ),
-              bottom: animation.value * 16 + 16,
+              bottom: animation.value * 16 + animation.value * -16 + 16,
               left: 16,
               right: 16,
             ),
             Pannel(
-              margin: EdgeInsets.only(bottom: animation.value * 72 + 16),
-              onTap: () {
-                setState(() {
-                  if (showLocation) {
-                    animationController.reverse();
-                  } else {
-                    animationController.forward();
-                  }
-                  showLocation = !showLocation;
-                });
-              },
+              margin: EdgeInsets.only(bottom: animation.value * 56 + 16),
               child: child,
             ),
           ],
@@ -98,7 +134,29 @@ class _NurseItemState extends State<NurseItem> with SingleTickerProviderStateMix
               children: [
                 Align(
                   alignment: Alignment.centerRight,
-                  child: Svgs.menu,
+                  child: InkWell(
+                      onTap: () {
+                        showCupertinoModalPopup(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return CupertinoActionSheet(
+                              // message: Text('是否要删除当前项？'),
+                              actions: <Widget>[
+                                CupertinoActionSheetAction(
+                                  child: Text('删除'),
+                                  onPressed: () => Navigator.of(context).pop('delete'),
+                                  isDestructiveAction: true,
+                                ),
+                                CupertinoActionSheetAction(
+                                  onPressed: () => Navigator.of(context).pop('cancel'),
+                                  child: Text("取消"),
+                                ),
+                              ],
+                            );
+                          },
+                        ).then((value) => {print(value)});
+                      },
+                      child: Svgs.menu),
                 ),
                 Row(
                   children: [
@@ -149,22 +207,18 @@ class _NurseItemState extends State<NurseItem> with SingleTickerProviderStateMix
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 16, right: 4),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(
-                              '￥',
-                              style: TextStyles.price.copyWith(fontSize: 12),
-                            ),
-                            Text(
-                              '140',
-                              style: TextStyles.price.copyWith(fontSize: 16),
-                            ),
-                            Text(
-                              '/天',
-                              style: TextStyles.price.copyWith(fontSize: 12),
-                            ),
-                          ],
+                        child: RichText(
+                          text: TextSpan(
+                            style: TextStyles.price.copyWith(fontSize: 12),
+                            children: [
+                              TextSpan(text: '￥'),
+                              TextSpan(
+                                text: '140',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                              TextSpan(text: '/天'),
+                            ],
+                          ),
                         ),
                       )
                     ],

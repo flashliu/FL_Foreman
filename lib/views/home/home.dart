@@ -3,6 +3,7 @@ import 'package:FL_Foreman/res/svgs.dart';
 import 'package:FL_Foreman/views/home/need_list.dart';
 import 'package:FL_Foreman/views/home/nurse_list.dart';
 import 'package:FL_Foreman/views/home/profit.dart';
+import 'package:FL_Foreman/views/setting/setting.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -79,7 +80,15 @@ class UserDrawer extends StatelessWidget {
               SizedBox(height: 20),
               buildActionCell(icon: Svgs.qr, text: '扫一扫'),
               buildActionCell(icon: Svgs.scanner, text: '我的二维码'),
-              buildActionCell(icon: Svgs.setting, text: '设置'),
+              buildActionCell(
+                icon: Svgs.setting,
+                text: '设置',
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => Setting(),
+                  ),
+                ),
+              )
             ],
           ),
         ),
@@ -88,35 +97,39 @@ class UserDrawer extends StatelessWidget {
     );
   }
 
-  Container buildActionCell({Widget icon, String text}) {
+  Container buildActionCell({Widget icon, String text, Function onTap}) {
     return Container(
       width: 155,
       height: 48,
       margin: EdgeInsets.only(bottom: 16),
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
+      child: Material(
+        borderRadius: BorderRadius.circular(24),
         color: Colors.white,
-        borderRadius: BorderRadius.all(
-          Radius.circular(24),
-        ),
-      ),
-      child: Row(
-        children: [
-          icon,
-          SizedBox(
-            width: 5,
-          ),
-          Text(text),
-          Expanded(
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: Icon(
-                Icons.arrow_forward_ios,
-                size: 15,
-              ),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(24),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              children: [
+                icon,
+                SizedBox(
+                  width: 5,
+                ),
+                Text(text),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Icon(
+                      Icons.arrow_forward_ios,
+                      size: 15,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }

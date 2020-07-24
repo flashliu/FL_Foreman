@@ -12,11 +12,11 @@ class OrderItem extends StatefulWidget {
 }
 
 class _OrderItemState extends State<OrderItem> {
-  bool isLoading = true;
+  bool isLoading = false;
   @override
   void initState() {
     super.initState();
-    loaded();
+    // loaded();
   }
 
   void loaded() async {
