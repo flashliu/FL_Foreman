@@ -4,6 +4,7 @@ import 'package:FL_Foreman/res/text_styles.dart';
 import 'package:FL_Foreman/widget/pannel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 class NurseItem extends StatefulWidget {
   final bool showLocation;
@@ -228,6 +229,51 @@ class _NurseItemState extends State<NurseItem> with SingleTickerProviderStateMix
             ),
           )
         ],
+      ),
+    );
+  }
+}
+
+class NurseItemShimmer extends StatelessWidget {
+  const NurseItemShimmer({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Pannel(
+      onTap: () {},
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey[200],
+        highlightColor: Colors.grey[50],
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 72,
+              height: 102,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: Colors.grey[800],
+              ),
+            ),
+            SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Container(color: Colors.grey[800], width: 20, height: 10),
+                  ),
+                  Container(color: Colors.grey[800], width: 120, height: 16),
+                  SizedBox(height: 10),
+                  Container(color: Colors.grey[800], width: 50, height: 16),
+                  SizedBox(height: 10),
+                  Container(color: Colors.grey[800], height: 25),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

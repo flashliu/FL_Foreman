@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:FL_Foreman/apis/user_api.dart';
+import 'package:FL_Foreman/common/storage.dart';
 import 'package:FL_Foreman/common/toast_utils.dart';
 import 'package:FL_Foreman/providers/user_provider.dart';
 import 'package:FL_Foreman/res/colors.dart';
@@ -40,15 +42,39 @@ class _LoginState extends State<Login> {
     if (code.length != 6) {
       return ToastUtils.showShort("验证码错误！");
     }
-    final res = await Provider.of<UserProvider>(context, listen: false).smsLogin(
+    final user = await Provider.of<UserProvider>(context, listen: false).smsLogin(
       username: username,
       code: code,
       key: key,
     );
-    if (res != null) {
-      ToastUtils.showShort("登录成功");
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => Home()));
+    if (user != null) {
+      loginSuccess(user);
     }
+  }
+
+  void wechatLogin() async {
+    final user = await Provider.of<UserProvider>(context, listen: false).wechatLogin();
+    if (user != null) {
+      loginSuccess(user);
+    }
+  }
+
+  void appleLogin() async {
+    final user = await Provider.of<UserProvider>(context, listen: false).appleLogin();
+    if (user != null) {
+      loginSuccess(user);
+    }
+  }
+
+  void aliLogin() async {
+    Provider.of<UserProvider>(context, listen: false).aliLogin();
+  }
+
+  void loginSuccess(user) async {
+    await Storage().set('userinfo', jsonEncode(user));
+    Provider.of<UserProvider>(context, listen: false).setUser(user);
+    ToastUtils.showLong("登录成功");
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => Home()));
   }
 
   void getCode() async {
@@ -109,7 +135,7 @@ class _LoginState extends State<Login> {
   void dispose() {
     accountEditController.dispose();
     codeEditController.dispose();
-    timer.cancel();
+    if (timer != null) timer.cancel();
     super.dispose();
   }
 
@@ -133,6 +159,7 @@ class _LoginState extends State<Login> {
                   width: 80,
                   height: 80,
                 ),
+                SizedBox(height: 40),
                 buildInput(
                     hintText: '输入手机号',
                     icon: Icon(
@@ -282,9 +309,7 @@ class _LoginState extends State<Login> {
                     margin: EdgeInsets.symmetric(horizontal: 20),
                     child: GestureDetector(
                       child: Svgs.wx,
-                      onTap: () {
-                        Provider.of<UserProvider>(context, listen: false).wechatLogin();
-                      },
+                      onTap: () => wechatLogin(),
                     ),
                   ),
                 ),
@@ -294,7 +319,7 @@ class _LoginState extends State<Login> {
                     margin: EdgeInsets.symmetric(horizontal: 20),
                     child: GestureDetector(
                       child: Svgs.iphone,
-                      onTap: () {},
+                      onTap: () => appleLogin(),
                     ),
                   ),
                 ),
@@ -303,7 +328,7 @@ class _LoginState extends State<Login> {
                     margin: EdgeInsets.symmetric(horizontal: 20),
                     child: GestureDetector(
                       child: Svgs.ali,
-                      onTap: () {},
+                      onTap: () => aliLogin(),
                     ),
                   ),
                   visible: true,

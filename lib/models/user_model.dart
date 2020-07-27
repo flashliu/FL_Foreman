@@ -71,15 +71,15 @@ class LoginUser {
 
   LoginUser.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    createTime = json['createTime'];
-    updateTime = json['updateTime'];
+    createTime = json['createTime'].toString();
+    updateTime = json['updateTime'].toString();
     deleted = json['deleted'];
     username = json['username'];
     password = json['password'];
     phone = json['phone'];
     state = json['state'];
     balance = json['balance'];
-    lastLoginTime = json['lastLoginTime'];
+    lastLoginTime = json['lastLoginTime'].toString();
     loginNum = json['loginNum'];
     type = json['type'];
     grade = json['grade'];

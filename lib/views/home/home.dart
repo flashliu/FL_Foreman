@@ -1,3 +1,6 @@
+import 'package:FL_Foreman/apis/app_api.dart';
+import 'package:FL_Foreman/providers/app_provider.dart';
+import 'package:FL_Foreman/providers/user_provider.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/svgs.dart';
 import 'package:FL_Foreman/views/home/need_list.dart';
@@ -5,6 +8,8 @@ import 'package:FL_Foreman/views/home/nurse_list.dart';
 import 'package:FL_Foreman/views/home/profit.dart';
 import 'package:FL_Foreman/views/setting/setting.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_upgrade/flutter_app_upgrade.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   const Home({Key key}) : super(key: key);
@@ -18,7 +23,30 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    AppUpgrade.appUpgrade(
+      context,
+      _checkAppInfo(),
+      iosAppId: '1524264487',
+    );
     tabController = TabController(length: 3, vsync: this);
+  }
+
+  Future<AppUpgradeInfo> _checkAppInfo() async {
+    final versionInfo = await AppApi.getVersion();
+    Provider.of<AppProvider>(context, listen: false).setVersion(versionInfo);
+    final current = await FlutterUpgrade.appInfo;
+    if (versionInfo.vesionStable != current.versionName) return null;
+    return AppUpgradeInfo(
+      title: '新版本V' + versionInfo.vesionStable,
+      contents: [
+        '1、支持立体声蓝牙耳机，同时改善配对性能',
+        '2、提供屏幕虚拟键盘',
+        '3、更简洁更流畅，使用起来更快',
+        '4、修复一些软件在使用时自动退出bug',
+        '5、新增加了分类查看功能',
+      ],
+      apkDownloadUrl: versionInfo.versionStableUrl,
+    );
   }
 
   @override
@@ -33,10 +61,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           )
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: Svgs.order,
-      ),
     );
   }
 }
@@ -48,6 +72,8 @@ class UserDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserProvider>(context);
+    if (user.info == null) return Container();
     return Container(
       color: Color(0xFFF4F6F7),
       child: SafeArea(
@@ -70,7 +96,7 @@ class UserDrawer extends StatelessWidget {
               ),
               SizedBox(height: 12),
               Text(
-                '李婉瑜',
+                user.info.loginUser.username,
                 style: TextStyle(
                   fontSize: 16,
                   color: ColorCenter.textBlack,

@@ -289,4 +289,18 @@ class Svgs {
     width: 12,
     height: 12,
   );
+
+  static final Widget add = SvgPicture.asset(
+    'assets/svgs/icon_add.svg',
+    semanticsLabel: '',
+    width: 24,
+    height: 24,
+  );
+
+  static final Widget search = SvgPicture.asset(
+    'assets/svgs/icon_search.svg',
+    semanticsLabel: '',
+    width: 24,
+    height: 24,
+  );
 }

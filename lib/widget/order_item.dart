@@ -12,62 +12,9 @@ class OrderItem extends StatefulWidget {
 }
 
 class _OrderItemState extends State<OrderItem> {
-  bool isLoading = false;
-  @override
-  void initState() {
-    super.initState();
-    // loaded();
-  }
-
-  void loaded() async {
-    await Future.delayed(Duration(seconds: 2));
-    setState(() {
-      isLoading = false;
-    });
-  }
-
-  Widget buildShimmer() {
-    return Pannel(
-      onTap: () {},
-      child: Shimmer.fromColors(
-        baseColor: Colors.grey[200],
-        highlightColor: Colors.grey[50],
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(color: Colors.grey[800], width: 70, height: 15),
-            SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(color: Colors.grey[800], width: 150, height: 15),
-                Container(color: Colors.grey[800], width: 70, height: 15),
-              ],
-            ),
-            Container(
-              height: 40,
-              margin: EdgeInsets.symmetric(vertical: 16),
-              color: Colors.grey[800],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(color: Colors.grey[800], width: 150, height: 15),
-                Container(color: Colors.grey[800], width: 80, height: 20),
-              ],
-            ),
-            SizedBox(height: 10),
-            Container(color: Colors.grey[800], width: 150, height: 15),
-          ],
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final nomalText = TextStyle(fontSize: 12, color: ColorCenter.textGrey);
-    if (isLoading) return buildShimmer();
     return Pannel(
       onTap: () {},
       child: Column(
@@ -142,6 +89,49 @@ class _OrderItemState extends State<OrderItem> {
           SizedBox(height: 8),
           Text('预约编号：218723162178', style: nomalText),
         ],
+      ),
+    );
+  }
+}
+
+class OrderItemShimmer extends StatelessWidget {
+  const OrderItemShimmer({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Pannel(
+      onTap: () {},
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey[200],
+        highlightColor: Colors.grey[50],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(color: Colors.grey[800], width: 70, height: 15),
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(color: Colors.grey[800], width: 150, height: 15),
+                Container(color: Colors.grey[800], width: 70, height: 15),
+              ],
+            ),
+            Container(
+              height: 40,
+              margin: EdgeInsets.symmetric(vertical: 16),
+              color: Colors.grey[800],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(color: Colors.grey[800], width: 150, height: 15),
+                Container(color: Colors.grey[800], width: 80, height: 20),
+              ],
+            ),
+            SizedBox(height: 10),
+            Container(color: Colors.grey[800], width: 150, height: 15),
+          ],
+        ),
       ),
     );
   }
