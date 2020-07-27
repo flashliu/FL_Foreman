@@ -5,12 +5,13 @@ import 'package:fluttertoast/fluttertoast.dart';
 class ToastUtils {
   static void showShort(String msg) {
     Fluttertoast.showToast(
-        msg: msg,
-        textColor: Colors.white,
-        fontSize: 12,
-        backgroundColor: ColorCenter.themeColor,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.TOP);
+      msg: msg,
+      textColor: Colors.white,
+      fontSize: 12,
+      backgroundColor: ColorCenter.themeColor,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.CENTER,
+    );
   }
 
   static void showLong(String msg) {
@@ -20,6 +21,6 @@ class ToastUtils {
         fontSize: 12,
         backgroundColor: ColorCenter.themeColor,
         toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.TOP);
+        gravity: ToastGravity.CENTER);
   }
 }

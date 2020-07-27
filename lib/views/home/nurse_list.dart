@@ -1,10 +1,13 @@
 import 'package:FL_Foreman/apis/nurse_api.dart';
 import 'package:FL_Foreman/common/global.dart';
+import 'package:FL_Foreman/models/nurse_model.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/svgs.dart';
 import 'package:FL_Foreman/widget/nurse_item.dart';
+import 'package:FL_Foreman/widget/state_layout.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class NurseList extends StatefulWidget {
   NurseList({Key key}) : super(key: key);
@@ -15,28 +18,74 @@ class NurseList extends StatefulWidget {
 
 class _NurseListState extends State<NurseList> {
   final List<String> levels = ['全部', '特级', '一级', '二级', '三级'];
+  bool loading = true;
   bool showLocation = false;
-  List list = [];
+  RefreshController refreshController = RefreshController();
+  List<Nurse> list = [];
 
-  scanQrcode() async {
+  addNurse() async {
     final user = await Global.scanQrcode(context);
-    NurseApi.addNurse(user.id);
+    final res = await NurseApi.addNurse(user.id);
+    if (res['code'] == 200) {
+      getNurseList();
+    }
   }
 
-  buildItems() {
-    if (list.length == 0) {
-      return [
-        NurseItemShimmer(),
-        NurseItemShimmer(),
-        NurseItemShimmer(),
-      ];
-    }
+  getNurseList() async {
+    final data = await NurseApi.getNurseList();
+    await Future.delayed(Duration(seconds: 1));
+    setState(() {
+      list = data;
+      loading = false;
+    });
+  }
 
-    return list
-        .map((e) => NurseItem(
+  @override
+  void initState() {
+    super.initState();
+    getNurseList();
+  }
+
+  Widget buildItems() {
+    if (loading) {
+      return Column(
+        children: [
+          NurseItemShimmer(),
+          NurseItemShimmer(),
+          NurseItemShimmer(),
+          NurseItemShimmer(),
+        ],
+      );
+    }
+    if (list.length == 0) {
+      return Expanded(
+        child: Center(
+          child: StateLayout(
+            type: StateType.empty,
+            hintText: '暂时没有内容~',
+          ),
+        ),
+      );
+    }
+    return Expanded(
+      child: SmartRefresher(
+        controller: refreshController,
+        header: WaterDropHeader(
+          complete: Text('刷新成功！'),
+          refresh: CupertinoActivityIndicator(),
+        ),
+        footer: ClassicFooter(),
+        child: ListView.builder(
+          itemBuilder: (context, index) {
+            return NurseItem(
               showLocation: showLocation,
-            ))
-        .toList();
+              info: list[index],
+            );
+          },
+          itemCount: list.length,
+        ),
+      ),
+    );
   }
 
   @override
@@ -51,7 +100,7 @@ class _NurseListState extends State<NurseList> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             GestureDetector(
-              onTap: () => scanQrcode(),
+              onTap: () => addNurse(),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -118,7 +167,7 @@ class _NurseListState extends State<NurseList> {
                 ],
               ),
             ),
-            ...buildItems(),
+            buildItems(),
           ],
         ),
       ),

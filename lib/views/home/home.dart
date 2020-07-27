@@ -1,4 +1,5 @@
 import 'package:FL_Foreman/apis/app_api.dart';
+import 'package:FL_Foreman/common/global.dart';
 import 'package:FL_Foreman/providers/app_provider.dart';
 import 'package:FL_Foreman/providers/user_provider.dart';
 import 'package:FL_Foreman/res/colors.dart';
@@ -29,6 +30,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       iosAppId: '1524264487',
     );
     tabController = TabController(length: 3, vsync: this);
+    Provider.of<UserProvider>(context, listen: false).getNurseList();
   }
 
   Future<AppUpgradeInfo> _checkAppInfo() async {
@@ -104,7 +106,12 @@ class UserDrawer extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
-              buildActionCell(icon: Svgs.qr, text: '扫一扫'),
+              buildActionCell(
+                  icon: Svgs.qr,
+                  text: '扫一扫',
+                  onTap: () {
+                    Global.scanQrcode(context);
+                  }),
               buildActionCell(icon: Svgs.scanner, text: '我的二维码'),
               buildActionCell(
                 icon: Svgs.setting,

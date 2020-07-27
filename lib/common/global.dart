@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:FL_Foreman/common/toast_utils.dart';
 import 'package:FL_Foreman/models/user_model.dart';
 import 'package:FL_Foreman/providers/user_provider.dart';
 import 'package:FL_Foreman/widget/qr_page.dart';
@@ -34,10 +33,6 @@ class Global {
           if (kDebugMode) {
             print('response----------------------------');
             print(res.toString());
-          }
-          if (res.data['code'] != 200) {
-            ToastUtils.showLong(res.data['message']);
-            return res;
           }
         },
       ),

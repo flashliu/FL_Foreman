@@ -1,5 +1,5 @@
-import 'package:FL_Foreman/apis/nurse_api.dart';
 import 'package:FL_Foreman/apis/user_api.dart';
+import 'package:FL_Foreman/models/nurse_model.dart';
 import 'package:FL_Foreman/providers/user_provider.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/svgs.dart';
@@ -23,7 +23,6 @@ class _ProfitState extends State<Profit> {
   void initState() {
     super.initState();
     getAmout();
-    getNurseList();
   }
 
   getAmout() async {
@@ -39,9 +38,31 @@ class _ProfitState extends State<Profit> {
     });
   }
 
-  getNurseList() async {
-    final res = await NurseApi.getNurseList();
-    print(res);
+  Widget buildNurseList() {
+    return Consumer<UserProvider>(builder: (context, user, child) {
+      final list = user.nurseList.map((e) => buildNurseItem(e)).toList();
+      if (list.length == 0) return Container();
+      return Pannel(
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '护工排行',
+                  style: TextStyles.title.copyWith(fontSize: 18),
+                ),
+                Svgs.sort
+              ],
+            ),
+            SizedBox(height: 16),
+            Column(
+              children: list,
+            )
+          ],
+        ),
+      );
+    });
   }
 
   @override
@@ -87,14 +108,16 @@ class _ProfitState extends State<Profit> {
                       ),
                       Column(
                         children: [
-                          Text(
-                            '21',
-                            style: TextStyle(
-                              color: Color(0xFF00A2E6),
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          Consumer<UserProvider>(builder: (context, user, child) {
+                            return Text(
+                              user.nurseList.length.toString(),
+                              style: TextStyle(
+                                color: Color(0xFF00A2E6),
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            );
+                          }),
                           Text(
                             '护工人数',
                             style: TextStyle(color: ColorCenter.textBlack, fontSize: 12),
@@ -106,29 +129,7 @@ class _ProfitState extends State<Profit> {
                 ],
               ),
             ),
-            Pannel(
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '护工排行',
-                        style: TextStyles.title.copyWith(fontSize: 18),
-                      ),
-                      Svgs.sort
-                    ],
-                  ),
-                  SizedBox(height: 16),
-                  buildNurseItem(),
-                  buildNurseItem(),
-                  buildNurseItem(),
-                  buildNurseItem(),
-                  buildNurseItem(),
-                  buildNurseItem(),
-                ],
-              ),
-            )
+            buildNurseList()
           ],
         ),
       ),
@@ -272,22 +273,26 @@ class _ProfitState extends State<Profit> {
     );
   }
 
-  Widget buildNurseItem() {
+  Widget buildNurseItem(Nurse info) {
     return Container(
       margin: EdgeInsets.only(bottom: 16),
       child: Row(
         children: [
-          CircleAvatar(
-            child: Image.asset('assets/images/avatar.png'),
+          ClipOval(
+            child: Image.network(
+              info.headImg,
+              width: 40,
+              height: 40,
+            ),
           ),
           SizedBox(width: 16),
           Text(
-            '护工姓名',
+            info.realName,
             style: TextStyles.title.copyWith(fontSize: 14),
           ),
           Expanded(
             child: Text(
-              '129单',
+              '${info.workTimes}单',
               style: TextStyle(fontSize: 16, color: ColorCenter.textGrey),
               textAlign: TextAlign.right,
             ),

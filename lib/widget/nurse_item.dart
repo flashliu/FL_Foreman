@@ -1,3 +1,4 @@
+import 'package:FL_Foreman/models/nurse_model.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/svgs.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
@@ -8,7 +9,8 @@ import 'package:shimmer/shimmer.dart';
 
 class NurseItem extends StatefulWidget {
   final bool showLocation;
-  NurseItem({Key key, this.showLocation = false}) : super(key: key);
+  final Nurse info;
+  NurseItem({Key key, this.showLocation = false, this.info}) : super(key: key);
 
   @override
   _NurseItemState createState() => _NurseItemState();
@@ -123,7 +125,7 @@ class _NurseItemState extends State<NurseItem> with SingleTickerProviderStateMix
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: Image.network(
-              'https://pic2.zhimg.com/v2-639b49f2f6578eabddc458b84eb3c6a1.jpg',
+              widget.info.headImg,
               width: 72,
               height: 102,
               fit: BoxFit.fitHeight,
@@ -162,7 +164,7 @@ class _NurseItemState extends State<NurseItem> with SingleTickerProviderStateMix
                 Row(
                   children: [
                     Text(
-                      '李曼丽',
+                      widget.info.realName,
                       style: TextStyles.title,
                     ),
                     SizedBox(width: 8),
@@ -199,7 +201,7 @@ class _NurseItemState extends State<NurseItem> with SingleTickerProviderStateMix
                           ),
                           padding: EdgeInsets.all(4),
                           child: Text(
-                            '二级护理',
+                            widget.info.nurseLevel,
                             style: TextStyle(
                               color: Color(0xFF00A2E6),
                             ),
