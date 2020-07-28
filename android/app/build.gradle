@@ -26,6 +26,15 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
+    signingConfigs {
+        release {
+            storePassword 'facepay666666,.'
+            keyPassword 'facepay666666,.'
+            storeFile file('../../android/key/cloudnurse.keystore')
+            keyAlias 'cloudnurse'
+        }
+    }
+
     compileSdkVersion 28
 
     sourceSets {
@@ -37,9 +46,8 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.FL_Foreman"
-        minSdkVersion 16
+        applicationId "uni.UNID9A30E0"
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -47,9 +55,10 @@ android {
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
+        }
+        debug {
+            signingConfig signingConfigs.release
         }
     }
 }
@@ -60,4 +69,7 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.aliyun.ams:huawei-push:2.6.3.305'
+    implementation 'com.aliyun.ams:huawei-push-base:2.6.3.305'
+    implementation 'com.aliyun.ams:third_vivopush:2.9.0.1'
 }

@@ -42,7 +42,8 @@ dependencies:
   # 扫码
   qr_code_scanner: ^0.0.13
   # 推送
-  rammus: ^1.2.1
+  rammus:
+    git: https://github.com/985211yyg/rammus.git
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
