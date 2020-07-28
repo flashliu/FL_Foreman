@@ -1,10 +1,9 @@
 import 'dart:async';
 
-import 'package:FL_Foreman/apis/nurse_api.dart';
 import 'package:FL_Foreman/apis/user_api.dart';
 import 'package:FL_Foreman/common/storage.dart';
 import 'package:FL_Foreman/common/toast_utils.dart';
-import 'package:FL_Foreman/models/nurse_model.dart';
+import 'package:FL_Foreman/models/message_model.dart';
 import 'package:FL_Foreman/models/user_model.dart';
 import 'package:FL_Foreman/views/login/login.dart';
 import 'package:FL_Foreman/widget/fade_page_route.dart';
@@ -15,12 +14,13 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class UserProvider with ChangeNotifier {
   User info;
-  List<Nurse> nurseList = [];
+  List<Message> messageList = [];
 
-  getNurseList() async {
-    final data = await NurseApi.getNurseList();
-    nurseList = data;
+  getMessageList() async {
+    final list = await UserApi.getMessageList();
+    messageList = list;
     notifyListeners();
+    return list;
   }
 
   void setUser(User user) {

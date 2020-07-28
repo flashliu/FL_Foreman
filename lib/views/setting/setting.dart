@@ -1,4 +1,8 @@
+import 'package:FL_Foreman/common/toast_utils.dart';
 import 'package:FL_Foreman/providers/user_provider.dart';
+import 'package:FL_Foreman/views/setting/about_us.dart';
+import 'package:FL_Foreman/views/setting/notification_setting.dart';
+import 'package:FL_Foreman/views/setting/protocol.dart';
 import 'package:FL_Foreman/widget/cell.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,10 +27,30 @@ class Setting extends StatelessWidget {
         child: Column(
           children: [
             Cell(label: '版本号', value: 'iphone:V2.0'),
-            Cell(label: '关于我们', onTap: () {}),
-            Cell(label: '清除缓存', onTap: () {}),
-            Cell(label: '消息通知', onTap: () {}),
-            Cell(label: '用户协议', onTap: () {}),
+            Cell(
+              label: '关于我们',
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (_) => AboutUs()));
+              },
+            ),
+            Cell(
+              label: '清除缓存',
+              onTap: () {
+                ToastUtils.showLong('清除成功');
+              },
+            ),
+            Cell(
+              label: '消息通知',
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (_) => NotificationSetting()));
+              },
+            ),
+            Cell(
+              label: '用户协议',
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (_) => Protocol()));
+              },
+            ),
             SizedBox(height: 24),
             FlatButton(
               child: Container(

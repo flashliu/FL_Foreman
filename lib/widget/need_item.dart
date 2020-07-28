@@ -1,70 +1,13 @@
-import 'package:FL_Foreman/models/order_model.dart';
+import 'package:FL_Foreman/models/need_model.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
 import 'package:FL_Foreman/widget/pannel.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-class OrderItem extends StatelessWidget {
-  final Order info;
-  const OrderItem({Key key, this.info}) : super(key: key);
-
-  String orderStatus(String status) {
-    final statusMap = {
-      '1': '待付款',
-      '2': '已付款',
-      '3': '待结算',
-      '4': '待评价',
-      '5': '已评价',
-      '6': '已取消',
-      '20': '待执行',
-      '21': '执行中',
-      '99': '抢单中'
-    };
-
-    return statusMap[status];
-  }
-
-  buildNurseList() {
-    if (info.nurseList.length == 0) return Container();
-    return SizedBox(
-      height: 67,
-      child: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 1,
-          mainAxisSpacing: 18,
-          childAspectRatio: 67 / 48,
-        ),
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) {
-          final item = info.nurseList[index];
-          if (item.headImg == null) {
-            return Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(6),
-                color: Colors.grey,
-              ),
-            );
-          }
-          return Stack(
-            children: [
-              Positioned.fill(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(6),
-                  child: FittedBox(
-                    fit: BoxFit.cover,
-                    child: Image.network(item.headImg),
-                  ),
-                ),
-              ),
-            ],
-          );
-        },
-        itemCount: info.nurseList.length,
-      ),
-    );
-  }
-
+class NeedItem extends StatelessWidget {
+  final Need info;
+  NeedItem({Key key, this.info}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final nomalText = TextStyle(fontSize: 12, color: ColorCenter.textGrey);
@@ -73,13 +16,7 @@ class OrderItem extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(info.demandName, style: TextStyles.title),
-              Text(orderStatus(info.status.toString()), style: TextStyle(color: Color(0xFF00A2E6), fontSize: 12)),
-            ],
-          ),
+          Text(info.demandName, style: TextStyles.title),
           SizedBox(height: 5),
           Row(
             children: [
@@ -95,7 +32,7 @@ class OrderItem extends StatelessWidget {
               ),
               Expanded(
                 child: Text(
-                  info?.serverTime,
+                  info.serverTime,
                   style: nomalText,
                   textAlign: TextAlign.right,
                 ),
@@ -118,7 +55,7 @@ class OrderItem extends StatelessWidget {
                 ),
                 SizedBox(width: 8),
                 Text(
-                  info.beNursed.area,
+                  info.area,
                   style: nomalText,
                 )
               ],
@@ -147,16 +84,14 @@ class OrderItem extends StatelessWidget {
           ),
           SizedBox(height: 8),
           Text('预约编号：${info.id}', style: nomalText),
-          SizedBox(height: 8),
-          buildNurseList()
         ],
       ),
     );
   }
 }
 
-class OrderItemShimmer extends StatelessWidget {
-  const OrderItemShimmer({Key key}) : super(key: key);
+class NeedItemShimmer extends StatelessWidget {
+  const NeedItemShimmer({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

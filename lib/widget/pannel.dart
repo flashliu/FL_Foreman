@@ -4,12 +4,14 @@ class Pannel extends StatelessWidget {
   final Widget child;
   final Function onTap;
   final EdgeInsetsGeometry margin;
+  final EdgeInsetsGeometry padding;
   final Color color;
   const Pannel({
     Key key,
     this.child,
     this.onTap,
     this.margin = const EdgeInsets.only(bottom: 16),
+    this.padding = const EdgeInsets.all(16),
     this.color = Colors.white,
   }) : super(key: key);
 
@@ -27,7 +29,7 @@ class Pannel extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           child: Padding(
             child: child,
-            padding: EdgeInsets.all(16),
+            padding: padding,
           ),
           onTap: onTap,
         ),

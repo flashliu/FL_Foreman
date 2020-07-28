@@ -43,8 +43,8 @@ class _StateLayoutState extends State<StateLayout> {
       width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
+          SizedBox(height: 200),
           _img,
           SizedBox(
             height: 20,

@@ -1,4 +1,9 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:FL_Foreman/apis/app_api.dart';
+import 'package:FL_Foreman/apis/user_api.dart';
+import 'package:FL_Foreman/common/dialog_util.dart';
 import 'package:FL_Foreman/common/global.dart';
 import 'package:FL_Foreman/providers/app_provider.dart';
 import 'package:FL_Foreman/providers/user_provider.dart';
@@ -7,10 +12,13 @@ import 'package:FL_Foreman/res/svgs.dart';
 import 'package:FL_Foreman/views/home/need_list.dart';
 import 'package:FL_Foreman/views/home/nurse_list.dart';
 import 'package:FL_Foreman/views/home/profit.dart';
+import 'package:FL_Foreman/views/message_list/message_list.dart';
 import 'package:FL_Foreman/views/setting/setting.dart';
+import 'package:FL_Foreman/widget/modal_with_close_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_upgrade/flutter_app_upgrade.dart';
 import 'package:provider/provider.dart';
+import 'package:rammus/rammus.dart';
 
 class Home extends StatefulWidget {
   const Home({Key key}) : super(key: key);
@@ -30,7 +38,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       iosAppId: '1524264487',
     );
     tabController = TabController(length: 3, vsync: this);
-    Provider.of<UserProvider>(context, listen: false).getNurseList();
+    initAliPush();
+    Provider.of<UserProvider>(context, listen: false).getMessageList();
   }
 
   Future<AppUpgradeInfo> _checkAppInfo() async {
@@ -49,6 +58,30 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       ],
       apkDownloadUrl: versionInfo.versionStableUrl,
     );
+  }
+
+  void initAliPush() {
+    if (Platform.isIOS) {
+      configureNotificationPresentationOption();
+    }
+    addAlias(Global.userId).then((result) {
+      print("设置推送别名成功：");
+    }, onError: (error) {
+      print('设置推送别名失败:' + error.toString());
+    });
+
+    onNotification.listen((event) {
+      setupNotificationManager(
+        [
+          NotificationChannel(
+            "123",
+            event.title,
+            event.summary,
+            importance: AndroidNotificationImportance.MAX,
+          )
+        ],
+      );
+    });
   }
 
   @override
@@ -71,6 +104,26 @@ class UserDrawer extends StatelessWidget {
   const UserDrawer({
     Key key,
   }) : super(key: key);
+
+  showQrcode(BuildContext context) async {
+    Navigator.of(context).pop();
+    final data = await UserApi.getQrcode();
+    DialogUtils.showElasticDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (_) => ModalWithCloseDialog(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.memory(
+              Base64Decoder().convert(data),
+              fit: BoxFit.cover,
+            )
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,12 +160,15 @@ class UserDrawer extends StatelessWidget {
               ),
               SizedBox(height: 20),
               buildActionCell(
-                  icon: Svgs.qr,
-                  text: '扫一扫',
-                  onTap: () {
-                    Global.scanQrcode(context);
-                  }),
-              buildActionCell(icon: Svgs.scanner, text: '我的二维码'),
+                icon: Svgs.qr,
+                text: '扫一扫',
+                onTap: () => Global.scanQrcode(context),
+              ),
+              buildActionCell(
+                icon: Svgs.scanner,
+                text: '我的二维码',
+                onTap: () => showQrcode(context),
+              ),
               buildActionCell(
                 icon: Svgs.setting,
                 text: '设置',
@@ -235,7 +291,9 @@ class Header extends StatelessWidget {
                     child: Svgs.message,
                   ),
                 ),
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (_) => MessageList()));
+                },
               ),
             ),
           )

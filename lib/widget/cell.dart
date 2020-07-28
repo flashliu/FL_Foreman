@@ -6,17 +6,20 @@ class Cell extends StatelessWidget {
   final Widget action;
   final String value;
   final Function onTap;
+  final EdgeInsetsGeometry padding;
   Cell({
     Key key,
     this.label,
     this.value = '',
     this.action,
     this.onTap,
+    this.padding = const EdgeInsets.all(16),
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Pannel(
+      padding: padding,
       onTap: onTap,
       child: Row(
         children: [

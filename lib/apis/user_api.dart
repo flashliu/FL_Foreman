@@ -1,4 +1,5 @@
 import 'package:FL_Foreman/common/global.dart';
+import 'package:FL_Foreman/models/message_model.dart';
 import 'package:FL_Foreman/models/user_model.dart';
 import 'package:flutter/material.dart';
 
@@ -99,6 +100,37 @@ class UserApi {
       return res.data['data'].toString();
     } catch (e) {
       return null;
+    }
+  }
+
+  static Future<List<Message>> getMessageList() async {
+    try {
+      final res = await Global.http.post('/app-jpush/select', queryParameters: {
+        "toUser": Global.userId,
+        "pageNumber": 1,
+        "pageSize": 10,
+      });
+
+      if (res.data['code'] == 200) {
+        return List.from(res.data['data'].map((json) => Message.fromJson(json)));
+      }
+      return [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  static Future<String> getQrcode() async {
+    try {
+      final res = await Global.http.get('/appUser/generateQRcode', queryParameters: {
+        "width": 250,
+        "height": 250,
+        "id": Global.userId,
+      });
+
+      return res.data['data'];
+    } catch (e) {
+      return '';
     }
   }
 }

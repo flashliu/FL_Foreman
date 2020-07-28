@@ -5,6 +5,7 @@ import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/svgs.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
 import 'package:FL_Foreman/widget/pannel.dart';
+import 'package:FL_Foreman/widget/state_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +20,7 @@ class _ProfitState extends State<Profit> {
   String todayAmount = '0';
   String weekAmount = '0';
   String monthAmount = '0';
+  List<Nurse> list = [];
   @override
   void initState() {
     super.initState();
@@ -40,8 +42,6 @@ class _ProfitState extends State<Profit> {
 
   Widget buildNurseList() {
     return Consumer<UserProvider>(builder: (context, user, child) {
-      final list = user.nurseList.map((e) => buildNurseItem(e)).toList();
-      if (list.length == 0) return Container();
       return Pannel(
         child: Column(
           children: [
@@ -56,8 +56,23 @@ class _ProfitState extends State<Profit> {
               ],
             ),
             SizedBox(height: 16),
+            Visibility(
+              visible: list.length == 0,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 30),
+                child: Column(
+                  children: [
+                    Svgs.emptyHolder,
+                    Text(
+                      "你还没有添加过护工，快去添加吧",
+                      style: TextStyle(fontSize: 14, color: Colors.black54),
+                    ),
+                  ],
+                ),
+              ),
+            ),
             Column(
-              children: list,
+              children: list.map((e) => buildNurseItem(e)).toList(),
             )
           ],
         ),
@@ -110,7 +125,7 @@ class _ProfitState extends State<Profit> {
                         children: [
                           Consumer<UserProvider>(builder: (context, user, child) {
                             return Text(
-                              user.nurseList.length.toString(),
+                              list.length.toString(),
                               style: TextStyle(
                                 color: Color(0xFF00A2E6),
                                 fontSize: 16,
