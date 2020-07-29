@@ -5,7 +5,6 @@ import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/svgs.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
 import 'package:FL_Foreman/widget/pannel.dart';
-import 'package:FL_Foreman/widget/state_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
