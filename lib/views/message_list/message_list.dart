@@ -28,7 +28,7 @@ class _MessageListState extends State<MessageList> {
         titleSpacing: 0,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(vertical: 16),
         child: SmartRefresher(
           controller: refreshController,
           onRefresh: () async {

@@ -1,5 +1,6 @@
 import 'package:FL_Foreman/apis/nurse_api.dart';
 import 'package:FL_Foreman/common/global.dart';
+import 'package:FL_Foreman/common/toast_utils.dart';
 import 'package:FL_Foreman/models/nurse_model.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/svgs.dart';
@@ -30,6 +31,7 @@ class _NurseListState extends State<NurseList> {
     if (res['code'] == 200) {
       getNurseList(levelIndex);
     }
+    ToastUtils.showLong(res['message']);
   }
 
   getNurseList(int index) async {
@@ -52,10 +54,10 @@ class _NurseListState extends State<NurseList> {
 
   Widget buildItems() {
     if (loading) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
+      return Expanded(
+        child: Wrap(
           children: [
+            NurseItemShimmer(),
             NurseItemShimmer(),
             NurseItemShimmer(),
             NurseItemShimmer(),
@@ -65,26 +67,23 @@ class _NurseListState extends State<NurseList> {
       );
     }
     return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: SmartRefresher(
-          header: WaterDropHeader(
-            complete: Text('刷新成功！'),
-            refresh: CupertinoActivityIndicator(),
-          ),
-          footer: ClassicFooter(),
-          onRefresh: () => getNurseList(levelIndex),
-          controller: refreshController,
-          child: ListContent(
-            itemBuilder: (context, index) {
-              return NurseItem(
-                info: list[index],
-                showLocation: showLocation,
-              );
-            },
-            itemCount: list.length,
-            emptyText: "暂时没有内容～",
-          ),
+      child: SmartRefresher(
+        header: WaterDropHeader(
+          complete: Text('刷新成功！'),
+          refresh: CupertinoActivityIndicator(),
+        ),
+        footer: ClassicFooter(),
+        onRefresh: () => getNurseList(levelIndex),
+        controller: refreshController,
+        child: ListContent(
+          itemBuilder: (context, index) {
+            return NurseItem(
+              info: list[index],
+              showLocation: showLocation,
+            );
+          },
+          itemCount: list.length,
+          emptyText: "暂时没有内容～",
         ),
       ),
     );
@@ -128,7 +127,7 @@ class _NurseListState extends State<NurseList> {
                 child: Svgs.show,
               ),
               SizedBox(
-                width: 10,
+                width: 16,
               )
             ],
             mainAxisAlignment: MainAxisAlignment.end,

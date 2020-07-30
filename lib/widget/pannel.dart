@@ -10,7 +10,7 @@ class Pannel extends StatelessWidget {
     Key key,
     this.child,
     this.onTap,
-    this.margin = const EdgeInsets.only(bottom: 16),
+    this.margin = const EdgeInsets.only(bottom: 16, left: 16, right: 16),
     this.padding = const EdgeInsets.all(16),
     this.color = Colors.white,
   }) : super(key: key);
@@ -18,11 +18,10 @@ class Pannel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        boxShadow: [BoxShadow(color: Colors.grey[100], blurRadius: 15)],
-      ),
       margin: margin,
       child: Material(
+        elevation: 10,
+        shadowColor: Colors.grey[100].withOpacity(0.2),
         color: color,
         borderRadius: BorderRadius.circular(12),
         child: InkWell(

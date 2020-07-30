@@ -40,39 +40,31 @@ class _OrderPageState extends State<OrderPage> {
   @override
   Widget build(BuildContext context) {
     if (loading) {
-      return Expanded(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Wrap(
-            children: [
-              OrderItemShimmer(),
-              OrderItemShimmer(),
-              OrderItemShimmer(),
-              OrderItemShimmer(),
-            ],
-          ),
-        ),
+      return Wrap(
+        children: [
+          OrderItemShimmer(),
+          OrderItemShimmer(),
+          OrderItemShimmer(),
+          OrderItemShimmer(),
+        ],
       );
     }
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: SmartRefresher(
-        header: WaterDropHeader(
-          complete: Text('刷新成功！'),
-          refresh: CupertinoActivityIndicator(),
-        ),
-        footer: ClassicFooter(),
-        // onRefresh: () => getNeedList(siteIndex),
-        controller: refreshController,
-        child: ListContent(
-          itemBuilder: (context, index) {
-            return OrderItem(
-              info: list[index],
-            );
-          },
-          itemCount: list.length,
-          emptyText: "暂时没有内容～",
-        ),
+    return SmartRefresher(
+      header: WaterDropHeader(
+        complete: Text('刷新成功！'),
+        refresh: CupertinoActivityIndicator(),
+      ),
+      footer: ClassicFooter(),
+      onRefresh: () => getOrderList(),
+      controller: refreshController,
+      child: ListContent(
+        itemBuilder: (context, index) {
+          return OrderItem(
+            info: list[index],
+          );
+        },
+        itemCount: list.length,
+        emptyText: "暂时没有内容～",
       ),
     );
   }

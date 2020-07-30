@@ -1,5 +1,6 @@
 class Order {
   String id;
+  String orderId;
   String demandName;
   String serverSite;
   String serverTime;
@@ -32,10 +33,12 @@ class Order {
       this.notes,
       this.price,
       this.sumtime,
-      this.times});
+      this.times,
+      this.orderId});
 
   Order.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    orderId = json['orderId'];
     demandName = json['demandName'];
     serverSite = json['serverSite'];
     serverTime = json['serverTime'];
@@ -61,6 +64,7 @@ class Order {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
+    data['orderId'] = this.orderId;
     data['demandName'] = this.demandName;
     data['serverSite'] = this.serverSite;
     data['serverTime'] = this.serverTime;

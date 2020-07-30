@@ -82,70 +82,67 @@ class _ProfitState extends State<Profit> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Container(
-        color: ColorCenter.background,
-        padding: EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Pannel(
-              child: buildAmountPannel(),
-            ),
-            Pannel(
-              child: Column(
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      '服务数据',
-                      style: TextStyles.title.copyWith(fontSize: 18),
-                    ),
+      child: Column(
+        children: [
+          SizedBox(height: 16),
+          Pannel(
+            child: buildAmountPannel(),
+          ),
+          Pannel(
+            child: Column(
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '服务数据',
+                    style: TextStyles.title.copyWith(fontSize: 18),
                   ),
-                  SizedBox(height: 14),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Column(
-                        children: [
-                          Text(
-                            '2400',
+                ),
+                SizedBox(height: 14),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Column(
+                      children: [
+                        Text(
+                          '2400',
+                          style: TextStyle(
+                            color: Color(0xFF00A2E6),
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          '服务单数',
+                          style: TextStyle(color: ColorCenter.textBlack, fontSize: 12),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Consumer<UserProvider>(builder: (context, user, child) {
+                          return Text(
+                            list.length.toString(),
                             style: TextStyle(
                               color: Color(0xFF00A2E6),
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
-                          ),
-                          Text(
-                            '服务单数',
-                            style: TextStyle(color: ColorCenter.textBlack, fontSize: 12),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Consumer<UserProvider>(builder: (context, user, child) {
-                            return Text(
-                              list.length.toString(),
-                              style: TextStyle(
-                                color: Color(0xFF00A2E6),
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            );
-                          }),
-                          Text(
-                            '护工人数',
-                            style: TextStyle(color: ColorCenter.textBlack, fontSize: 12),
-                          ),
-                        ],
-                      )
-                    ],
-                  )
-                ],
-              ),
+                          );
+                        }),
+                        Text(
+                          '护工人数',
+                          style: TextStyle(color: ColorCenter.textBlack, fontSize: 12),
+                        ),
+                      ],
+                    )
+                  ],
+                )
+              ],
             ),
-            buildNurseList()
-          ],
-        ),
+          ),
+          buildNurseList()
+        ],
       ),
     );
   }

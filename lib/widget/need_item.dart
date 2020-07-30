@@ -1,6 +1,7 @@
 import 'package:FL_Foreman/models/need_model.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
+import 'package:FL_Foreman/views/need_detail/need_detail.dart';
 import 'package:FL_Foreman/widget/pannel.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
@@ -12,7 +13,7 @@ class NeedItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final nomalText = TextStyle(fontSize: 12, color: ColorCenter.textGrey);
     return Pannel(
-      onTap: () {},
+      onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => NeedDetail(info: info))),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

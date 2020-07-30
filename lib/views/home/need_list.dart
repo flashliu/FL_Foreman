@@ -44,39 +44,33 @@ class _NeedListState extends State<NeedList> with SingleTickerProviderStateMixin
   buildList() {
     if (loading) {
       return Expanded(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Wrap(
-            children: [
-              NeedItemShimmer(),
-              NeedItemShimmer(),
-              NeedItemShimmer(),
-              NeedItemShimmer(),
-            ],
-          ),
+        child: Wrap(
+          children: [
+            NeedItemShimmer(),
+            NeedItemShimmer(),
+            NeedItemShimmer(),
+            NeedItemShimmer(),
+          ],
         ),
       );
     }
     return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: SmartRefresher(
-          header: WaterDropHeader(
-            complete: Text('刷新成功！'),
-            refresh: CupertinoActivityIndicator(),
-          ),
-          footer: ClassicFooter(),
-          onRefresh: () => getNeedList(siteIndex),
-          controller: refreshController,
-          child: ListContent(
-            itemBuilder: (context, index) {
-              return NeedItem(
-                info: needList[index],
-              );
-            },
-            itemCount: needList.length,
-            emptyText: "暂时没有内容～",
-          ),
+      child: SmartRefresher(
+        header: WaterDropHeader(
+          complete: Text('刷新成功！'),
+          refresh: CupertinoActivityIndicator(),
+        ),
+        footer: ClassicFooter(),
+        onRefresh: () => getNeedList(siteIndex),
+        controller: refreshController,
+        child: ListContent(
+          itemBuilder: (context, index) {
+            return NeedItem(
+              info: needList[index],
+            );
+          },
+          itemCount: needList.length,
+          emptyText: "暂时没有内容～",
         ),
       ),
     );

@@ -10,7 +10,13 @@ import 'package:shimmer/shimmer.dart';
 class NurseItem extends StatefulWidget {
   final bool showLocation;
   final Nurse info;
-  NurseItem({Key key, this.showLocation = false, this.info}) : super(key: key);
+  final bool showAction;
+  NurseItem({
+    Key key,
+    this.showLocation = false,
+    this.info,
+    this.showAction = true,
+  }) : super(key: key);
 
   @override
   _NurseItemState createState() => _NurseItemState();
@@ -113,7 +119,7 @@ class _NurseItemState extends State<NurseItem> with SingleTickerProviderStateMix
               right: 16,
             ),
             Pannel(
-              margin: EdgeInsets.only(bottom: animation.value * 56 + 16),
+              margin: EdgeInsets.only(bottom: animation.value * 56 + 16, left: 16, right: 16),
               child: child,
             ),
           ],
@@ -135,9 +141,15 @@ class _NurseItemState extends State<NurseItem> with SingleTickerProviderStateMix
           Expanded(
             child: Column(
               children: [
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: InkWell(
+                Visibility(
+                  visible: !widget.showAction,
+                  child: SizedBox(height: 16),
+                ),
+                Visibility(
+                  visible: widget.showAction,
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: InkWell(
                       onTap: () {
                         showCupertinoModalPopup(
                           context: context,
@@ -159,7 +171,9 @@ class _NurseItemState extends State<NurseItem> with SingleTickerProviderStateMix
                           },
                         ).then((value) => {print(value)});
                       },
-                      child: Svgs.menu),
+                      child: Svgs.menu,
+                    ),
+                  ),
                 ),
                 Row(
                   children: [

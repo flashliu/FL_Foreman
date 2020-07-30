@@ -1,6 +1,7 @@
 import 'package:FL_Foreman/common/global.dart';
 import 'package:FL_Foreman/models/need_model.dart';
 import 'package:FL_Foreman/models/order_model.dart';
+import 'package:flutter/material.dart';
 
 class OrderApi {
   static Future<List<Need>> getNeedList(String site) async {
@@ -26,5 +27,23 @@ class OrderApi {
       return List<Order>.from(res.data['data'].map((json) => Order.fromJson(json)));
     }
     return [];
+  }
+
+  static Future bindingNurse({
+    @required String bidMoney,
+    @required String needId,
+    @required String userId,
+    @required int status,
+    @required String nurseId,
+  }) async {
+    final res = await Global.http.post('/app-bidding-record/add', data: {
+      "bidMoney": bidMoney,
+      "needId": needId,
+      "nurseId": nurseId,
+      "parentId": Global.userId,
+      "status": status,
+      "userId": userId
+    });
+    return res.data;
   }
 }

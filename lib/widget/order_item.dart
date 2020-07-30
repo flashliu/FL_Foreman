@@ -1,66 +1,83 @@
 import 'package:FL_Foreman/models/order_model.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
+import 'package:FL_Foreman/views/order_detail/order_detail.dart';
 import 'package:FL_Foreman/widget/pannel.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+
+String orderStatus(String status) {
+  final statusMap = {
+    '1': '待付款',
+    '2': '已付款',
+    '3': '待结算',
+    '4': '待评价',
+    '5': '已评价',
+    '6': '已取消',
+    '20': '待执行',
+    '21': '执行中',
+    '99': '抢单中'
+  };
+
+  return statusMap[status];
+}
 
 class OrderItem extends StatelessWidget {
   final Order info;
   const OrderItem({Key key, this.info}) : super(key: key);
 
-  String orderStatus(String status) {
-    final statusMap = {
-      '1': '待付款',
-      '2': '已付款',
-      '3': '待结算',
-      '4': '待评价',
-      '5': '已评价',
-      '6': '已取消',
-      '20': '待执行',
-      '21': '执行中',
-      '99': '抢单中'
-    };
-
-    return statusMap[status];
+  List<Widget> buildNurseItem() {
+    return info.nurseList.map((item) {
+      if (item.headImg == null) {
+        return Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(6),
+            color: Colors.grey,
+          ),
+        );
+      }
+      return Stack(
+        children: [
+          Positioned.fill(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(6),
+              child: FittedBox(
+                fit: BoxFit.cover,
+                child: Image.network(item.headImg),
+              ),
+            ),
+          ),
+        ],
+      );
+    }).toList();
   }
 
   buildNurseList() {
     if (info.nurseList.length == 0) return Container();
     return SizedBox(
       height: 67,
-      child: GridView.builder(
+      child: GridView(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 1,
           mainAxisSpacing: 18,
           childAspectRatio: 67 / 48,
         ),
         scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) {
-          final item = info.nurseList[index];
-          if (item.headImg == null) {
-            return Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(6),
-                color: Colors.grey,
-              ),
-            );
-          }
-          return Stack(
-            children: [
-              Positioned.fill(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(6),
-                  child: FittedBox(
-                    fit: BoxFit.cover,
-                    child: Image.network(item.headImg),
-                  ),
-                ),
-              ),
-            ],
-          );
-        },
-        itemCount: info.nurseList.length,
+        children: [
+          ...buildNurseItem(),
+          Container(
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(6),
+              color: Color(0xFFF5F7F8),
+              border: Border.all(color: Color(0xFFDDDDDD)),
+            ),
+            child: Text(
+              '查看更多',
+              style: TextStyle(color: Color(0xFF00A2E6), fontSize: 10),
+            ),
+          )
+        ],
       ),
     );
   }
@@ -69,7 +86,7 @@ class OrderItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final nomalText = TextStyle(fontSize: 12, color: ColorCenter.textGrey);
     return Pannel(
-      onTap: () {},
+      onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => OrderDetail(info: info))),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
