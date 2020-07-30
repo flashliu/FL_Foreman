@@ -40,14 +40,17 @@ class _OrderPageState extends State<OrderPage> {
   @override
   Widget build(BuildContext context) {
     if (loading) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          children: [
-            OrderItemShimmer(),
-            OrderItemShimmer(),
-            OrderItemShimmer(),
-          ],
+      return Expanded(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Wrap(
+            children: [
+              OrderItemShimmer(),
+              OrderItemShimmer(),
+              OrderItemShimmer(),
+              OrderItemShimmer(),
+            ],
+          ),
         ),
       );
     }

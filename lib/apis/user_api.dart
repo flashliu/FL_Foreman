@@ -75,7 +75,7 @@ class UserApi {
 
       return res.data['data'].toString();
     } catch (e) {
-      return null;
+      return '0';
     }
   }
 
@@ -87,7 +87,7 @@ class UserApi {
 
       return res.data['data'].toString();
     } catch (e) {
-      return null;
+      return '0';
     }
   }
 
@@ -99,7 +99,7 @@ class UserApi {
 
       return res.data['data'].toString();
     } catch (e) {
-      return null;
+      return '0';
     }
   }
 
@@ -111,10 +111,7 @@ class UserApi {
         "pageSize": 10,
       });
 
-      if (res.data['code'] == 200) {
-        return List.from(res.data['data'].map((json) => Message.fromJson(json)));
-      }
-      return [];
+      return List.from(res.data['data'].map((json) => Message.fromJson(json)));
     } catch (e) {
       return [];
     }

@@ -43,14 +43,17 @@ class _NeedListState extends State<NeedList> with SingleTickerProviderStateMixin
 
   buildList() {
     if (loading) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          children: [
-            NeedItemShimmer(),
-            NeedItemShimmer(),
-            NeedItemShimmer(),
-          ],
+      return Expanded(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Wrap(
+            children: [
+              NeedItemShimmer(),
+              NeedItemShimmer(),
+              NeedItemShimmer(),
+              NeedItemShimmer(),
+            ],
+          ),
         ),
       );
     }
