@@ -22,50 +22,48 @@ class Setting extends StatelessWidget {
         title: Text('设置'),
         titleSpacing: 0,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Cell(label: '版本号', value: 'iphone:V2.0'),
-            Cell(
-              label: '关于我们',
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (_) => AboutUs()));
-              },
+      body: Column(
+        children: [
+          SizedBox(height: 16),
+          Cell(label: '版本号', value: 'iphone:V2.0'),
+          Cell(
+            label: '关于我们',
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (_) => AboutUs()));
+            },
+          ),
+          Cell(
+            label: '清除缓存',
+            onTap: () {
+              ToastUtils.showLong('清除成功');
+            },
+          ),
+          Cell(
+            label: '消息通知',
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (_) => NotificationSetting()));
+            },
+          ),
+          Cell(
+            label: '用户协议',
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (_) => Protocol()));
+            },
+          ),
+          SizedBox(height: 24),
+          FlatButton(
+            child: Container(
+              width: 252,
+              height: 40,
+              alignment: Alignment.center,
+              child: Text('退出登录'),
             ),
-            Cell(
-              label: '清除缓存',
-              onTap: () {
-                ToastUtils.showLong('清除成功');
-              },
-            ),
-            Cell(
-              label: '消息通知',
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (_) => NotificationSetting()));
-              },
-            ),
-            Cell(
-              label: '用户协议',
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (_) => Protocol()));
-              },
-            ),
-            SizedBox(height: 24),
-            FlatButton(
-              child: Container(
-                width: 252,
-                height: 40,
-                alignment: Alignment.center,
-                child: Text('退出登录'),
-              ),
-              color: Colors.blue,
-              textColor: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-              onPressed: () => userProvider.logOut(context),
-            )
-          ],
-        ),
+            color: Colors.blue,
+            textColor: Colors.white,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            onPressed: () => userProvider.logOut(context),
+          )
+        ],
       ),
     );
   }

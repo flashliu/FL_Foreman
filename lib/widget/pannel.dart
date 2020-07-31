@@ -6,6 +6,7 @@ class Pannel extends StatelessWidget {
   final EdgeInsetsGeometry margin;
   final EdgeInsetsGeometry padding;
   final Color color;
+  final BorderRadius borderRadius;
   const Pannel({
     Key key,
     this.child,
@@ -13,6 +14,7 @@ class Pannel extends StatelessWidget {
     this.margin = const EdgeInsets.only(bottom: 16, left: 16, right: 16),
     this.padding = const EdgeInsets.all(16),
     this.color = Colors.white,
+    this.borderRadius = const BorderRadius.all(Radius.circular(12)),
   }) : super(key: key);
 
   @override
@@ -23,9 +25,9 @@ class Pannel extends StatelessWidget {
         elevation: 10,
         shadowColor: Colors.grey[100].withOpacity(0.2),
         color: color,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: borderRadius,
         child: InkWell(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: borderRadius,
           child: Padding(
             child: child,
             padding: padding,

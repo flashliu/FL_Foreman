@@ -3,6 +3,15 @@ import 'package:FL_Foreman/res/text_styles.dart';
 import 'package:FL_Foreman/views/my_order_list/order_page.dart';
 import 'package:flutter/material.dart';
 
+List<Map> tabMaps = [
+  {"text": '全部', "status": 0},
+  {"text": '抢单中', "status": 99},
+  {"text": '待付款', "status": 1},
+  {"text": '待执行', "status": 20},
+  {"text": '执行中', "status": 21},
+  {"text": '已结束', "status": 100},
+];
+
 class MyOrderList extends StatefulWidget {
   MyOrderList({Key key}) : super(key: key);
 
@@ -12,19 +21,17 @@ class MyOrderList extends StatefulWidget {
 
 class _MyOrderListState extends State<MyOrderList> with SingleTickerProviderStateMixin {
   TabController tabController;
-  List<Map> tabMaps = [
-    {"text": '全部', "status": 0},
-    {"text": '抢单中', "status": 99},
-    {"text": '待付款', "status": 1},
-    {"text": '待执行', "status": 20},
-    {"text": '执行中', "status": 21},
-    {"text": '已结束', "status": 100},
-  ];
 
   @override
   void initState() {
     super.initState();
     tabController = TabController(length: tabMaps.length, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
   }
 
   Widget buildTabBar() {

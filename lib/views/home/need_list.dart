@@ -29,6 +29,12 @@ class _NeedListState extends State<NeedList> with SingleTickerProviderStateMixin
     getNeedList(0);
   }
 
+  @override
+  void dispose() {
+    refreshController.dispose();
+    super.dispose();
+  }
+
   getNeedList(int index) async {
     final list = await OrderApi.getNeedList(serverSites[index]);
     await Future.delayed(Duration(seconds: 1));
@@ -98,7 +104,10 @@ class _NeedListState extends State<NeedList> with SingleTickerProviderStateMixin
                 ),
                 onTap: (index) {
                   siteIndex = index;
-                  refreshController.requestRefresh();
+                  setState(() {
+                    loading = true;
+                  });
+                  getNeedList(index);
                 },
               ),
             ),

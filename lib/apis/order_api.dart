@@ -16,13 +16,18 @@ class OrderApi {
     return [];
   }
 
-  static Future<List<Order>> getOrderList(int status) async {
-    final res = await Global.http.get('/app-v2-order/list', queryParameters: {
+  static Future<List<Order>> getOrderList({int status, String nurseId}) async {
+    final params = {
       "status": status,
       "pageSize": 1000,
       "page": 1,
       "parentId": Global.userId,
-    });
+    };
+    if (nurseId != null) {
+      params['nurseId'] = nurseId;
+      params.remove('parentId');
+    }
+    final res = await Global.http.get('/app-v2-order/list', queryParameters: params);
     if (res.data['code'] == 200) {
       return List<Order>.from(res.data['data'].map((json) => Order.fromJson(json)));
     }

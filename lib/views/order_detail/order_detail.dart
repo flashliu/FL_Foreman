@@ -37,6 +37,12 @@ class _OrderDetailState extends State<OrderDetail> with SingleTickerProviderStat
   }
 
   @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(

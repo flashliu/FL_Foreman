@@ -34,6 +34,14 @@ class _NurseListState extends State<NurseList> {
     ToastUtils.showLong(res['message']);
   }
 
+  delNurse(id) async {
+    final res = await NurseApi.delNurse(id);
+    if (res['code'] == 200) {
+      ToastUtils.showLong(res['message']);
+      getNurseList(levelIndex);
+    }
+  }
+
   getNurseList(int index) async {
     final data = await NurseApi.getNurseList();
     await Future.delayed(Duration(seconds: 1));
@@ -50,6 +58,12 @@ class _NurseListState extends State<NurseList> {
   void initState() {
     super.initState();
     getNurseList(levelIndex);
+  }
+
+  @override
+  void dispose() {
+    refreshController.dispose();
+    super.dispose();
   }
 
   Widget buildItems() {
@@ -80,6 +94,7 @@ class _NurseListState extends State<NurseList> {
             return NurseItem(
               info: list[index],
               showLocation: showLocation,
+              onDelete: (info) => delNurse(info.id),
             );
           },
           itemCount: list.length,

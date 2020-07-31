@@ -22,4 +22,12 @@ class NurseApi {
 
     return res.data;
   }
+
+  static Future delNurse(String nurseId) async {
+    final res = await Global.http.post('/v2-foreman/delete-nurse/' + nurseId, queryParameters: {
+      "parentId": Global.userId,
+    });
+
+    return res.data;
+  }
 }

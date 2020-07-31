@@ -42,6 +42,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     Provider.of<UserProvider>(context, listen: false).getMessageList();
   }
 
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
+  }
+
   Future<AppUpgradeInfo> _checkAppInfo() async {
     final versionInfo = await AppApi.getVersion();
     Provider.of<AppProvider>(context, listen: false).setVersion(versionInfo);

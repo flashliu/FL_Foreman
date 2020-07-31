@@ -8,7 +8,8 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class OrderPage extends StatefulWidget {
   final int status;
-  OrderPage({Key key, this.status}) : super(key: key);
+  final String nurseId;
+  OrderPage({Key key, this.status, this.nurseId}) : super(key: key);
 
   @override
   _OrderPageState createState() => _OrderPageState();
@@ -25,8 +26,26 @@ class _OrderPageState extends State<OrderPage> {
     getOrderList();
   }
 
+  @override
+  void dispose() {
+    refreshController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(OrderPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.status != widget.status) {
+      loading = true;
+      getOrderList();
+    }
+  }
+
   getOrderList() async {
-    final res = await OrderApi.getOrderList(widget.status);
+    final res = await OrderApi.getOrderList(
+      status: widget.status,
+      nurseId: widget.nurseId,
+    );
     await Future.delayed(Duration(seconds: 1));
     if (mounted) {
       setState(() {

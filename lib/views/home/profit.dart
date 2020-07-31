@@ -1,3 +1,4 @@
+import 'package:FL_Foreman/apis/nurse_api.dart';
 import 'package:FL_Foreman/apis/user_api.dart';
 import 'package:FL_Foreman/models/nurse_model.dart';
 import 'package:FL_Foreman/providers/user_provider.dart';
@@ -24,6 +25,16 @@ class _ProfitState extends State<Profit> {
   void initState() {
     super.initState();
     getAmout();
+    getNurseList();
+  }
+
+  getNurseList() async {
+    final data = await NurseApi.getNurseList();
+    if (this.mounted) {
+      setState(() {
+        list = data;
+      });
+    }
   }
 
   getAmout() async {
@@ -195,89 +206,89 @@ class _ProfitState extends State<Profit> {
                 )
               ],
             ),
-            Divider(
-              height: 30,
-            ),
-            Material(
-              color: Colors.transparent,
-              child: InkWell(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-                onTap: () {},
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 2),
-                  child: Row(
-                    children: [
-                      Svgs.wallet,
-                      SizedBox(width: 8),
-                      Text('我的账户'),
-                      Expanded(
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: Icon(
-                            Icons.keyboard_arrow_right,
-                            color: ColorCenter.textGrey,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 10),
-            Material(
-              color: Colors.transparent,
-              child: InkWell(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-                onTap: () {},
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 2),
-                  child: Row(
-                    children: [
-                      Svgs.coupon,
-                      SizedBox(width: 8),
-                      Text('我的卡券'),
-                      Expanded(
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: Icon(
-                            Icons.keyboard_arrow_right,
-                            color: ColorCenter.textGrey,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 10),
-            Material(
-              color: Colors.transparent,
-              child: InkWell(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-                onTap: () {},
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 2),
-                  child: Row(
-                    children: [
-                      Svgs.withdrawal,
-                      SizedBox(width: 8),
-                      Text('我要提现'),
-                      Expanded(
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: Icon(
-                            Icons.keyboard_arrow_right,
-                            color: ColorCenter.textGrey,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            // Divider(
+            //   height: 30,
+            // ),
+            // Material(
+            //   color: Colors.transparent,
+            //   child: InkWell(
+            //     borderRadius: BorderRadius.all(Radius.circular(8)),
+            //     onTap: () {},
+            //     child: Padding(
+            //       padding: EdgeInsets.symmetric(vertical: 2),
+            //       child: Row(
+            //         children: [
+            //           Svgs.wallet,
+            //           SizedBox(width: 8),
+            //           Text('我的账户'),
+            //           Expanded(
+            //             child: Align(
+            //               alignment: Alignment.centerRight,
+            //               child: Icon(
+            //                 Icons.keyboard_arrow_right,
+            //                 color: ColorCenter.textGrey,
+            //               ),
+            //             ),
+            //           )
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            // SizedBox(height: 10),
+            // Material(
+            //   color: Colors.transparent,
+            //   child: InkWell(
+            //     borderRadius: BorderRadius.all(Radius.circular(8)),
+            //     onTap: () {},
+            //     child: Padding(
+            //       padding: EdgeInsets.symmetric(vertical: 2),
+            //       child: Row(
+            //         children: [
+            //           Svgs.coupon,
+            //           SizedBox(width: 8),
+            //           Text('我的卡券'),
+            //           Expanded(
+            //             child: Align(
+            //               alignment: Alignment.centerRight,
+            //               child: Icon(
+            //                 Icons.keyboard_arrow_right,
+            //                 color: ColorCenter.textGrey,
+            //               ),
+            //             ),
+            //           )
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            // SizedBox(height: 10),
+            // Material(
+            //   color: Colors.transparent,
+            //   child: InkWell(
+            //     borderRadius: BorderRadius.all(Radius.circular(8)),
+            //     onTap: () {},
+            //     child: Padding(
+            //       padding: EdgeInsets.symmetric(vertical: 2),
+            //       child: Row(
+            //         children: [
+            //           Svgs.withdrawal,
+            //           SizedBox(width: 8),
+            //           Text('我要提现'),
+            //           Expanded(
+            //             child: Align(
+            //               alignment: Alignment.centerRight,
+            //               child: Icon(
+            //                 Icons.keyboard_arrow_right,
+            //                 color: ColorCenter.textGrey,
+            //               ),
+            //             ),
+            //           )
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ),
           ],
         );
       },
@@ -294,6 +305,7 @@ class _ProfitState extends State<Profit> {
               info.headImg,
               width: 40,
               height: 40,
+              fit: BoxFit.cover,
             ),
           ),
           SizedBox(width: 16),

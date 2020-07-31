@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ProtocolPrivacy extends StatefulWidget {
@@ -25,15 +23,12 @@ class _ProtocolPrivacyState extends State<ProtocolPrivacy> {
   void initAssets() async {
     String path = '';
     if (widget.title != '用户协议') {
-      path = 'assets/file/protocol.html';
+      path = 'http://www.yihut.cn/protocol.html';
     } else {
-      path = 'assets/file/privacy.html';
+      path = 'http://www.yihut.cn/privacy.html';
     }
-    String content = await rootBundle.loadString(path);
-    String contentBase64 = base64Encode(const Utf8Encoder().convert(content));
-    String url = 'data:text/html;base64,$contentBase64';
     controller.future.then((value) {
-      value.loadUrl(url);
+      value.loadUrl(path);
     });
   }
 

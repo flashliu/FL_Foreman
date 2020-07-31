@@ -15,6 +15,12 @@ class MessageList extends StatefulWidget {
 class _MessageListState extends State<MessageList> {
   RefreshController refreshController = RefreshController();
   @override
+  void dispose() {
+    refreshController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
     final list = userProvider.messageList;

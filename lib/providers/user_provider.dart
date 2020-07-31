@@ -15,6 +15,24 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 class UserProvider with ChangeNotifier {
   User info;
   List<Message> messageList = [];
+  bool allNotification = true;
+  bool systemNotification = true;
+  bool preferentialNotification = true;
+
+  setAllNotification(bool value) {
+    allNotification = value;
+    notifyListeners();
+  }
+
+  setSystemNotification(bool value) {
+    systemNotification = value;
+    notifyListeners();
+  }
+
+  setPreferentialNotification(bool value) {
+    preferentialNotification = value;
+    notifyListeners();
+  }
 
   getMessageList() async {
     final list = await UserApi.getMessageList();

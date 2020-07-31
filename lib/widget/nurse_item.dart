@@ -1,7 +1,9 @@
+import 'package:FL_Foreman/apis/order_api.dart';
 import 'package:FL_Foreman/models/nurse_model.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/svgs.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
+import 'package:FL_Foreman/views/nurse_detail/nurse_detail.dart';
 import 'package:FL_Foreman/widget/pannel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,11 +13,19 @@ class NurseItem extends StatefulWidget {
   final bool showLocation;
   final Nurse info;
   final bool showAction;
+  final EdgeInsets margin;
+  final BorderRadius borderRadius;
+  final bool canGoDetail;
+  final Function(Nurse info) onDelete;
   NurseItem({
     Key key,
     this.showLocation = false,
     this.info,
     this.showAction = true,
+    this.margin,
+    this.borderRadius = const BorderRadius.all(Radius.circular(12)),
+    this.canGoDetail = true,
+    this.onDelete,
   }) : super(key: key);
 
   @override
@@ -119,8 +129,20 @@ class _NurseItemState extends State<NurseItem> with SingleTickerProviderStateMix
               right: 16,
             ),
             Pannel(
-              margin: EdgeInsets.only(bottom: animation.value * 56 + 16, left: 16, right: 16),
+              borderRadius: widget.borderRadius,
+              margin: widget.margin ?? EdgeInsets.only(bottom: animation.value * 56 + 16, left: 16, right: 16),
               child: child,
+              onTap: () {
+                if (widget.canGoDetail) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => NurseDetail(
+                        info: widget.info,
+                      ),
+                    ),
+                  );
+                }
+              },
             ),
           ],
         );
@@ -169,7 +191,11 @@ class _NurseItemState extends State<NurseItem> with SingleTickerProviderStateMix
                               ],
                             );
                           },
-                        ).then((value) => {print(value)});
+                        ).then((value) {
+                          if (value == 'delete') {
+                            widget.onDelete(widget.info);
+                          }
+                        });
                       },
                       child: Svgs.menu,
                     ),
