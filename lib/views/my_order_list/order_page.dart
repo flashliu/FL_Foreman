@@ -46,7 +46,7 @@ class _OrderPageState extends State<OrderPage> {
       status: widget.status,
       nurseId: widget.nurseId,
     );
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(Duration(milliseconds: 500));
     if (mounted) {
       setState(() {
         list = res;

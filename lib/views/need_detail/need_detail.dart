@@ -5,6 +5,7 @@ import 'package:FL_Foreman/res/text_styles.dart';
 import 'package:FL_Foreman/views/choose_nurse/choose_nurse.dart';
 import 'package:FL_Foreman/widget/label_value.dart';
 import 'package:FL_Foreman/widget/pannel.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class NeedDetail extends StatefulWidget {
@@ -166,7 +167,7 @@ class _NeedDetailState extends State<NeedDetail> {
                     SizedBox(width: 10),
                     FlatButton(
                       onPressed: () => Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (_) => ChooseNurse(info: widget.info)),
+                        CupertinoPageRoute(builder: (_) => ChooseNurse(info: widget.info)),
                       ),
                       child: Text('立即派单'),
                       color: ColorCenter.themeColor,

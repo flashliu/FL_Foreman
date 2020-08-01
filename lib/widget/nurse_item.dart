@@ -135,7 +135,7 @@ class _NurseItemState extends State<NurseItem> with SingleTickerProviderStateMix
               onTap: () {
                 if (widget.canGoDetail) {
                   Navigator.of(context).push(
-                    MaterialPageRoute(
+                    CupertinoPageRoute(
                       builder: (_) => NurseDetail(
                         info: widget.info,
                       ),

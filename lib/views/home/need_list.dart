@@ -37,7 +37,7 @@ class _NeedListState extends State<NeedList> with SingleTickerProviderStateMixin
 
   getNeedList(int index) async {
     final list = await OrderApi.getNeedList(serverSites[index]);
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(Duration(milliseconds: 500));
     if (this.mounted) {
       setState(() {
         loading = false;
@@ -115,7 +115,9 @@ class _NeedListState extends State<NeedList> with SingleTickerProviderStateMixin
           Row(
             children: [
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  showSearch(context: context, delegate: NeedSearchDelegate());
+                },
                 child: Hero(
                   tag: 'search',
                   child: Icon(
@@ -138,7 +140,7 @@ class _NeedListState extends State<NeedList> with SingleTickerProviderStateMixin
   buildFloat() {
     return FloatingActionButton(
       onPressed: () {
-        Navigator.of(context).push(MaterialPageRoute(builder: (_) => MyOrderList()));
+        Navigator.of(context).push(CupertinoPageRoute(builder: (_) => MyOrderList()));
       },
       child: Svgs.order,
     );
@@ -164,6 +166,74 @@ class _NeedListState extends State<NeedList> with SingleTickerProviderStateMixin
           ),
         )
       ],
+    );
+  }
+}
+
+class NeedSearchDelegate extends SearchDelegate {
+  List<String> suggestions = ['生活护理', '术后护理', '康复护理', '高级护理'];
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(
+          Icons.search,
+        ),
+        onPressed: () {
+          query = '';
+        },
+      )
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, '');
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return ListView.separated(
+      itemBuilder: (context, index) {
+        return Container(
+          height: 60,
+          alignment: Alignment.center,
+          child: Text(
+            '$index',
+            style: TextStyle(fontSize: 20),
+          ),
+        );
+      },
+      separatorBuilder: (context, index) {
+        return Divider();
+      },
+      itemCount: 10,
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    return ListView.separated(
+      itemBuilder: (context, index) {
+        return ListTile(
+          title: Text(suggestions[index]),
+          onTap: () {
+            query = suggestions[index];
+            this.showResults(context);
+          },
+        );
+      },
+      separatorBuilder: (context, index) {
+        return Divider(
+          height: 1,
+        );
+      },
+      itemCount: suggestions.length,
     );
   }
 }

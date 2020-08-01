@@ -4,6 +4,7 @@ import 'package:FL_Foreman/views/setting/about_us.dart';
 import 'package:FL_Foreman/views/setting/notification_setting.dart';
 import 'package:FL_Foreman/views/setting/protocol.dart';
 import 'package:FL_Foreman/widget/cell.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -29,7 +30,7 @@ class Setting extends StatelessWidget {
           Cell(
             label: '关于我们',
             onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (_) => AboutUs()));
+              Navigator.of(context).push(CupertinoPageRoute(builder: (_) => AboutUs()));
             },
           ),
           Cell(
@@ -41,13 +42,13 @@ class Setting extends StatelessWidget {
           Cell(
             label: '消息通知',
             onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (_) => NotificationSetting()));
+              Navigator.of(context).push(CupertinoPageRoute(builder: (_) => NotificationSetting()));
             },
           ),
           Cell(
             label: '用户协议',
             onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (_) => Protocol()));
+              Navigator.of(context).push(CupertinoPageRoute(builder: (_) => Protocol()));
             },
           ),
           SizedBox(height: 24),

@@ -3,6 +3,7 @@ import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
 import 'package:FL_Foreman/views/order_detail/order_detail.dart';
 import 'package:FL_Foreman/widget/pannel.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -86,7 +87,7 @@ class OrderItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final nomalText = TextStyle(fontSize: 12, color: ColorCenter.textGrey);
     return Pannel(
-      onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => OrderDetail(info: info))),
+      onTap: () => Navigator.of(context).push(CupertinoPageRoute(builder: (_) => OrderDetail(info: info))),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

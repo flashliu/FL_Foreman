@@ -11,6 +11,7 @@ import 'package:FL_Foreman/widget/checkable_nurse_item.dart';
 import 'package:FL_Foreman/widget/label_value.dart';
 import 'package:FL_Foreman/widget/list_content.dart';
 import 'package:FL_Foreman/widget/pannel.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ChooseNurse extends StatefulWidget {
@@ -52,7 +53,7 @@ class _ChooseNurseState extends State<ChooseNurse> {
     );
     ToastUtils.showLong(res['message']);
     if (res['code'] == 200) {
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => MyOrderList()));
+      Navigator.of(context).pushReplacement(CupertinoPageRoute(builder: (_) => MyOrderList()));
     }
   }
 

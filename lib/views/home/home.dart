@@ -15,6 +15,7 @@ import 'package:FL_Foreman/views/home/profit.dart';
 import 'package:FL_Foreman/views/message_list/message_list.dart';
 import 'package:FL_Foreman/views/setting/setting.dart';
 import 'package:FL_Foreman/widget/modal_with_close_dialog.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_upgrade/flutter_app_upgrade.dart';
 import 'package:provider/provider.dart';
@@ -179,7 +180,7 @@ class UserDrawer extends StatelessWidget {
                 icon: Svgs.setting,
                 text: '设置',
                 onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(
+                  CupertinoPageRoute(
                     builder: (_) => Setting(),
                   ),
                 ),
@@ -262,29 +263,25 @@ class Header extends StatelessWidget {
               ),
             ),
           ),
-          TabBar(
-            isScrollable: true,
-            indicatorColor: Colors.white,
-            labelColor: Colors.white,
-            unselectedLabelColor: Colors.white70,
-            labelStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-            unselectedLabelStyle: TextStyle(fontWeight: FontWeight.normal, color: Colors.white54),
-            indicatorSize: TabBarIndicatorSize.label,
-            tabs: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('我的收益'),
+          Expanded(
+            child: Align(
+              alignment: Alignment.center,
+              child: TabBar(
+                isScrollable: true,
+                indicatorColor: Colors.white,
+                labelColor: Colors.white,
+                unselectedLabelColor: Colors.white70,
+                labelStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                unselectedLabelStyle: TextStyle(fontWeight: FontWeight.normal, color: Colors.white54),
+                indicatorSize: TabBarIndicatorSize.label,
+                tabs: [
+                  Text('我的收益'),
+                  Text("接单"),
+                  Text("护工管理"),
+                ],
+                controller: tabController,
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text("接单"),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text("护工管理"),
-              )
-            ],
-            controller: tabController,
+            ),
           ),
           ClipOval(
             child: Material(
@@ -298,7 +295,7 @@ class Header extends StatelessWidget {
                   ),
                 ),
                 onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (_) => MessageList()));
+                  Navigator.of(context).push(CupertinoPageRoute(builder: (_) => MessageList()));
                 },
               ),
             ),

@@ -12,6 +12,7 @@ import 'package:FL_Foreman/res/svgs.dart';
 import 'package:FL_Foreman/views/home/home.dart';
 import 'package:FL_Foreman/views/protocol_privacy/protocol_privacy.dart';
 import 'package:common_utils/common_utils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +30,7 @@ class _LoginState extends State<Login> {
   TextEditingController accountEditController;
   TextEditingController codeEditController;
   Timer timer;
-  String key;
+  String key = '';
   bool canSendCode = true;
   int tick = 60;
 
@@ -74,7 +75,7 @@ class _LoginState extends State<Login> {
     await Storage().set('userinfo', jsonEncode(user));
     Provider.of<UserProvider>(context, listen: false).setUser(user);
     ToastUtils.showLong("登录成功");
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => Home()));
+    Navigator.pushReplacement(context, CupertinoPageRoute(builder: (_) => Home()));
   }
 
   void getCode() async {
@@ -112,7 +113,7 @@ class _LoginState extends State<Login> {
     protocolTapGestureRecognizer = TapGestureRecognizer()
       ..onTap = () {
         Navigator.of(context).push(
-          MaterialPageRoute(
+          CupertinoPageRoute(
             builder: (_) => ProtocolPrivacy(
               title: "用户协议",
             ),
@@ -122,7 +123,7 @@ class _LoginState extends State<Login> {
     privacyTapGestureRecognizer = TapGestureRecognizer()
       ..onTap = () {
         Navigator.of(context).push(
-          MaterialPageRoute(
+          CupertinoPageRoute(
             builder: (_) => ProtocolPrivacy(
               title: "隐私政策",
             ),
@@ -145,6 +146,7 @@ class _LoginState extends State<Login> {
       resizeToAvoidBottomInset: false,
       backgroundColor: ColorCenter.background,
       body: GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: () => FocusScope.of(context).unfocus(),
         child: SafeArea(
           child: Container(

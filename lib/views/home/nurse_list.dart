@@ -126,7 +126,10 @@ class _NurseListState extends State<NurseList> {
                 ),
                 onTap: (index) {
                   levelIndex = index;
-                  refreshController.requestRefresh();
+                  setState(() {
+                    loading = true;
+                  });
+                  getNurseList(index);
                 },
               ),
             ),

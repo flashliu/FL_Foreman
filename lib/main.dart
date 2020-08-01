@@ -11,6 +11,7 @@ import 'package:fluwx/fluwx.dart';
 import 'package:provider/provider.dart';
 
 main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(App());
   registerWxApi(
     appId: "wx18fc3a377ec300f8",
