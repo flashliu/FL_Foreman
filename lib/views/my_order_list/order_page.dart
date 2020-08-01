@@ -54,6 +54,7 @@ class _OrderPageState extends State<OrderPage> {
 
   refresh() async {
     page = 1;
+    await Future.delayed(Duration(milliseconds: 300));
     final res = await getOrderList();
     if (mounted) {
       setState(() {

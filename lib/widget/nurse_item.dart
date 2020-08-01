@@ -125,8 +125,8 @@ class _NurseItemState extends State<NurseItem> with SingleTickerProviderStateMix
                 ),
               ),
               bottom: animation.value * 16 + animation.value * -16 + 16,
-              left: 16,
-              right: 16,
+              left: 32,
+              right: 32,
             ),
             Pannel(
               borderRadius: widget.borderRadius,

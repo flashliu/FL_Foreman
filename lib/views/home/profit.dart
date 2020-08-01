@@ -29,8 +29,9 @@ class _ProfitState extends State<Profit> {
   }
 
   getNurseList() async {
-    final data = await NurseApi.getNurseList();
+    final data = await NurseApi.getNurseList('');
     if (this.mounted) {
+      data.sort((a, b) => b.workTimes.compareTo(a.workTimes));
       setState(() {
         list = data;
       });

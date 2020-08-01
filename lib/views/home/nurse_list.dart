@@ -43,7 +43,9 @@ class _NurseListState extends State<NurseList> {
   }
 
   getNurseList(int index) async {
-    final data = await NurseApi.getNurseList();
+    final nurseLevel = levelIndex == 0 ? '' : levels[levelIndex] + '护理';
+    final data = await NurseApi.getNurseList(nurseLevel);
+    await Future.delayed(Duration(milliseconds: 300));
     if (this.mounted) {
       setState(() {
         list = data;

@@ -2,6 +2,7 @@ import 'package:FL_Foreman/apis/order_api.dart';
 import 'package:FL_Foreman/models/need_model.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/svgs.dart';
+import 'package:FL_Foreman/res/text_styles.dart';
 import 'package:FL_Foreman/views/my_order_list/my_order_list.dart';
 import 'package:FL_Foreman/widget/list_content.dart';
 import 'package:FL_Foreman/widget/need_item.dart';
@@ -37,6 +38,7 @@ class _NeedListState extends State<NeedList> with SingleTickerProviderStateMixin
 
   getNeedList(int index) async {
     final list = await OrderApi.getNeedList(serverSites[index]);
+    await Future.delayed(Duration(milliseconds: 300));
     if (this.mounted) {
       setState(() {
         loading = false;
@@ -171,6 +173,13 @@ class _NeedListState extends State<NeedList> with SingleTickerProviderStateMixin
 
 class NeedSearchDelegate extends SearchDelegate {
   List<String> suggestions = ['生活护理', '术后护理', '康复护理', '高级护理'];
+
+  @override
+  String get searchFieldLabel => '请输入护理类型';
+
+  @override
+  TextStyle get searchFieldStyle => TextStyle(fontSize: 16);
+
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
@@ -197,32 +206,39 @@ class NeedSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    return ListView.separated(
-      itemBuilder: (context, index) {
-        return Container(
-          height: 60,
-          alignment: Alignment.center,
-          child: Text(
-            '$index',
-            style: TextStyle(fontSize: 20),
+    return FutureBuilder(
+      future: OrderApi.getNeedList('居家'),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return Center(child: CircularProgressIndicator());
+        }
+        return Padding(
+          padding: EdgeInsets.symmetric(vertical: 16),
+          child: ListView.builder(
+            itemBuilder: (context, index) {
+              return NeedItem(
+                info: snapshot.data[index],
+              );
+            },
+            itemCount: snapshot.data.length,
           ),
         );
       },
-      separatorBuilder: (context, index) {
-        return Divider();
-      },
-      itemCount: 10,
     );
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
+    final filterSuggestions = suggestions.where((f) => f.contains(query)).toList();
     return ListView.separated(
       itemBuilder: (context, index) {
         return ListTile(
-          title: Text(suggestions[index]),
+          title: Text(
+            filterSuggestions[index],
+            style: TextStyles.black_14,
+          ),
           onTap: () {
-            query = suggestions[index];
+            query = filterSuggestions[index];
             this.showResults(context);
           },
         );
@@ -232,7 +248,7 @@ class NeedSearchDelegate extends SearchDelegate {
           height: 1,
         );
       },
-      itemCount: suggestions.length,
+      itemCount: filterSuggestions.length,
     );
   }
 }
