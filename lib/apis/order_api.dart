@@ -16,11 +16,11 @@ class OrderApi {
     return [];
   }
 
-  static Future<List<Order>> getOrderList({int status, String nurseId}) async {
+  static Future<List<Order>> getOrderList({int status, String nurseId, int page = 1, int pageSize = 5}) async {
     final params = {
       "status": status,
-      "pageSize": 1000,
-      "page": 1,
+      "pageSize": pageSize,
+      "page": page,
       "parentId": Global.userId,
     };
     if (nurseId != null) {

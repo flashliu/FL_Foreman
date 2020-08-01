@@ -19,11 +19,13 @@ class _OrderPageState extends State<OrderPage> {
   List<Order> list = [];
   bool loading = true;
   RefreshController refreshController = RefreshController();
+  int page = 1;
+  int pageSize = 5;
 
   @override
   void initState() {
     super.initState();
-    getOrderList();
+    refresh();
   }
 
   @override
@@ -37,23 +39,42 @@ class _OrderPageState extends State<OrderPage> {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.status != widget.status) {
       loading = true;
-      getOrderList();
+      refresh();
     }
   }
 
-  getOrderList() async {
-    final res = await OrderApi.getOrderList(
+  Future<List<Order>> getOrderList() async {
+    return await OrderApi.getOrderList(
       status: widget.status,
       nurseId: widget.nurseId,
+      page: page,
+      pageSize: pageSize,
     );
-    await Future.delayed(Duration(milliseconds: 500));
+  }
+
+  refresh() async {
+    page = 1;
+    final res = await getOrderList();
     if (mounted) {
       setState(() {
         list = res;
         loading = false;
       });
     }
+    if (res.length == 0) refreshController.loadNoData();
     refreshController.refreshCompleted();
+  }
+
+  loadMore() async {
+    page++;
+    final res = await getOrderList();
+    if (res.length < pageSize) {
+      return refreshController.loadNoData();
+    }
+    setState(() {
+      list = list + res;
+    });
+    refreshController.loadComplete();
   }
 
   @override
@@ -69,12 +90,33 @@ class _OrderPageState extends State<OrderPage> {
       );
     }
     return SmartRefresher(
+      enablePullUp: refreshController.footerMode.value != LoadStatus.noMore,
       header: WaterDropHeader(
         complete: Text('刷新成功！'),
         refresh: CupertinoActivityIndicator(),
       ),
-      footer: ClassicFooter(),
-      onRefresh: () => getOrderList(),
+      footer: CustomFooter(
+        builder: (BuildContext context, LoadStatus mode) {
+          Widget body;
+          if (mode == LoadStatus.idle) {
+            body = Text("上拉加载更多");
+          } else if (mode == LoadStatus.loading) {
+            body = CupertinoActivityIndicator();
+          } else if (mode == LoadStatus.failed) {
+            body = Text("加载失败");
+          } else if (mode == LoadStatus.canLoading) {
+            body = Text("松开加载");
+          } else {
+            body = Text("没有更多数据");
+          }
+          return Container(
+            height: 55.0,
+            child: Center(child: body),
+          );
+        },
+      ),
+      onRefresh: () => refresh(),
+      onLoading: () => loadMore(),
       controller: refreshController,
       child: ListContent(
         itemBuilder: (context, index) {

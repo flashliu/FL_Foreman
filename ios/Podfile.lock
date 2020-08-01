@@ -7,8 +7,12 @@ PODS:
   - AlicloudUTDID (1.5.0.91)
   - AlicloudUtils (1.3.9):
     - AlicloudUTDID
+  - Bugly (2.5.71)
   - Flutter (1.0.0)
   - flutter_app_upgrade (0.0.1):
+    - Flutter
+  - flutter_bugly (0.0.1):
+    - Bugly
     - Flutter
   - fluttertoast (0.0.2):
     - Flutter
@@ -35,6 +39,7 @@ PODS:
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_app_upgrade (from `.symlinks/plugins/flutter_app_upgrade/ios`)
+  - flutter_bugly (from `.symlinks/plugins/flutter_bugly/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - fluwx (from `.symlinks/plugins/fluwx/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
@@ -50,6 +55,8 @@ SPEC REPOS:
     - AlicloudUT
     - AlicloudUTDID
     - AlicloudUtils
+  https://github.com/CocoaPods/Specs.git:
+    - Bugly
   trunk:
     - MTBBarcodeScanner
     - WechatOpenSDK
@@ -59,6 +66,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_app_upgrade:
     :path: ".symlinks/plugins/flutter_app_upgrade/ios"
+  flutter_bugly:
+    :path: ".symlinks/plugins/flutter_bugly/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
   fluwx:
@@ -81,8 +90,10 @@ SPEC CHECKSUMS:
   AlicloudUT: 6d1cf30d57d096b7e9bb4b069dd0ba6ad59a3338
   AlicloudUTDID: 5f008f2ac35e3969a5cbf8557ef8d285525be948
   AlicloudUtils: 66e0ba6ece62d7dd05e9dd95674b2c7811624c2f
+  Bugly: fd066c75c4a0eca1440f9b6a84bd37d51bfc85ac
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_app_upgrade: a62fbe2a09a2176a7b44211c8355adfcfb969779
+  flutter_bugly: c9800f4d5bc5bdc27ffdde3417a26ba44266e0c3
   fluttertoast: b644586ef3b16f67fae9a1f8754cef6b2d6b634b
   fluwx: 07a55ed66bf3a4961e836a2a411b02dcada32902
   MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb

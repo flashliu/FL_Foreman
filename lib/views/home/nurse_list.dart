@@ -44,7 +44,6 @@ class _NurseListState extends State<NurseList> {
 
   getNurseList(int index) async {
     final data = await NurseApi.getNurseList();
-    await Future.delayed(Duration(seconds: 1));
     if (this.mounted) {
       setState(() {
         list = data;

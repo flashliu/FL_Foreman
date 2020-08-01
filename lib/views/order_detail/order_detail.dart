@@ -74,7 +74,7 @@ class _OrderDetailState extends State<OrderDetail> with SingleTickerProviderStat
                       ),
                       Expanded(
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 80, right: 120),
+                          padding: const EdgeInsets.only(left: 60, right: 100),
                           child: TabBar(
                             labelPadding: EdgeInsets.only(bottom: 2),
                             controller: tabController,

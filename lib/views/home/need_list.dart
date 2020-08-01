@@ -37,7 +37,6 @@ class _NeedListState extends State<NeedList> with SingleTickerProviderStateMixin
 
   getNeedList(int index) async {
     final list = await OrderApi.getNeedList(serverSites[index]);
-    await Future.delayed(Duration(milliseconds: 500));
     if (this.mounted) {
       setState(() {
         loading = false;

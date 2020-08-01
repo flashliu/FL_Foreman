@@ -149,30 +149,26 @@ class _ChooseNurseState extends State<ChooseNurse> {
                     ],
                   ),
                 ),
-                SizedBox(height: 32),
+                SizedBox(height: 16),
                 Expanded(
                   child: buildNurseList(),
                 ),
-                SizedBox(height: 60)
-              ],
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Container(
-              width: double.infinity,
-              decoration: BoxDecoration(color: Colors.white),
-              padding: EdgeInsets.only(bottom: 32, left: 16, right: 16),
-              child: FlatButton(
-                onPressed: checkedNurse.length > 0 ? confirm : null,
-                disabledColor: Colors.grey[300],
-                child: Text('确认（${checkedNurse.length}人）'),
-                color: ColorCenter.themeColor,
-                textColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(color: Colors.white),
+                  padding: EdgeInsets.only(bottom: 32, left: 16, right: 16),
+                  child: FlatButton(
+                    onPressed: checkedNurse.length > 0 ? confirm : null,
+                    disabledColor: Colors.grey[300],
+                    child: Text('确认（${checkedNurse.length}人）'),
+                    color: ColorCenter.themeColor,
+                    textColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
           )
         ],

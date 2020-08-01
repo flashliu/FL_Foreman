@@ -53,7 +53,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     final versionInfo = await AppApi.getVersion();
     Provider.of<AppProvider>(context, listen: false).setVersion(versionInfo);
     final current = await FlutterUpgrade.appInfo;
-    if (versionInfo.vesionStable != current.versionName) return null;
+    if (versionInfo.vesionStable == current.versionName) return null;
     return AppUpgradeInfo(
       title: '新版本V' + versionInfo.vesionStable,
       contents: [
@@ -94,7 +94,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: UserDrawer(),
+      drawer: UserDrawer(
+        parentContext: context,
+      ),
       body: Column(
         children: [
           Header(tabController: tabController),
@@ -108,8 +110,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 }
 
 class UserDrawer extends StatelessWidget {
+  final BuildContext parentContext;
   const UserDrawer({
     Key key,
+    this.parentContext,
   }) : super(key: key);
 
   showQrcode(BuildContext context) async {
@@ -117,7 +121,7 @@ class UserDrawer extends StatelessWidget {
     final data = await UserApi.getQrcode();
     DialogUtils.showElasticDialog(
       barrierDismissible: true,
-      context: context,
+      context: parentContext,
       builder: (_) => ModalWithCloseDialog(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
