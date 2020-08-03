@@ -117,7 +117,7 @@ class _ProfitState extends State<Profit> {
                     Column(
                       children: [
                         Text(
-                          '2400',
+                          list.map((e) => e.workTimes).fold(0, (p, n) => p + n).toString(),
                           style: TextStyle(
                             color: Color(0xFF00A2E6),
                             fontSize: 16,
@@ -132,16 +132,14 @@ class _ProfitState extends State<Profit> {
                     ),
                     Column(
                       children: [
-                        Consumer<UserProvider>(builder: (context, user, child) {
-                          return Text(
-                            list.length.toString(),
-                            style: TextStyle(
-                              color: Color(0xFF00A2E6),
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          );
-                        }),
+                        Text(
+                          list.length.toString(),
+                          style: TextStyle(
+                            color: Color(0xFF00A2E6),
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                         Text(
                           '护工人数',
                           style: TextStyle(color: ColorCenter.textBlack, fontSize: 12),

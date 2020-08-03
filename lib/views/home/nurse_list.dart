@@ -4,6 +4,7 @@ import 'package:FL_Foreman/common/toast_utils.dart';
 import 'package:FL_Foreman/models/nurse_model.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/svgs.dart';
+import 'package:FL_Foreman/res/text_styles.dart';
 import 'package:FL_Foreman/widget/list_content.dart';
 import 'package:FL_Foreman/widget/nurse_item.dart';
 import 'package:flutter/cupertino.dart';
@@ -179,16 +180,19 @@ class _NurseListState extends State<NurseList> {
               ],
             ),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Svgs.search,
-              SizedBox(height: 2),
-              Text(
-                '查找',
-                style: TextStyle(color: Colors.white, fontSize: 12),
-              ),
-            ],
+          GestureDetector(
+            onTap: () => showSearch(context: context, delegate: NurseSearchDelegate()),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Svgs.search,
+                SizedBox(height: 2),
+                Text(
+                  '查找',
+                  style: TextStyle(color: Colors.white, fontSize: 12),
+                ),
+              ],
+            ),
           )
         ],
       ),
@@ -215,6 +219,88 @@ class _NurseListState extends State<NurseList> {
           ),
         )
       ],
+    );
+  }
+}
+
+class NurseSearchDelegate extends SearchDelegate {
+  List<String> suggestions = ['特级护理', '一护护理', '二级护理', '三级护理'];
+
+  @override
+  String get searchFieldLabel => '请输入护理类型';
+
+  @override
+  TextStyle get searchFieldStyle => TextStyle(fontSize: 16);
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(
+          Icons.search,
+        ),
+        onPressed: () {
+          query = '';
+        },
+      )
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, '');
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return FutureBuilder(
+      future: NurseApi.getNurseList(''),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return Center(child: CircularProgressIndicator());
+        }
+        return Padding(
+          padding: EdgeInsets.symmetric(vertical: 16),
+          child: ListView.builder(
+            itemBuilder: (context, index) {
+              return NurseItem(
+                info: snapshot.data[index],
+              );
+            },
+            itemCount: snapshot.data.length,
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    final filterSuggestions = suggestions.where((f) => f.contains(query)).toList();
+    return ListView.separated(
+      itemBuilder: (context, index) {
+        return ListTile(
+          title: Text(
+            filterSuggestions[index],
+            style: TextStyles.black_14,
+          ),
+          onTap: () {
+            query = filterSuggestions[index];
+            this.showResults(context);
+          },
+        );
+      },
+      separatorBuilder: (context, index) {
+        return Divider(
+          height: 1,
+        );
+      },
+      itemCount: filterSuggestions.length,
     );
   }
 }
