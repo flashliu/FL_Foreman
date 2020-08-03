@@ -20,7 +20,7 @@ class Global {
   );
 
   static final key = GlobalKey();
-  static final userId = Provider.of<UserProvider>(key.currentContext, listen: false).info.loginUser.id;
+  static get userId => Provider.of<UserProvider>(key.currentContext, listen: false).info.loginUser.id;
 
   static Future<LoginUser> scanQrcode(BuildContext context) {
     final completer = Completer<LoginUser>();

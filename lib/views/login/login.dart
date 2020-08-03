@@ -163,19 +163,20 @@ class _LoginState extends State<Login> {
                 ),
                 SizedBox(height: 40),
                 buildInput(
-                    hintText: '输入手机号',
-                    icon: Icon(
-                      Icons.phone_iphone,
-                      color: ColorCenter.themeColor,
-                      size: 16,
-                    ),
-                    controller: accountEditController),
+                  hintText: '输入手机号',
+                  icon: Icon(
+                    Icons.phone_iphone,
+                    color: ColorCenter.themeColor,
+                    size: 16,
+                  ),
+                  controller: accountEditController,
+                ),
+                SizedBox(height: 20),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
-                      flex: 2,
                       child: buildInput(
                         hintText: '输入验证码',
                         icon: Icon(
@@ -186,27 +187,24 @@ class _LoginState extends State<Login> {
                         controller: codeEditController,
                       ),
                     ),
-                    Expanded(
-                      flex: 1,
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 10, top: 20, left: 10, right: 10),
-                        child: GestureDetector(
-                          onTap: getCode,
-                          child: Container(
-                            decoration:
-                                kBtnDecorationStyle.copyWith(color: canSendCode ? ColorCenter.themeColor : Colors.grey),
-                            alignment: Alignment.centerLeft,
-                            height: 45.0,
-                            child: Center(
-                              child: Text(
-                                canSendCode ? "获取验证码" : (tick.toString() + "s"),
-                                style: TextStyle(fontSize: 14, color: Colors.white),
-                              ),
-                            ),
+                    SizedBox(width: 20),
+                    GestureDetector(
+                      onTap: getCode,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        decoration: kBtnDecorationStyle.copyWith(
+                          color: canSendCode ? ColorCenter.themeColor : Colors.grey,
+                        ),
+                        alignment: Alignment.centerLeft,
+                        height: 45.0,
+                        child: Center(
+                          child: Text(
+                            canSendCode ? "获取验证码" : (tick.toString() + "s"),
+                            style: TextStyle(fontSize: 14, color: Colors.white),
                           ),
                         ),
                       ),
-                    ),
+                    )
                   ],
                 ),
                 Padding(
@@ -244,28 +242,25 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Padding buildInput({String hintText, Widget icon, TextEditingController controller}) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10, top: 20, left: 10, right: 10),
-      child: Container(
-        alignment: Alignment.centerLeft,
-        decoration: kBoxDecorationStyle3,
-        height: 45.0,
-        child: TextField(
-          cursorColor: ColorCenter.themeColor,
-          controller: controller,
-          keyboardType: TextInputType.phone,
-          style: TextStyle(
-            color: Colors.black,
-            fontFamily: 'OpenSans',
-          ),
-          decoration: InputDecoration(
-            border: InputBorder.none,
-            contentPadding: EdgeInsets.all(8),
-            prefixIcon: icon,
-            hintText: hintText,
-            // hintStyle: TextStyles.kHintTextStyle,
-          ),
+  Widget buildInput({String hintText, Widget icon, TextEditingController controller}) {
+    return Container(
+      alignment: Alignment.centerLeft,
+      decoration: kBoxDecorationStyle3,
+      height: 45.0,
+      child: TextField(
+        cursorColor: ColorCenter.themeColor,
+        controller: controller,
+        keyboardType: TextInputType.phone,
+        style: TextStyle(
+          color: Colors.black,
+          fontFamily: 'OpenSans',
+        ),
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.all(8),
+          prefixIcon: icon,
+          hintText: hintText,
+          // hintStyle: TextStyles.kHintTextStyle,
         ),
       ),
     );
