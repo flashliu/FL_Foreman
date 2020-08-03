@@ -4,7 +4,9 @@ import 'dart:convert';
 import 'package:FL_Foreman/models/user_model.dart';
 import 'package:FL_Foreman/res/svgs.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:qr_code_tools/qr_code_tools.dart';
 
 class QrPage extends StatefulWidget {
   final Function success;
@@ -19,9 +21,21 @@ class QrPage extends StatefulWidget {
 
 class _QrPageState extends State<QrPage> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  final picker = ImagePicker();
   bool lightOn = false;
   QRViewController controller;
   StreamSubscription<String> listner;
+
+  scanFromCamera() async {
+    try {
+      final file = await picker.getImage(source: ImageSource.gallery);
+      String scanData = await QrCodeToolsPlugin.decodeFrom(file.path);
+      Map<String, dynamic> jsonScanData = jsonDecode(scanData);
+      final user = LoginUser.fromJson(jsonScanData);
+      widget.success(user);
+    } catch (e) {}
+    Navigator.of(context).pop();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,9 +79,7 @@ class _QrPageState extends State<QrPage> {
                 ),
                 // Svgs.closeLight,
                 GestureDetector(
-                  onTap: () {
-                    controller.flipCamera();
-                  },
+                  onTap: () => scanFromCamera(),
                   child: Svgs.photo,
                 )
               ],

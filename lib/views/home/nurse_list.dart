@@ -227,7 +227,7 @@ class NurseSearchDelegate extends SearchDelegate {
   List<String> suggestions = ['特级护理', '一护护理', '二级护理', '三级护理'];
 
   @override
-  String get searchFieldLabel => '请输入护理类型';
+  String get searchFieldLabel => '请输入护工等级、名字';
 
   @override
   TextStyle get searchFieldStyle => TextStyle(fontSize: 16);

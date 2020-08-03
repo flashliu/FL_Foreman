@@ -19,12 +19,16 @@ PODS:
   - fluwx (0.0.1):
     - Flutter
     - WechatOpenSDK (= 1.8.7.1)
+  - image_picker (0.0.1):
+    - Flutter
   - MTBBarcodeScanner (5.0.11)
   - "permission_handler (5.0.1+1)":
     - Flutter
   - qr_code_scanner (0.0.2):
     - Flutter
     - MTBBarcodeScanner
+  - qr_code_tools (0.0.1):
+    - Flutter
   - rammus (0.0.1):
     - AlicloudPush (~> 1.9.9)
     - Flutter
@@ -42,8 +46,10 @@ DEPENDENCIES:
   - flutter_bugly (from `.symlinks/plugins/flutter_bugly/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - fluwx (from `.symlinks/plugins/fluwx/ios`)
+  - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
   - qr_code_scanner (from `.symlinks/plugins/qr_code_scanner/ios`)
+  - qr_code_tools (from `.symlinks/plugins/qr_code_tools/ios`)
   - rammus (from `.symlinks/plugins/rammus/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - sign_in_with_apple (from `.symlinks/plugins/sign_in_with_apple/ios`)
@@ -57,8 +63,8 @@ SPEC REPOS:
     - AlicloudUtils
   https://github.com/CocoaPods/Specs.git:
     - Bugly
-  trunk:
     - MTBBarcodeScanner
+  trunk:
     - WechatOpenSDK
 
 EXTERNAL SOURCES:
@@ -72,10 +78,14 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/fluttertoast/ios"
   fluwx:
     :path: ".symlinks/plugins/fluwx/ios"
+  image_picker:
+    :path: ".symlinks/plugins/image_picker/ios"
   permission_handler:
     :path: ".symlinks/plugins/permission_handler/ios"
   qr_code_scanner:
     :path: ".symlinks/plugins/qr_code_scanner/ios"
+  qr_code_tools:
+    :path: ".symlinks/plugins/qr_code_tools/ios"
   rammus:
     :path: ".symlinks/plugins/rammus/ios"
   shared_preferences:
@@ -96,9 +106,11 @@ SPEC CHECKSUMS:
   flutter_bugly: c9800f4d5bc5bdc27ffdde3417a26ba44266e0c3
   fluttertoast: b644586ef3b16f67fae9a1f8754cef6b2d6b634b
   fluwx: 07a55ed66bf3a4961e836a2a411b02dcada32902
+  image_picker: 9c3312491f862b28d21ecd8fdf0ee14e601b3f09
   MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
   permission_handler: eac8e15b4a1a3fba55b761d19f3f4e6b005d15b6
   qr_code_scanner: 16107718bdad7d708cdf6a5eacdca24b56cdf471
+  qr_code_tools: bd0c76036813e6251a1df7d130b9c366fe961444
   rammus: b742412b5535e367fce5c30b82d36c8fcb06271a
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   sign_in_with_apple: 34f3f5456a45fd7ac5fb42905e2ad31dae061b4a
