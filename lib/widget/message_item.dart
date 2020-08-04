@@ -7,11 +7,13 @@ import 'package:flutter/material.dart';
 
 class MessageItem extends StatelessWidget {
   final Message info;
-  const MessageItem({Key key, this.info}) : super(key: key);
+  final Function onTap;
+  const MessageItem({Key key, this.info, this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Pannel(
+      onTap: onTap,
       child: Column(
         children: [
           Row(
@@ -20,8 +22,8 @@ class MessageItem extends StatelessWidget {
                 info.createTime,
                 style: TextStyles.grey_14,
               ),
-              Offstage(
-                offstage: info.status == 0,
+              Visibility(
+                visible: info.status == 0,
                 child: Dot(
                   dotColor: ColorCenter.red,
                   height: 5,

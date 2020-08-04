@@ -50,6 +50,7 @@ class _MessageListState extends State<MessageList> {
             itemBuilder: (context, index) {
               return MessageItem(
                 info: list[index],
+                onTap: () => userProvider.readMessage(list[index].id),
               );
             },
             itemCount: list.length,

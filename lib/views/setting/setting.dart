@@ -1,8 +1,8 @@
 import 'package:FL_Foreman/common/toast_utils.dart';
 import 'package:FL_Foreman/providers/user_provider.dart';
+import 'package:FL_Foreman/views/protocol_privacy/protocol_privacy.dart';
 import 'package:FL_Foreman/views/setting/about_us.dart';
 import 'package:FL_Foreman/views/setting/notification_setting.dart';
-import 'package:FL_Foreman/views/setting/protocol.dart';
 import 'package:FL_Foreman/widget/cell.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +48,7 @@ class Setting extends StatelessWidget {
           Cell(
             label: '用户协议',
             onTap: () {
-              Navigator.of(context).push(CupertinoPageRoute(builder: (_) => Protocol()));
+              Navigator.of(context).push(CupertinoPageRoute(builder: (_) => ProtocolPrivacy(title: "用户协议")));
             },
           ),
           SizedBox(height: 24),

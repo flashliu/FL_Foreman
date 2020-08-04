@@ -164,8 +164,11 @@ class _NeedDetailState extends State<NeedDetail> {
                   children: [
                     Column(
                       children: [
-                        Text('总收入￥1300', style: TextStyles.price.copyWith(fontSize: 16)),
-                        Text('￥130/天', style: TextStyles.price.copyWith(fontSize: 12)),
+                        Text(
+                          '总收入￥${widget.info.price * int.parse(widget.info.totalTime)}',
+                          style: TextStyles.price.copyWith(fontSize: 16),
+                        ),
+                        Text('￥${widget.info.price}/天', style: TextStyles.price.copyWith(fontSize: 12)),
                       ],
                     ),
                     SizedBox(width: 10),

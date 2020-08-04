@@ -7,6 +7,7 @@ import 'package:FL_Foreman/res/svgs.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
 import 'package:FL_Foreman/widget/list_content.dart';
 import 'package:FL_Foreman/widget/nurse_item.dart';
+import 'package:FL_Foreman/widget/state_layout.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -44,7 +45,7 @@ class _NurseListState extends State<NurseList> {
   }
 
   getNurseList(int index) async {
-    final nurseLevel = levelIndex == 0 ? '' : levels[levelIndex] + '护理';
+    final nurseLevel = levelIndex == 0 ? '' : (levelIndex - 1).toString();
     final data = await NurseApi.getNurseList(nurseLevel);
     await Future.delayed(Duration(milliseconds: 300));
     if (this.mounted) {
@@ -260,9 +261,15 @@ class NurseSearchDelegate extends SearchDelegate {
   Widget buildResults(BuildContext context) {
     return FutureBuilder(
       future: NurseApi.searchNurseList(query),
-      builder: (context, snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<List<Nurse>> snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return Center(child: CircularProgressIndicator());
+        }
+        if (snapshot.data.length == 0) {
+          return StateLayout(
+            type: StateType.empty,
+            hintText: '没有查询到数据',
+          );
         }
         return Padding(
           padding: EdgeInsets.symmetric(vertical: 16),

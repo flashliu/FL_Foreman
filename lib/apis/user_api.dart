@@ -108,13 +108,20 @@ class UserApi {
       final res = await Global.http.post('/app-jpush/select', queryParameters: {
         "toUser": Global.userId,
         "pageNumber": 1,
-        "pageSize": 10,
+        "pageSize": 1000,
       });
 
       return List.from(res.data['data'].map((json) => Message.fromJson(json)));
     } catch (e) {
       return [];
     }
+  }
+
+  static Future readMessage(String id) async {
+    final res = await Global.http.post('/app-jpush/updateById', queryParameters: {
+      "id": id,
+    });
+    return res.data;
   }
 
   static Future<String> getQrcode() async {

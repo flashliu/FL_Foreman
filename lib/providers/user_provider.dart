@@ -34,6 +34,15 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  readMessage(String id) async {
+    final res = await UserApi.readMessage(id);
+    if (res['code'] == 200) {
+      final message = messageList.firstWhere((element) => element.id == id);
+      message.status = 1;
+      notifyListeners();
+    }
+  }
+
   getMessageList() async {
     final list = await UserApi.getMessageList();
     messageList = list;

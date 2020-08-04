@@ -2,7 +2,7 @@ import 'package:FL_Foreman/common/global.dart';
 import 'package:FL_Foreman/models/nurse_model.dart';
 
 class NurseApi {
-  static Future<List<Nurse>> getNurseList(String nurseLevel) async {
+  static Future<List<Nurse>> getNurseList(nurseLevel) async {
     final res = await Global.http.get('/appSecondNurse/queryAllSecondNurse', queryParameters: {
       "nurseLevel": nurseLevel,
       "pageNumber": 1,
