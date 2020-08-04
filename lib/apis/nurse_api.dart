@@ -14,6 +14,18 @@ class NurseApi {
     return List<Nurse>.from(res.data['data'].map((json) => Nurse.fromJson(json)));
   }
 
+  static Future<List<Nurse>> searchNurseList(String keyworld) async {
+    final res = await Global.http.get('/appSecondNurse/selectNurseByLike', queryParameters: {
+      "context": keyworld,
+      "pageNumber": 1,
+      "pageSize": 1000,
+      "parentId": Global.userId,
+    });
+    if (res.data['code'] != 200) return [];
+
+    return List<Nurse>.from(res.data['data'].map((json) => Nurse.fromJson(json)));
+  }
+
   static Future<Map> addNurse(String nurseId) async {
     final res = await Global.http.post('/appSecondNurse/relationNurse', queryParameters: {
       "nurseId": nurseId,

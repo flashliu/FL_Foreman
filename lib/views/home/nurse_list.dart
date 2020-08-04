@@ -224,7 +224,7 @@ class _NurseListState extends State<NurseList> {
 }
 
 class NurseSearchDelegate extends SearchDelegate {
-  List<String> suggestions = ['特级护理', '一护护理', '二级护理', '三级护理'];
+  List<String> suggestions = ['特级护理', '一级护理', '二级护理', '三级护理'];
 
   @override
   String get searchFieldLabel => '请输入护工等级、名字';
@@ -240,7 +240,7 @@ class NurseSearchDelegate extends SearchDelegate {
           Icons.search,
         ),
         onPressed: () {
-          query = '';
+          showResults(context);
         },
       )
     ];
@@ -259,7 +259,7 @@ class NurseSearchDelegate extends SearchDelegate {
   @override
   Widget buildResults(BuildContext context) {
     return FutureBuilder(
-      future: NurseApi.getNurseList(''),
+      future: NurseApi.searchNurseList(query),
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return Center(child: CircularProgressIndicator());

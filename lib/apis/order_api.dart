@@ -16,6 +16,19 @@ class OrderApi {
     return [];
   }
 
+  static Future<List<Need>> searchNeedList(String keyworld) async {
+    final res = await Global.http.get('/app-v2-needs/selectByLike', queryParameters: {
+      "pageNum": 1,
+      "pageSize": 1000,
+      "context": keyworld,
+      "userId": Global.userId,
+    });
+    if (res.data['code'] == 200) {
+      return List<Need>.from(res.data['data'].map((json) => Need.fromJson(json)));
+    }
+    return [];
+  }
+
   static Future<List<Order>> getOrderList({int status, String nurseId, int page = 1, int pageSize = 5}) async {
     final params = {
       "status": status,

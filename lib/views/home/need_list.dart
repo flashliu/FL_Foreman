@@ -188,7 +188,7 @@ class NeedSearchDelegate extends SearchDelegate {
           Icons.search,
         ),
         onPressed: () {
-          query = '';
+          showResults(context);
         },
       )
     ];
@@ -207,7 +207,7 @@ class NeedSearchDelegate extends SearchDelegate {
   @override
   Widget buildResults(BuildContext context) {
     return FutureBuilder(
-      future: OrderApi.getNeedList('居家'),
+      future: OrderApi.searchNeedList(query),
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return Center(child: CircularProgressIndicator());
