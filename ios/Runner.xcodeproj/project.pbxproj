@@ -361,7 +361,6 @@
 				CODE_SIGN_ENTITLEMENTS = "Runner/云护工(工头端).entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = A764MC5RXS;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -377,7 +376,6 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = uni.UNID9A30E0;
 				PRODUCT_NAME = "云护工服务商端";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -504,7 +502,6 @@
 				CODE_SIGN_ENTITLEMENTS = "Runner/云护工(工头端).entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = A764MC5RXS;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -520,7 +517,6 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = uni.UNID9A30E0;
 				PRODUCT_NAME = "云护工服务商端";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -541,7 +537,6 @@
 				CODE_SIGN_ENTITLEMENTS = "Runner/云护工(工头端).entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = A764MC5RXS;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -557,7 +552,6 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = uni.UNID9A30E0;
 				PRODUCT_NAME = "云护工服务商端";
 				PROVISIONING_PROFILE_SPECIFIER = "";

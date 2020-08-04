@@ -56,13 +56,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     if (versionInfo.vesionStable == current.versionName) return null;
     return AppUpgradeInfo(
       title: '新版本V' + versionInfo.vesionStable,
-      contents: [
-        '1、支持立体声蓝牙耳机，同时改善配对性能',
-        '2、提供屏幕虚拟键盘',
-        '3、更简洁更流畅，使用起来更快',
-        '4、修复一些软件在使用时自动退出bug',
-        '5、新增加了分类查看功能',
-      ],
+      contents: [versionInfo.updateContent ?? ""],
+      force: versionInfo.updateType ?? 0 == 1 ? true : false,
       apkDownloadUrl: versionInfo.versionStableUrl,
     );
   }

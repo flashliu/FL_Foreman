@@ -63,7 +63,14 @@ class _ProfitState extends State<Profit> {
                   '护工排行',
                   style: TextStyles.title.copyWith(fontSize: 18),
                 ),
-                Svgs.sort
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      list = list.reversed.toList();
+                    });
+                  },
+                  child: Svgs.sort,
+                )
               ],
             ),
             SizedBox(height: 16),
