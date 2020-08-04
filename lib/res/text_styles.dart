@@ -1,6 +1,7 @@
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:flutter/material.dart';
 
+// ignore_for_file: non_constant_identifier_names
 class TextStyles {
   static final TextStyle black_Bold_16 =
       TextStyle(color: Colors.black, fontSize: 16.0, fontWeight: FontWeight.bold, decoration: TextDecoration.none);
