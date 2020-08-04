@@ -8,7 +8,7 @@ class AppVersion {
   String updateContent;
   String name;
   int appType;
-  bool updateType;
+  int updateType;
 
   AppVersion({
     this.id,

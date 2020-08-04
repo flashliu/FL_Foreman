@@ -9,6 +9,20 @@ class OrderApi {
       "page": 1,
       "pageSize": 10,
       "serverSite": site,
+      "userId": "",
+    });
+    if (res.data['code'] == 200) {
+      return List<Need>.from(res.data['data'].map((json) => Need.fromJson(json)));
+    }
+    return [];
+  }
+
+  static Future<List<Need>> getNeedSuggestList() async {
+    final res = await Global.http.get('/app-v2-needs/selectByCommend', queryParameters: {
+      "page": 1,
+      "pageSize": 10,
+      "commend": "1",
+      "nurseId": Global.userId,
     });
     if (res.data['code'] == 200) {
       return List<Need>.from(res.data['data'].map((json) => Need.fromJson(json)));

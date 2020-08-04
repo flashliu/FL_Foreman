@@ -57,7 +57,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     return AppUpgradeInfo(
       title: '新版本V' + versionInfo.vesionStable,
       contents: [versionInfo.updateContent ?? ""],
-      force: versionInfo.updateType ?? 0 == 1 ? true : false,
+      force: versionInfo.updateType == 1,
       apkDownloadUrl: versionInfo.versionStableUrl,
     );
   }
