@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:FL_Foreman/common/global.dart';
 import 'package:FL_Foreman/models/need_model.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
@@ -7,18 +10,57 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-class NeedItem extends StatelessWidget {
+class NeedItem extends StatefulWidget {
   final Need info;
   NeedItem({Key key, this.info}) : super(key: key);
+
+  @override
+  _NeedItemState createState() => _NeedItemState();
+}
+
+class _NeedItemState extends State<NeedItem> {
+  CountDown countDown = CountDown(day: '00', hour: '00', min: '00', sec: '00');
+  Timer timer;
+
+  @override
+  void initState() {
+    super.initState();
+    setCountDown();
+  }
+
+  setCountDown() {
+    final startTime = DateTime.parse(widget.info.startTime);
+    if (startTime.isAfter(DateTime.now())) {
+      setState(() {
+        countDown = CountDown.fromTime(startTime);
+      });
+      timer = Timer.periodic(Duration(seconds: 1), (_) {
+        final newCountDown = CountDown.fromTime(startTime);
+        if (int.parse(newCountDown.day) < 0) {
+          return timer.cancel();
+        }
+        setState(() {
+          countDown = newCountDown;
+        });
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final nomalText = TextStyle(fontSize: 12, color: ColorCenter.textGrey);
     return Pannel(
-      onTap: () => Navigator.of(context).push(CupertinoPageRoute(builder: (_) => NeedDetail(info: info))),
+      onTap: () => Navigator.of(context).push(CupertinoPageRoute(builder: (_) => NeedDetail(info: widget.info))),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(info.demandName, style: TextStyles.title),
+          Text(widget.info.demandName, style: TextStyles.title),
           SizedBox(height: 5),
           Row(
             children: [
@@ -29,12 +71,12 @@ class NeedItem extends StatelessWidget {
               ),
               SizedBox(width: 4),
               Text(
-                '${info.startTime} 至 ${info.endTime}',
+                '${widget.info.startTime} 至 ${widget.info.endTime}',
                 style: TextStyle(fontSize: 14, color: ColorCenter.textBlack),
               ),
               Expanded(
                 child: Text(
-                  info.serverTime,
+                  widget.info.serverTime,
                   style: nomalText,
                   textAlign: TextAlign.right,
                 ),
@@ -57,7 +99,7 @@ class NeedItem extends StatelessWidget {
                 ),
                 SizedBox(width: 8),
                 Text(
-                  info.area,
+                  widget.info.area,
                   style: nomalText,
                 )
               ],
@@ -65,7 +107,10 @@ class NeedItem extends StatelessWidget {
           ),
           Row(
             children: [
-              Text('结束倒计时：2天 12:30:10', style: nomalText),
+              Text(
+                '结束倒计时：${countDown.day}天 ${countDown.hour}:${countDown.min}:${countDown.sec}',
+                style: nomalText,
+              ),
               Expanded(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -76,7 +121,7 @@ class NeedItem extends StatelessWidget {
                       style: TextStyles.price.copyWith(fontSize: 12, height: 1.7),
                     ),
                     Text(
-                      info.price.toString(),
+                      widget.info.price.toString(),
                       style: TextStyles.price.copyWith(fontSize: 18),
                     )
                   ],
@@ -85,7 +130,7 @@ class NeedItem extends StatelessWidget {
             ],
           ),
           SizedBox(height: 8),
-          Text('预约编号：${info.id}', style: nomalText),
+          Text('预约编号：${widget.info.id}', style: nomalText),
         ],
       ),
     );

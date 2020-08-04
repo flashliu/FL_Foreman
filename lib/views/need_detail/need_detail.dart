@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:FL_Foreman/common/global.dart';
 import 'package:FL_Foreman/models/need_model.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/svgs.dart';
@@ -17,6 +20,40 @@ class NeedDetail extends StatefulWidget {
 }
 
 class _NeedDetailState extends State<NeedDetail> {
+  CountDown countDown = CountDown(day: '00', hour: '00', min: '00', sec: '00');
+  Timer timer;
+
+  @override
+  void initState() {
+    super.initState();
+    setCountDown();
+  }
+
+  setCountDown() {
+    final startTime = DateTime.parse(widget.info.startTime);
+
+    if (startTime.isAfter(DateTime.now())) {
+      setState(() {
+        countDown = CountDown.fromTime(startTime);
+      });
+      timer = Timer.periodic(Duration(seconds: 1), (_) {
+        final newCountDown = CountDown.fromTime(startTime);
+        if (int.parse(newCountDown.day) < 0) {
+          return timer.cancel();
+        }
+        setState(() {
+          countDown = newCountDown;
+        });
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,7 +137,12 @@ class _NeedDetailState extends State<NeedDetail> {
                         SizedBox(height: 16),
                         Row(
                           children: [
-                            Text(widget.info.notes),
+                            Expanded(
+                              child: Text(
+                                widget.info.notes,
+                                softWrap: true,
+                              ),
+                            ),
                             Visibility(
                               child: Text('暂无备注'),
                               visible: widget.info.notes.length == 0,
@@ -141,13 +183,13 @@ class _NeedDetailState extends State<NeedDetail> {
                       text: TextSpan(
                         style: TextStyles.grey_14,
                         children: [
-                          TextSpan(text: '10', style: TextStyles.black_14),
+                          TextSpan(text: widget.info.peopleNumber.toString(), style: TextStyles.black_14),
                           TextSpan(text: '人抢单'),
                         ],
                       ),
                     ),
                     Text(
-                      '结束倒计时：2天 12:30:10',
+                      '结束倒计时：${countDown.day}天 ${countDown.hour}:${countDown.min}:${countDown.sec}',
                       style: TextStyle(color: Color(0xFF00A2E6), fontSize: 12),
                     )
                   ],
