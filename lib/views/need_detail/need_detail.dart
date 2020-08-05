@@ -69,6 +69,7 @@ class _NeedDetailState extends State<NeedDetail> {
         children: [
           Expanded(
             child: SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
               child: Column(
                 children: [
                   SizedBox(height: 16),

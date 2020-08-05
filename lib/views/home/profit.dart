@@ -103,6 +103,7 @@ class _ProfitState extends State<Profit> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      physics: AlwaysScrollableScrollPhysics(),
       child: Column(
         children: [
           SizedBox(height: 16),

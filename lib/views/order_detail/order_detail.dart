@@ -161,96 +161,104 @@ class _OrderDetailState extends State<OrderDetail> with SingleTickerProviderStat
   }
 
   Widget buildInfo() {
-    return Column(
-      children: [
-        Pannel(
-          child: Column(
-            children: [
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 16),
-                decoration: BoxDecoration(
-                  color: Color(0xFFF5F7F8),
-                  borderRadius: BorderRadius.circular(6),
+    return SingleChildScrollView(
+      physics: AlwaysScrollableScrollPhysics(),
+      child: Column(
+        children: [
+          Pannel(
+            child: Column(
+              children: [
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 16),
+                  decoration: BoxDecoration(
+                    color: Color(0xFFF5F7F8),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  padding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        'assets/images/img_location.png',
+                        width: 16,
+                        height: 16,
+                      ),
+                      SizedBox(width: 8),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.info.beNursed.area,
+                            style: TextStyle(color: ColorCenter.textBlack),
+                          ),
+                          Text(
+                            widget.info.beNursed.realName,
+                            style: TextStyles.grey_12,
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
-                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
-                child: Row(
+                LabelValue(label: '服务地点', value: widget.info.serverSite),
+                SizedBox(height: 16),
+                LabelValue(label: '顾客自理能力', value: widget.info.selfCare),
+              ],
+            ),
+          ),
+          Pannel(
+            child: Column(
+              children: [
+                Row(
                   children: [
-                    Image.asset(
-                      'assets/images/img_location.png',
-                      width: 16,
-                      height: 16,
-                    ),
-                    SizedBox(width: 8),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.info.beNursed.area,
-                          style: TextStyle(color: ColorCenter.textBlack),
-                        ),
-                        Text(
-                          widget.info.beNursed.realName,
-                          style: TextStyles.grey_12,
-                        ),
-                      ],
-                    )
+                    Svgs.time2,
+                    SizedBox(width: 4),
+                    Text('时间', style: TextStyles.black_16),
                   ],
                 ),
-              ),
-              LabelValue(label: '服务地点', value: widget.info.serverSite),
-              SizedBox(height: 16),
-              LabelValue(label: '顾客自理能力', value: widget.info.selfCare),
-            ],
+                SizedBox(height: 16),
+                LabelValue(label: '顾客需要照护时间段', value: widget.info.serverTime),
+                SizedBox(height: 16),
+                LabelValue(label: '服务日期', value: '${widget.info.startTime} 至 ${widget.info.endTime}'),
+              ],
+            ),
           ),
-        ),
-        Pannel(
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Svgs.time2,
-                  SizedBox(width: 4),
-                  Text('时间', style: TextStyles.black_16),
-                ],
-              ),
-              SizedBox(height: 16),
-              LabelValue(label: '顾客需要照护时间段', value: widget.info.serverTime),
-              SizedBox(height: 16),
-              LabelValue(label: '服务日期', value: '${widget.info.startTime} 至 ${widget.info.endTime}'),
-            ],
+          Pannel(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('备注', style: TextStyles.black_16),
+                SizedBox(height: 16),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        widget.info.notes,
+                        softWrap: true,
+                      ),
+                    ),
+                    Visibility(
+                      child: Text('暂无备注'),
+                      visible: widget.info.notes.length == 0,
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
-        ),
-        Pannel(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('备注', style: TextStyles.black_16),
-              SizedBox(height: 16),
-              Row(
-                children: [
-                  Text(widget.info.notes),
-                  Visibility(
-                    child: Text('暂无备注'),
-                    visible: widget.info.notes.length == 0,
-                  ),
-                ],
-              )
-            ],
+          Pannel(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('订单信息', style: TextStyles.black_16),
+                SizedBox(height: 16),
+                LabelValue(label: '预约编号', value: widget.info.id),
+                SizedBox(height: 16),
+                LabelValue(label: '创建时间', value: widget.info.createTime),
+              ],
+            ),
           ),
-        ),
-        Pannel(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('订单信息', style: TextStyles.black_16),
-              SizedBox(height: 16),
-              LabelValue(label: '预约编号', value: widget.info.id),
-              SizedBox(height: 16),
-              LabelValue(label: '创建时间', value: widget.info.createTime),
-            ],
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -275,6 +283,7 @@ class _OrderDetailState extends State<OrderDetail> with SingleTickerProviderStat
     }
 
     return SingleChildScrollView(
+      physics: AlwaysScrollableScrollPhysics(),
       child: Column(
         children: [...nurseList],
       ),

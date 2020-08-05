@@ -45,6 +45,7 @@ class AboutUs extends StatelessWidget {
           padding: EdgeInsets.all(20),
           decoration: kBoxDecorationStyle5,
           child: SingleChildScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
