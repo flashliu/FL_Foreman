@@ -51,8 +51,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   Future<AppUpgradeInfo> _checkAppInfo() async {
     final versionInfo = await AppApi.getVersion();
-    Provider.of<AppProvider>(context, listen: false).setVersion(versionInfo);
+    final appProvider = Provider.of<AppProvider>(context, listen: false);
     final current = await FlutterUpgrade.appInfo;
+    appProvider.setVersion(versionInfo);
+    appProvider.setCurrentVersion(current);
     if (versionInfo.vesionStable == current.versionName) return null;
     return AppUpgradeInfo(
       title: '新版本V' + versionInfo.vesionStable,
