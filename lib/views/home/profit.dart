@@ -44,11 +44,13 @@ class _ProfitState extends State<Profit> {
       UserApi.getWeekAmount(),
       UserApi.getMonthAmount(),
     ]);
-    setState(() {
-      todayAmount = res[0];
-      weekAmount = res[1];
-      monthAmount = res[2];
-    });
+    if (mounted) {
+      setState(() {
+        todayAmount = res[0];
+        weekAmount = res[1];
+        monthAmount = res[2];
+      });
+    }
   }
 
   Widget buildNurseList() {
