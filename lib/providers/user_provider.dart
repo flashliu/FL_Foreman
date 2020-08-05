@@ -19,6 +19,8 @@ class UserProvider with ChangeNotifier {
   bool systemNotification = true;
   bool preferentialNotification = true;
 
+  UserProvider(this.info);
+
   setAllNotification(bool value) {
     allNotification = value;
     notifyListeners();

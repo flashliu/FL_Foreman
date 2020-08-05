@@ -1,37 +1,48 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:FL_Foreman/common/global.dart';
+import 'package:FL_Foreman/common/storage.dart';
+import 'package:FL_Foreman/models/user_model.dart';
 import 'package:FL_Foreman/providers/app_provider.dart';
 import 'package:FL_Foreman/providers/user_provider.dart';
 import 'package:FL_Foreman/res/colors.dart';
-import 'package:FL_Foreman/views/guide/guide.dart';
+import 'package:FL_Foreman/views/home/home.dart';
+import 'package:FL_Foreman/views/login/login.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:fluwx/fluwx.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
-main() {
+main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await requestPermission();
   registerWxApi(
     appId: "wx18fc3a377ec300f8",
     universalLink: "https://yihut.cn/foreman/ulink/",
   );
+  setDeBugLog();
+  final user = await getStorageUser();
   FlutterBugly.postCatchedException(
-    () => runApp(App()),
+    () => runApp(App(user: user)),
     debugUpload: true,
     handler: (flutterErrorDetails) {},
   );
   FlutterBugly.init(androidAppId: "9d119bd5de", iOSAppId: "9d3564f668");
-  if (Platform.isAndroid) {
-    // 以下两行 设置android状态栏为透明的沉浸。写在组件渲染之后，
-    // 是为了在渲染后进行set赋值，覆盖状态栏，写在渲染之前MaterialApp组件会覆盖掉这个值。
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarBrightness: Brightness.dark),
-    );
-  }
+  setAndroidStatusBar();
+}
+
+Future<User> getStorageUser() async {
+  final res = await Storage().get('userinfo');
+  if (res == null) return res;
+  return User.fromJson(jsonDecode(res));
+}
+
+setDeBugLog() {
   if (kDebugMode) {
     Global.http.interceptors.add(
       InterceptorsWrapper(
@@ -56,13 +67,29 @@ main() {
   }
 }
 
+Future<Map<Permission, PermissionStatus>> requestPermission() async {
+  return await [Permission.notification, Permission.camera, Permission.photos].request();
+}
+
+setAndroidStatusBar() {
+  if (Platform.isAndroid) {
+    // 以下两行 设置android状态栏为透明的沉浸。写在组件渲染之后，
+    // 是为了在渲染后进行set赋值，覆盖状态栏，写在渲染之前MaterialApp组件会覆盖掉这个值。
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarBrightness: Brightness.dark),
+    );
+  }
+}
+
 class App extends StatelessWidget {
-  const App({Key key}) : super(key: key);
+  final User user;
+  const App({Key key, this.user}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => UserProvider(user)),
         ChangeNotifierProvider(create: (context) => AppProvider()),
       ],
       child: MaterialApp(
@@ -84,7 +111,7 @@ class App extends StatelessWidget {
           ),
           scaffoldBackgroundColor: Color(0xFFF4F6F7),
         ),
-        home: Guide(),
+        home: user == null ? Login() : Home(),
       ),
     );
   }
