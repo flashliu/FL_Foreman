@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:FL_Foreman/common/global.dart';
 import 'package:FL_Foreman/models/order_model.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
@@ -23,12 +26,50 @@ String orderStatus(String status) {
   return statusMap[status];
 }
 
-class OrderItem extends StatelessWidget {
+class OrderItem extends StatefulWidget {
   final Order info;
   const OrderItem({Key key, this.info}) : super(key: key);
 
+  @override
+  _OrderItemState createState() => _OrderItemState();
+}
+
+class _OrderItemState extends State<OrderItem> {
+  CountDown countDown = CountDown(day: '00', hour: '00', min: '00', sec: '00');
+  Timer timer;
+
+  @override
+  void initState() {
+    super.initState();
+    setCountDown();
+  }
+
+  setCountDown() {
+    final startTime = DateTime.parse(widget.info.startTime);
+    if (startTime.isAfter(DateTime.now())) {
+      setState(() {
+        countDown = CountDown.fromTime(startTime);
+      });
+      timer = Timer.periodic(Duration(seconds: 1), (_) {
+        final newCountDown = CountDown.fromTime(startTime);
+        if (int.parse(newCountDown.day) < 0) {
+          return timer.cancel();
+        }
+        setState(() {
+          countDown = newCountDown;
+        });
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
+
   List<Widget> buildNurseItem() {
-    return info.nurseList.map((item) {
+    return widget.info.nurseList.map((item) {
       if (item.headImg == null) {
         return Container(
           decoration: BoxDecoration(
@@ -54,7 +95,7 @@ class OrderItem extends StatelessWidget {
   }
 
   buildNurseList() {
-    if (info.nurseList.length == 0) return Container();
+    if (widget.info.nurseList.length == 0) return Container();
     return SizedBox(
       height: 67,
       child: GridView(
@@ -87,15 +128,16 @@ class OrderItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final nomalText = TextStyle(fontSize: 12, color: ColorCenter.textGrey);
     return Pannel(
-      onTap: () => Navigator.of(context).push(CupertinoPageRoute(builder: (_) => OrderDetail(info: info))),
+      onTap: () => Navigator.of(context).push(CupertinoPageRoute(builder: (_) => OrderDetail(info: widget.info))),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(info.demandName, style: TextStyles.title),
-              Text(orderStatus(info.status.toString()), style: TextStyle(color: Color(0xFF00A2E6), fontSize: 12)),
+              Text(widget.info.demandName, style: TextStyles.title),
+              Text(orderStatus(widget.info.status.toString()),
+                  style: TextStyle(color: Color(0xFF00A2E6), fontSize: 12)),
             ],
           ),
           SizedBox(height: 5),
@@ -108,12 +150,12 @@ class OrderItem extends StatelessWidget {
               ),
               SizedBox(width: 4),
               Text(
-                '${info.startTime} 至 ${info.endTime}',
+                '${widget.info.startTime} 至 ${widget.info.endTime}',
                 style: TextStyle(fontSize: 14, color: ColorCenter.textBlack),
               ),
               Expanded(
                 child: Text(
-                  info?.serverTime,
+                  widget.info?.serverTime,
                   style: nomalText,
                   textAlign: TextAlign.right,
                 ),
@@ -136,7 +178,7 @@ class OrderItem extends StatelessWidget {
                 ),
                 SizedBox(width: 8),
                 Text(
-                  info.beNursed.area,
+                  widget.info.beNursed.area,
                   style: nomalText,
                 )
               ],
@@ -144,7 +186,10 @@ class OrderItem extends StatelessWidget {
           ),
           Row(
             children: [
-              Text('结束倒计时：2天 12:30:10', style: nomalText),
+              Text(
+                '结束倒计时：${countDown.day}天 ${countDown.hour}:${countDown.min}:${countDown.sec}',
+                style: nomalText,
+              ),
               Expanded(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -155,7 +200,7 @@ class OrderItem extends StatelessWidget {
                       style: TextStyles.price.copyWith(fontSize: 12, height: 1.7),
                     ),
                     Text(
-                      info.price.toString(),
+                      widget.info.price.toString(),
                       style: TextStyles.price.copyWith(fontSize: 18),
                     )
                   ],
@@ -164,7 +209,7 @@ class OrderItem extends StatelessWidget {
             ],
           ),
           SizedBox(height: 8),
-          Text('预约编号：${info.id}', style: nomalText),
+          Text('预约编号：${widget.info.id}', style: nomalText),
           SizedBox(height: 8),
           buildNurseList()
         ],

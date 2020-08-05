@@ -25,7 +25,7 @@ class _NeedItemState extends State<NeedItem> {
   @override
   void initState() {
     super.initState();
-    // setCountDown();
+    setCountDown();
   }
 
   setCountDown() {

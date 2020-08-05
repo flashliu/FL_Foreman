@@ -62,7 +62,9 @@ class _OrderPageState extends State<OrderPage> {
         loading = false;
       });
     }
-    if (res.length == 0) refreshController.loadNoData();
+    if (res.length == 0) {
+      refreshController.loadNoData();
+    }
     refreshController.refreshCompleted();
   }
 
@@ -91,7 +93,7 @@ class _OrderPageState extends State<OrderPage> {
       );
     }
     return SmartRefresher(
-      enablePullUp: refreshController.footerMode.value != LoadStatus.noMore,
+      enablePullUp: list.length >= pageSize,
       header: WaterDropHeader(
         complete: Text('刷新成功！'),
         refresh: CupertinoActivityIndicator(),

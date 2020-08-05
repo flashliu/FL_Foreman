@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:FL_Foreman/common/global.dart';
 import 'package:FL_Foreman/models/nurse_model.dart';
 import 'package:FL_Foreman/models/order_model.dart';
 import 'package:FL_Foreman/res/colors.dart';
@@ -20,10 +23,13 @@ class OrderDetail extends StatefulWidget {
 class _OrderDetailState extends State<OrderDetail> with SingleTickerProviderStateMixin {
   TabController tabController;
   double bottom = 0;
+  CountDown countDown = CountDown(day: '00', hour: '00', min: '00', sec: '00');
+  Timer timer;
 
   @override
   void initState() {
     super.initState();
+    setCountDown();
     tabController = TabController(length: 2, vsync: this)
       ..addListener(() {
         setState(() {
@@ -36,9 +42,29 @@ class _OrderDetailState extends State<OrderDetail> with SingleTickerProviderStat
       });
   }
 
+  setCountDown() {
+    final startTime = DateTime.parse(widget.info.startTime);
+
+    if (startTime.isAfter(DateTime.now())) {
+      setState(() {
+        countDown = CountDown.fromTime(startTime);
+      });
+      timer = Timer.periodic(Duration(seconds: 1), (_) {
+        final newCountDown = CountDown.fromTime(startTime);
+        if (int.parse(newCountDown.day) < 0) {
+          return timer.cancel();
+        }
+        setState(() {
+          countDown = newCountDown;
+        });
+      });
+    }
+  }
+
   @override
   void dispose() {
     tabController.dispose();
+    timer?.cancel();
     super.dispose();
   }
 
@@ -122,7 +148,7 @@ class _OrderDetailState extends State<OrderDetail> with SingleTickerProviderStat
                     ),
                   ),
                   Text(
-                    '结束倒计时：2天 12:30:10',
+                    '结束倒计时：${countDown.day}天 ${countDown.hour}:${countDown.min}:${countDown.sec}',
                     style: TextStyle(color: Color(0xFF00A2E6), fontSize: 12),
                   )
                 ],
