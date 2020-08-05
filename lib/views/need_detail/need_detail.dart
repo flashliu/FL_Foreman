@@ -50,7 +50,7 @@ class _NeedDetailState extends State<NeedDetail> {
 
   @override
   void dispose() {
-    timer.cancel();
+    timer?.cancel();
     super.dispose();
   }
 
