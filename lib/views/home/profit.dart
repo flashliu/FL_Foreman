@@ -16,11 +16,15 @@ class Profit extends StatefulWidget {
   _ProfitState createState() => _ProfitState();
 }
 
-class _ProfitState extends State<Profit> {
+class _ProfitState extends State<Profit> with AutomaticKeepAliveClientMixin {
   String todayAmount = '0';
   String weekAmount = '0';
   String monthAmount = '0';
   List<Nurse> list = [];
+
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   void initState() {
     super.initState();
@@ -102,6 +106,7 @@ class _ProfitState extends State<Profit> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       physics: AlwaysScrollableScrollPhysics(),
       child: Column(
