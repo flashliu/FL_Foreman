@@ -106,12 +106,11 @@ class Svgs {
     color: Colors.grey,
   );
 
-  static final Widget iphone = SvgPicture.asset(
-    'assets/svgs/icon_iphone.svg',
+  static final Widget apple = SvgPicture.asset(
+    'assets/svgs/icon_apple.svg',
     semanticsLabel: '',
     width: 50,
     height: 50,
-    color: Colors.black,
   );
 
   static final Widget user = SvgPicture.asset(

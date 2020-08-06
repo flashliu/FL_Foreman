@@ -11,6 +11,7 @@ import 'package:FL_Foreman/res/styles.dart';
 import 'package:FL_Foreman/res/svgs.dart';
 import 'package:FL_Foreman/views/home/home.dart';
 import 'package:FL_Foreman/views/protocol_privacy/protocol_privacy.dart';
+import 'package:FL_Foreman/widget/pannel.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -302,7 +303,9 @@ class _LoginState extends State<Login> {
               children: [
                 Visibility(
                   visible: true,
-                  child: Container(
+                  child: Pannel(
+                    padding: EdgeInsets.zero,
+                    borderRadius: BorderRadius.circular(50),
                     margin: EdgeInsets.symmetric(horizontal: 20),
                     child: GestureDetector(
                       child: Svgs.wx,
@@ -312,16 +315,20 @@ class _LoginState extends State<Login> {
                 ),
                 Visibility(
                   visible: Platform.isIOS,
-                  child: Container(
+                  child: Pannel(
+                    padding: EdgeInsets.zero,
+                    borderRadius: BorderRadius.circular(50),
                     margin: EdgeInsets.symmetric(horizontal: 20),
                     child: GestureDetector(
-                      child: Svgs.iphone,
+                      child: Svgs.apple,
                       onTap: () => appleLogin(),
                     ),
                   ),
                 ),
                 Visibility(
-                  child: Container(
+                  child: Pannel(
+                    padding: EdgeInsets.zero,
+                    borderRadius: BorderRadius.circular(50),
                     margin: EdgeInsets.symmetric(horizontal: 20),
                     child: GestureDetector(
                       child: Svgs.ali,
