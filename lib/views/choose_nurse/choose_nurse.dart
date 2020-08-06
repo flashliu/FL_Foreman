@@ -33,7 +33,7 @@ class _ChooseNurseState extends State<ChooseNurse> {
   }
 
   getNurseList() async {
-    final data = await NurseApi.getNurseList('');
+    final data = await NurseApi.getNurseList(nurseLevel: '');
     await Future.delayed(Duration(seconds: 1));
     if (this.mounted) {
       setState(() {

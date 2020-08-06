@@ -70,27 +70,23 @@ class _OrderItemState extends State<OrderItem> {
 
   List<Widget> buildNurseItem() {
     return widget.info.nurseList.map((item) {
-      if (item.headImg == null) {
-        return Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(6),
-            color: Colors.grey,
+      try {
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(6),
+          child: FittedBox(
+            fit: BoxFit.cover,
+            child: Image.network(item.headImg),
+          ),
+        );
+      } catch (e) {
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(6),
+          child: FittedBox(
+            fit: BoxFit.cover,
+            child: Image.asset('assets/images/avatar.png'),
           ),
         );
       }
-      return Stack(
-        children: [
-          Positioned.fill(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(6),
-              child: FittedBox(
-                fit: BoxFit.cover,
-                child: Image.network(item.headImg),
-              ),
-            ),
-          ),
-        ],
-      );
     }).toList();
   }
 

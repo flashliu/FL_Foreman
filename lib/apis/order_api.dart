@@ -4,10 +4,10 @@ import 'package:FL_Foreman/models/order_model.dart';
 import 'package:flutter/material.dart';
 
 class OrderApi {
-  static Future<List<Need>> getNeedList(String site) async {
+  static Future<List<Need>> getNeedList({String site, int page = 1, int pageSize = 5}) async {
     final res = await Global.http.get('/app-v2-needs/selectByServerSite', queryParameters: {
-      "page": 1,
-      "pageSize": 10,
+      "page": page,
+      "pageSize": pageSize,
       "serverSite": site,
       "userId": "",
     });

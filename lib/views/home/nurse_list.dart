@@ -5,12 +5,11 @@ import 'package:FL_Foreman/models/nurse_model.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/svgs.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
-import 'package:FL_Foreman/widget/list_content.dart';
+import 'package:FL_Foreman/views/home/nurse_page.dart';
 import 'package:FL_Foreman/widget/nurse_item.dart';
 import 'package:FL_Foreman/widget/state_layout.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class NurseList extends StatefulWidget {
   NurseList({Key key}) : super(key: key);
@@ -19,19 +18,28 @@ class NurseList extends StatefulWidget {
   _NurseListState createState() => _NurseListState();
 }
 
-class _NurseListState extends State<NurseList> {
-  final List<String> levels = ['全部', '特级', '一级', '二级', '三级'];
-  bool loading = true;
+class _NurseListState extends State<NurseList> with SingleTickerProviderStateMixin {
+  final List<Map> levels = [
+    {"name": '全部', "value": ""},
+    {"name": '特级', "value": "0"},
+    {"name": '一级', "value": "1"},
+    {"name": '二级', "value": "2"},
+    {"name": '三级', "value": "3"},
+  ];
+  TabController tabController;
   bool showLocation = false;
-  RefreshController refreshController = RefreshController();
-  List<Nurse> list = [];
-  int levelIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(length: levels.length, vsync: this);
+  }
 
   addNurse() async {
     final user = await Global.scanQrcode(context);
     final res = await NurseApi.addNurse(user.id);
     if (res['code'] == 200) {
-      getNurseList(levelIndex);
+      // getNurseList(levelIndex);
     }
     ToastUtils.showLong(res['message']);
   }
@@ -40,69 +48,15 @@ class _NurseListState extends State<NurseList> {
     final res = await NurseApi.delNurse(id);
     if (res['code'] == 200) {
       ToastUtils.showLong(res['message']);
-      getNurseList(levelIndex);
+      //   getNurseList(levelIndex);
     }
   }
 
-  getNurseList(int index) async {
-    final nurseLevel = levelIndex == 0 ? '' : (levelIndex - 1).toString();
-    final data = await NurseApi.getNurseList(nurseLevel);
-    await Future.delayed(Duration(milliseconds: 300));
-    if (this.mounted) {
-      setState(() {
-        list = data;
-        loading = false;
-      });
-    }
-    refreshController.refreshCompleted();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getNurseList(levelIndex);
-  }
-
-  @override
-  void dispose() {
-    refreshController.dispose();
-    super.dispose();
-  }
-
-  Widget buildItems() {
-    if (loading) {
-      return Expanded(
-        child: Wrap(
-          children: [
-            NurseItemShimmer(),
-            NurseItemShimmer(),
-            NurseItemShimmer(),
-            NurseItemShimmer(),
-            NurseItemShimmer(),
-          ],
-        ),
-      );
-    }
+  Widget buildTabPage() {
     return Expanded(
-      child: SmartRefresher(
-        header: WaterDropHeader(
-          complete: Text('刷新成功！'),
-          refresh: CupertinoActivityIndicator(),
-        ),
-        footer: ClassicFooter(),
-        onRefresh: () => getNurseList(levelIndex),
-        controller: refreshController,
-        child: ListContent(
-          itemBuilder: (context, index) {
-            return NurseItem(
-              info: list[index],
-              showLocation: showLocation,
-              onDelete: (info) => delNurse(info.id),
-            );
-          },
-          itemCount: list.length,
-          emptyText: "暂时没有内容～",
-        ),
+      child: TabBarView(
+        children: levels.map((e) => NursePage(level: e['value'], showLocation: showLocation)).toList(),
+        controller: tabController,
       ),
     );
   }
@@ -113,27 +67,18 @@ class _NurseListState extends State<NurseList> {
       child: Row(
         children: [
           Expanded(
-            child: DefaultTabController(
-              length: levels.length,
-              child: TabBar(
-                tabs: levels.map((e) => Text(e)).toList(),
-                isScrollable: true,
-                indicatorSize: TabBarIndicatorSize.label,
-                indicatorColor: ColorCenter.themeColor,
-                labelColor: ColorCenter.themeColor,
-                unselectedLabelColor: Colors.black,
-                unselectedLabelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                labelStyle: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-                onTap: (index) {
-                  levelIndex = index;
-                  setState(() {
-                    loading = true;
-                  });
-                  getNurseList(index);
-                },
+            child: TabBar(
+              controller: tabController,
+              tabs: levels.map((e) => Text(e['name'])).toList(),
+              isScrollable: true,
+              indicatorSize: TabBarIndicatorSize.label,
+              indicatorColor: ColorCenter.themeColor,
+              labelColor: ColorCenter.themeColor,
+              unselectedLabelColor: Colors.black,
+              unselectedLabelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              labelStyle: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
               ),
             ),
           ),
@@ -208,7 +153,7 @@ class _NurseListState extends State<NurseList> {
           child: Column(
             children: [
               buildTab(),
-              buildItems(),
+              buildTabPage(),
             ],
           ),
         ),

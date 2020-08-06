@@ -29,7 +29,7 @@ class _ProfitState extends State<Profit> {
   }
 
   getNurseList() async {
-    final data = await NurseApi.getNurseList('');
+    final data = await NurseApi.getNurseList(nurseLevel: '');
     if (this.mounted) {
       data.sort((a, b) => b.workTimes.compareTo(a.workTimes));
       setState(() {
@@ -309,14 +309,27 @@ class _ProfitState extends State<Profit> {
       margin: EdgeInsets.only(bottom: 16),
       child: Row(
         children: [
-          ClipOval(
-            child: Image.network(
-              info.headImg,
-              width: 40,
-              height: 40,
-              fit: BoxFit.cover,
-            ),
-          ),
+          Builder(builder: (_) {
+            try {
+              return ClipOval(
+                child: Image.network(
+                  info.headImg,
+                  width: 40,
+                  height: 40,
+                  fit: BoxFit.cover,
+                ),
+              );
+            } catch (e) {
+              return ClipOval(
+                child: Image.asset(
+                  'assets/images/avatar.png',
+                  width: 40,
+                  height: 40,
+                  fit: BoxFit.cover,
+                ),
+              );
+            }
+          }),
           SizedBox(width: 16),
           Text(
             info.realName,

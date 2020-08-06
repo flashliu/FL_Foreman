@@ -130,11 +130,24 @@ class _CheckabledNurseItemState extends State<CheckabledNurseItem> {
             top: -32,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: Image.network(
-                widget.info.headImg,
-                width: 88,
-                height: 124,
-                fit: BoxFit.fitHeight,
+              child: Builder(
+                builder: (_) {
+                  try {
+                    return Image.network(
+                      widget.info.headImg,
+                      width: 88,
+                      height: 124,
+                      fit: BoxFit.fitHeight,
+                    );
+                  } catch (e) {
+                    return Image.asset(
+                      'assets/images/avatar.png',
+                      width: 88,
+                      height: 124,
+                      fit: BoxFit.fitHeight,
+                    );
+                  }
+                },
               ),
             ),
           ),

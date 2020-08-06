@@ -1,22 +1,21 @@
 import 'package:FL_Foreman/apis/order_api.dart';
-import 'package:FL_Foreman/models/order_model.dart';
+import 'package:FL_Foreman/models/need_model.dart';
 import 'package:FL_Foreman/widget/list_content.dart';
-import 'package:FL_Foreman/widget/order_item.dart';
+import 'package:FL_Foreman/widget/need_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class OrderPage extends StatefulWidget {
-  final int status;
-  final String nurseId;
-  OrderPage({Key key, this.status, this.nurseId}) : super(key: key);
+class NeedPage extends StatefulWidget {
+  final String site;
+  NeedPage({Key key, this.site}) : super(key: key);
 
   @override
-  _OrderPageState createState() => _OrderPageState();
+  _NeedPageState createState() => _NeedPageState();
 }
 
-class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixin {
-  List<Order> list = [];
+class _NeedPageState extends State<NeedPage> with AutomaticKeepAliveClientMixin {
+  List<Need> list = [];
   bool loading = true;
   RefreshController refreshController = RefreshController();
   int page = 1;
@@ -37,28 +36,17 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
     super.dispose();
   }
 
-  @override
-  void didUpdateWidget(OrderPage oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.status != widget.status) {
-      loading = true;
-      refresh();
+  Future<List<Need>> getNeedList() async {
+    if (widget.site.isEmpty) {
+      return OrderApi.getNeedSuggestList();
     }
-  }
-
-  Future<List<Order>> getOrderList() async {
-    return await OrderApi.getOrderList(
-      status: widget.status,
-      nurseId: widget.nurseId,
-      page: page,
-      pageSize: pageSize,
-    );
+    return OrderApi.getNeedList(site: widget.site, page: page, pageSize: pageSize);
   }
 
   refresh() async {
     page = 1;
     await Future.delayed(Duration(milliseconds: 300));
-    final res = await getOrderList();
+    final res = await getNeedList();
     if (mounted) {
       setState(() {
         list = res;
@@ -73,7 +61,7 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
 
   loadMore() async {
     page++;
-    final res = await getOrderList();
+    final res = await getNeedList();
     if (res.length < pageSize) {
       return refreshController.loadNoData();
     }
@@ -89,10 +77,10 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
     if (loading) {
       return Wrap(
         children: [
-          OrderItemShimmer(),
-          OrderItemShimmer(),
-          OrderItemShimmer(),
-          OrderItemShimmer(),
+          NeedItemShimmer(),
+          NeedItemShimmer(),
+          NeedItemShimmer(),
+          NeedItemShimmer(),
         ],
       );
     }
@@ -127,7 +115,7 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
       controller: refreshController,
       child: ListContent(
         itemBuilder: (context, index) {
-          return OrderItem(
+          return NeedItem(
             info: list[index],
           );
         },
