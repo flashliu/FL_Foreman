@@ -141,7 +141,7 @@ class _CheckabledNurseItemState extends State<CheckabledNurseItem> {
                     );
                   } catch (e) {
                     return Image.asset(
-                      'assets/images/avatar.png',
+                      'assets/images/nurse_avatar.png',
                       width: 88,
                       height: 124,
                       fit: BoxFit.fitHeight,

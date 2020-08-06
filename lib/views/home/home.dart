@@ -152,11 +152,25 @@ class UserDrawer extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
-              Image.asset(
-                'assets/images/avatar.png',
-                width: 72,
-                height: 72,
-              ),
+              Builder(builder: (_) {
+                try {
+                  return ClipOval(
+                    child: Image.network(
+                      user.info.loginUser.headImg,
+                      width: 72,
+                      height: 72,
+                    ),
+                  );
+                } catch (e) {
+                  return ClipOval(
+                    child: Image.asset(
+                      'assets/images/avatar.png',
+                      width: 72,
+                      height: 72,
+                    ),
+                  );
+                }
+              }),
               SizedBox(height: 12),
               Text(
                 user.info.loginUser.username,

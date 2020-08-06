@@ -322,7 +322,7 @@ class _ProfitState extends State<Profit> {
             } catch (e) {
               return ClipOval(
                 child: Image.asset(
-                  'assets/images/avatar.png',
+                  'assets/images/nurse_avatar.png',
                   width: 40,
                   height: 40,
                   fit: BoxFit.cover,

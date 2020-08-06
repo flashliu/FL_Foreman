@@ -164,7 +164,7 @@ class _NurseItemState extends State<NurseItem> with SingleTickerProviderStateMix
               return ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: Image.asset(
-                  'assets/images/avatar.png',
+                  'assets/images/nurse_avatar.png',
                   width: 72,
                   height: 102,
                   fit: BoxFit.fitHeight,
