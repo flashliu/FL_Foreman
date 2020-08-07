@@ -83,7 +83,7 @@ class _OrderItemState extends State<OrderItem> {
                   );
                 } catch (e) {
                   return Image.asset(
-                    'assets/images/avatar.png',
+                    'assets/images/nurse_avatar.png',
                     fit: BoxFit.cover,
                   );
                 }
