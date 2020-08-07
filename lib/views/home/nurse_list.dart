@@ -39,17 +39,9 @@ class _NurseListState extends State<NurseList> with SingleTickerProviderStateMix
     final user = await Global.scanQrcode(context);
     final res = await NurseApi.addNurse(user.id);
     if (res['code'] == 200) {
-      // getNurseList(levelIndex);
+      setState(() {});
     }
     ToastUtils.showLong(res['message']);
-  }
-
-  delNurse(id) async {
-    final res = await NurseApi.delNurse(id);
-    if (res['code'] == 200) {
-      ToastUtils.showLong(res['message']);
-      //   getNurseList(levelIndex);
-    }
   }
 
   Widget buildTabPage() {

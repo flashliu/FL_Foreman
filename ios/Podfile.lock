@@ -1,5 +1,5 @@
 PODS:
-  - AlicloudPush (1.9.9.1):
+  - AlicloudPush (1.9.9.2):
     - AlicloudUT
     - AlicloudUtils
   - AlicloudUT (5.2.0.16):
@@ -64,7 +64,6 @@ SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - Bugly
     - MTBBarcodeScanner
-  trunk:
     - WechatOpenSDK
 
 EXTERNAL SOURCES:
@@ -96,7 +95,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter/ios"
 
 SPEC CHECKSUMS:
-  AlicloudPush: c87e2fae0e3909cad267d9a34379ae865c6b4ea0
+  AlicloudPush: b2856c9ec633f934eb173d307c51e1cdd7fb1b97
   AlicloudUT: 6d1cf30d57d096b7e9bb4b069dd0ba6ad59a3338
   AlicloudUTDID: 5f008f2ac35e3969a5cbf8557ef8d285525be948
   AlicloudUtils: 66e0ba6ece62d7dd05e9dd95674b2c7811624c2f

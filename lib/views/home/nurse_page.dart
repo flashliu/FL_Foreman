@@ -1,4 +1,5 @@
 import 'package:FL_Foreman/apis/nurse_api.dart';
+import 'package:FL_Foreman/common/toast_utils.dart';
 import 'package:FL_Foreman/models/nurse_model.dart';
 import 'package:FL_Foreman/widget/list_content.dart';
 import 'package:FL_Foreman/widget/nurse_item.dart';
@@ -27,6 +28,14 @@ class _NursePageState extends State<NursePage> with AutomaticKeepAliveClientMixi
 
   Future<List<Nurse>> getNurseList() async {
     return NurseApi.getNurseList(nurseLevel: widget.level, page: page, pageSize: pageSize);
+  }
+
+  delNurse(id) async {
+    final res = await NurseApi.delNurse(id);
+    if (res['code'] == 200) {
+      refresh();
+    }
+    ToastUtils.showLong(res['message']);
   }
 
   @override
@@ -112,6 +121,7 @@ class _NursePageState extends State<NursePage> with AutomaticKeepAliveClientMixi
           return NurseItem(
             info: list[index],
             showLocation: widget.showLocation,
+            onDelete: (info) => delNurse(info.id),
           );
         },
         itemCount: list.length,
