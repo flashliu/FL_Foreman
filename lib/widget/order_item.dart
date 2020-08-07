@@ -76,17 +76,16 @@ class _OrderItemState extends State<OrderItem> {
           children: [
             Positioned.fill(
               child: Builder(builder: (_) {
-                try {
-                  return Image.network(
-                    item.headImg,
-                    fit: BoxFit.cover,
-                  );
-                } catch (e) {
+                if (item.headImg == null || item.headImg.isEmpty) {
                   return Image.asset(
                     'assets/images/nurse_avatar.png',
                     fit: BoxFit.cover,
                   );
                 }
+                return Image.network(
+                  item.headImg,
+                  fit: BoxFit.cover,
+                );
               }),
             ),
             Align(

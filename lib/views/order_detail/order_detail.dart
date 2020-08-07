@@ -256,6 +256,7 @@ class _OrderDetailState extends State<OrderDetail> with SingleTickerProviderStat
               ],
             ),
           ),
+          SizedBox(height: 70)
         ],
       ),
     );

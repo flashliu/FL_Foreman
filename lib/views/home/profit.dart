@@ -315,16 +315,7 @@ class _ProfitState extends State<Profit> with AutomaticKeepAliveClientMixin {
       child: Row(
         children: [
           Builder(builder: (_) {
-            try {
-              return ClipOval(
-                child: Image.network(
-                  info.headImg,
-                  width: 40,
-                  height: 40,
-                  fit: BoxFit.cover,
-                ),
-              );
-            } catch (e) {
+            if (info.headImg == null || info.headImg.isEmpty) {
               return ClipOval(
                 child: Image.asset(
                   'assets/images/nurse_avatar.png',
@@ -334,6 +325,14 @@ class _ProfitState extends State<Profit> with AutomaticKeepAliveClientMixin {
                 ),
               );
             }
+            return ClipOval(
+              child: Image.network(
+                info.headImg,
+                width: 40,
+                height: 40,
+                fit: BoxFit.cover,
+              ),
+            );
           }),
           SizedBox(width: 16),
           Text(

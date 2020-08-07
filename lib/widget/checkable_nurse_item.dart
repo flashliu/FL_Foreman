@@ -132,14 +132,7 @@ class _CheckabledNurseItemState extends State<CheckabledNurseItem> {
               borderRadius: BorderRadius.circular(8),
               child: Builder(
                 builder: (_) {
-                  try {
-                    return Image.network(
-                      widget.info.headImg,
-                      width: 88,
-                      height: 124,
-                      fit: BoxFit.fitHeight,
-                    );
-                  } catch (e) {
+                  if (widget.info.headImg == null || widget.info.headImg.isEmpty) {
                     return Image.asset(
                       'assets/images/nurse_avatar.png',
                       width: 88,
@@ -147,6 +140,12 @@ class _CheckabledNurseItemState extends State<CheckabledNurseItem> {
                       fit: BoxFit.fitHeight,
                     );
                   }
+                  return Image.network(
+                    widget.info.headImg,
+                    width: 88,
+                    height: 124,
+                    fit: BoxFit.fitHeight,
+                  );
                 },
               ),
             ),

@@ -153,15 +153,7 @@ class UserDrawer extends StatelessWidget {
               ),
               SizedBox(height: 20),
               Builder(builder: (_) {
-                try {
-                  return ClipOval(
-                    child: Image.network(
-                      user.info.loginUser.headImg,
-                      width: 72,
-                      height: 72,
-                    ),
-                  );
-                } catch (e) {
+                if (user.info.loginUser.headImg == null || user.info.loginUser.headImg.isEmpty) {
                   return ClipOval(
                     child: Image.asset(
                       'assets/images/avatar.png',
@@ -170,6 +162,13 @@ class UserDrawer extends StatelessWidget {
                     ),
                   );
                 }
+                return ClipOval(
+                  child: Image.network(
+                    user.info.loginUser.headImg,
+                    width: 72,
+                    height: 72,
+                  ),
+                );
               }),
               SizedBox(height: 12),
               Text(

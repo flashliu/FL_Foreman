@@ -153,12 +153,22 @@ class _NurseItemState extends State<NurseItem> with SingleTickerProviderStateMix
             try {
               return ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: Image.network(
-                  widget.info.headImg,
-                  width: 72,
-                  height: 102,
-                  fit: BoxFit.fitHeight,
-                ),
+                child: Builder(builder: (_) {
+                  if (widget.info.headImg == null || widget.info.headImg.isEmpty) {
+                    return Image.asset(
+                      'assets/images/nurse_avatar.png',
+                      width: 72,
+                      height: 102,
+                      fit: BoxFit.fitHeight,
+                    );
+                  }
+                  return Image.network(
+                    widget.info.headImg,
+                    width: 72,
+                    height: 102,
+                    fit: BoxFit.fitHeight,
+                  );
+                }),
               );
             } catch (e) {
               return ClipRRect(

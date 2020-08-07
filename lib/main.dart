@@ -15,10 +15,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bugly/flutter_bugly.dart';
 import 'package:fluwx/fluwx.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Permission.notification.request();
   registerWxApi(
     appId: "wx18fc3a377ec300f8",
     universalLink: "https://yihut.cn/foreman/ulink/",
