@@ -174,8 +174,8 @@ class _OrderItemState extends State<OrderItem> {
                 ),
                 SizedBox(width: 8),
                 Text(
-                  widget.info.beNursed.area,
-                  style: nomalText,
+                  widget.info.beNursed.area.isEmpty ? '详细地址联系客户' : widget.info.beNursed.area,
+                  style: TextStyles.black_Bold_14.copyWith(fontSize: 12),
                 )
               ],
             ),

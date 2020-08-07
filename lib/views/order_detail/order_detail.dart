@@ -187,8 +187,8 @@ class _OrderDetailState extends State<OrderDetail> with SingleTickerProviderStat
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.info.beNursed.area,
-                            style: TextStyle(color: ColorCenter.textBlack),
+                            widget.info.beNursed.area.isEmpty ? '详细地址联系客户' : widget.info.beNursed.area,
+                            style: TextStyles.black_Bold_14,
                           ),
                           Text(
                             widget.info.beNursed.realName,

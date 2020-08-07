@@ -95,11 +95,11 @@ class _NeedDetailState extends State<NeedDetail> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    widget.info.area,
-                                    style: TextStyle(color: ColorCenter.textBlack),
+                                    widget.info.area.isEmpty ? '详细地址联系客户' : widget.info.area,
+                                    style: TextStyles.black_Bold_14,
                                   ),
                                   Text(
-                                    widget.info.area,
+                                    widget.info.realName,
                                     style: TextStyles.grey_12,
                                   ),
                                 ],

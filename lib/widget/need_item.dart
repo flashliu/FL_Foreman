@@ -99,8 +99,8 @@ class _NeedItemState extends State<NeedItem> {
                 ),
                 SizedBox(width: 8),
                 Text(
-                  widget.info.area,
-                  style: nomalText,
+                  widget.info.area.isEmpty ? '详细地址联系客户' : widget.info.area,
+                  style: TextStyles.black_Bold_14.copyWith(fontSize: 12),
                 )
               ],
             ),

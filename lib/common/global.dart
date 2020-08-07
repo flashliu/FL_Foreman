@@ -25,6 +25,7 @@ class Global {
 
   static Future<LoginUser> scanQrcode(BuildContext context) async {
     final completer = Completer<LoginUser>();
+    await [Permission.camera, Permission.photos].request();
     final cameraIsDenied = await Permission.camera.isDenied;
     final photosIsDenied = await Permission.photos.isDenied;
     if (cameraIsDenied || photosIsDenied) {

@@ -16,6 +16,7 @@ import 'package:common_utils/common_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:fluwx/fluwx.dart';
 import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
@@ -34,6 +35,7 @@ class _LoginState extends State<Login> {
   String key = '';
   bool canSendCode = true;
   int tick = 60;
+  bool wxInStall = false;
 
   void login() async {
     final username = accountEditController.value.text;
@@ -106,9 +108,17 @@ class _LoginState extends State<Login> {
     });
   }
 
+  checkWxInstall() async {
+    var value = await isWeChatInstalled;
+    setState(() {
+      wxInStall = value;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    checkWxInstall();
     accountEditController = TextEditingController();
     codeEditController = TextEditingController();
     protocolTapGestureRecognizer = TapGestureRecognizer()
@@ -302,7 +312,7 @@ class _LoginState extends State<Login> {
             child: Row(
               children: [
                 Visibility(
-                  visible: true,
+                  visible: wxInStall,
                   child: Pannel(
                     padding: EdgeInsets.zero,
                     borderRadius: BorderRadius.circular(50),
@@ -325,18 +335,18 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                 ),
-                Visibility(
-                  child: Pannel(
-                    padding: EdgeInsets.zero,
-                    borderRadius: BorderRadius.circular(50),
-                    margin: EdgeInsets.symmetric(horizontal: 20),
-                    child: GestureDetector(
-                      child: Svgs.ali,
-                      onTap: () => aliLogin(),
-                    ),
-                  ),
-                  visible: true,
-                )
+                // Visibility(
+                //   child: Pannel(
+                //     padding: EdgeInsets.zero,
+                //     borderRadius: BorderRadius.circular(50),
+                //     margin: EdgeInsets.symmetric(horizontal: 20),
+                //     child: GestureDetector(
+                //       child: Svgs.ali,
+                //       onTap: () => aliLogin(),
+                //     ),
+                //   ),
+                //   visible: true,
+                // )
               ],
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,

@@ -72,11 +72,6 @@ class UserProvider with ChangeNotifier {
   Future<User> wechatLogin() async {
     Completer<User> completer = Completer();
     StreamSubscription<BaseWeChatResponse> listener;
-    var wxInStall = await isWeChatInstalled;
-    if (!wxInStall) {
-      ToastUtils.showShort("请安装微信！");
-      return null;
-    }
     if (listener == null) {
       listener = weChatResponseEventHandler.listen((response) async {
         if (response is WeChatAuthResponse) {
