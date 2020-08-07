@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:FL_Foreman/common/global.dart';
+import 'package:FL_Foreman/models/countdown_model.dart';
 import 'package:FL_Foreman/models/need_model.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/svgs.dart';

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:FL_Foreman/common/global.dart';
+import 'package:FL_Foreman/models/countdown_model.dart';
 import 'package:FL_Foreman/models/order_model.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
@@ -70,23 +70,41 @@ class _OrderItemState extends State<OrderItem> {
 
   List<Widget> buildNurseItem() {
     return widget.info.nurseList.map((item) {
-      try {
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(6),
-          child: FittedBox(
-            fit: BoxFit.cover,
-            child: Image.network(item.headImg),
-          ),
-        );
-      } catch (e) {
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(6),
-          child: FittedBox(
-            fit: BoxFit.cover,
-            child: Image.asset('assets/images/avatar.png'),
-          ),
-        );
-      }
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(6),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: Builder(builder: (_) {
+                try {
+                  return Image.network(
+                    item.headImg,
+                    fit: BoxFit.cover,
+                  );
+                } catch (e) {
+                  return Image.asset(
+                    'assets/images/avatar.png',
+                    fit: BoxFit.cover,
+                  );
+                }
+              }),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                height: 18,
+                width: double.infinity,
+                alignment: Alignment.center,
+                color: Color.fromRGBO(0, 0, 0, 0.4),
+                child: Text(
+                  widget.info.beNursed.realName,
+                  style: TextStyle(color: Colors.white, fontSize: 12),
+                ),
+              ),
+            )
+          ],
+        ),
+      );
     }).toList();
   }
 

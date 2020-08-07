@@ -1,9 +1,8 @@
 import 'dart:async';
 
-import 'package:FL_Foreman/common/global.dart';
+import 'package:FL_Foreman/models/countdown_model.dart';
 import 'package:FL_Foreman/models/nurse_model.dart';
 import 'package:FL_Foreman/models/order_model.dart';
-import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/svgs.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
 import 'package:FL_Foreman/widget/label_value.dart';
