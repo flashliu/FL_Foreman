@@ -149,9 +149,8 @@ class _ChooseNurseState extends State<ChooseNurse> {
                     ],
                   ),
                 ),
-                SizedBox(height: 16),
                 Expanded(
-                  child: buildNurseList(),
+                  child: SingleChildScrollView(child: buildNurseList()),
                 ),
                 Container(
                   width: double.infinity,

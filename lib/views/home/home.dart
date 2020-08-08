@@ -172,7 +172,7 @@ class UserDrawer extends StatelessWidget {
               }),
               SizedBox(height: 12),
               Text(
-                user.info.loginUser.username,
+                user.info.loginUser.username.length > 11 ? user.info.loginUser.nickname : user.info.loginUser.username,
                 style: TextStyle(
                   fontSize: 16,
                   color: ColorCenter.textBlack,

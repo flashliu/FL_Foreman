@@ -8,6 +8,7 @@ import 'package:FL_Foreman/views/order_detail/order_detail.dart';
 import 'package:FL_Foreman/widget/pannel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
 String orderStatus(String status) {
@@ -120,16 +121,23 @@ class _OrderItemState extends State<OrderItem> {
         scrollDirection: Axis.horizontal,
         children: [
           ...buildNurseItem(),
-          Container(
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6),
-              color: Color(0xFFF5F7F8),
-              border: Border.all(color: Color(0xFFDDDDDD)),
+          InkWell(
+            onTap: () => Navigator.of(context).push(
+              CupertinoPageRoute(
+                builder: (_) => OrderDetail(info: widget.info, index: 1),
+              ),
             ),
-            child: Text(
-              '查看更多',
-              style: TextStyle(color: Color(0xFF00A2E6), fontSize: 10),
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(6),
+                color: Color(0xFFF5F7F8),
+                border: Border.all(color: Color(0xFFDDDDDD)),
+              ),
+              child: Text(
+                '查看更多',
+                style: TextStyle(color: Color(0xFF00A2E6), fontSize: 10),
+              ),
             ),
           )
         ],
@@ -141,7 +149,14 @@ class _OrderItemState extends State<OrderItem> {
   Widget build(BuildContext context) {
     final nomalText = TextStyle(fontSize: 12, color: ColorCenter.textGrey);
     return Pannel(
-      onTap: () => Navigator.of(context).push(CupertinoPageRoute(builder: (_) => OrderDetail(info: widget.info))),
+      onTap: () => Navigator.of(context).push(
+        CupertinoPageRoute(
+          builder: (_) => OrderDetail(
+            info: widget.info,
+            showNurse: Provider.of<bool>(context),
+          ),
+        ),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

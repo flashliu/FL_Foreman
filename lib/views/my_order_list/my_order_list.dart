@@ -2,6 +2,7 @@ import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
 import 'package:FL_Foreman/views/my_order_list/order_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 List<Map> tabMaps = [
   {"text": '全部', "status": 0},
@@ -55,9 +56,12 @@ class _MyOrderListState extends State<MyOrderList> with SingleTickerProviderStat
 
   Widget buildTabPage() {
     return Expanded(
-      child: TabBarView(
-        children: tabMaps.map((e) => OrderPage(status: e['status'])).toList(),
-        controller: tabController,
+      child: Provider<bool>.value(
+        value: true,
+        child: TabBarView(
+          children: tabMaps.map((e) => OrderPage(status: e['status'])).toList(),
+          controller: tabController,
+        ),
       ),
     );
   }

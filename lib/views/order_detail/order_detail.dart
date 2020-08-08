@@ -13,7 +13,9 @@ import 'package:flutter/material.dart';
 
 class OrderDetail extends StatefulWidget {
   final Order info;
-  OrderDetail({Key key, @required this.info}) : super(key: key);
+  final int index;
+  final bool showNurse;
+  OrderDetail({Key key, @required this.info, this.index = 0, this.showNurse = true}) : super(key: key);
 
   @override
   _OrderDetailState createState() => _OrderDetailState();
@@ -21,7 +23,7 @@ class OrderDetail extends StatefulWidget {
 
 class _OrderDetailState extends State<OrderDetail> with SingleTickerProviderStateMixin {
   TabController tabController;
-  double bottom = 0;
+  double bottom;
   CountDown countDown = CountDown(day: '00', hour: '00', min: '00', sec: '00');
   Timer timer;
 
@@ -29,7 +31,8 @@ class _OrderDetailState extends State<OrderDetail> with SingleTickerProviderStat
   void initState() {
     super.initState();
     setCountDown();
-    tabController = TabController(length: 2, vsync: this)
+    bottom = widget.index == 0 ? 0 : -70;
+    tabController = TabController(length: widget.showNurse ? 2 : 1, vsync: this, initialIndex: widget.index)
       ..addListener(() {
         setState(() {
           if (tabController.index == 1) {
@@ -100,15 +103,27 @@ class _OrderDetailState extends State<OrderDetail> with SingleTickerProviderStat
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.only(left: 60, right: 100),
-                          child: TabBar(
-                            labelPadding: EdgeInsets.only(bottom: 2),
-                            controller: tabController,
-                            indicatorColor: Colors.white,
-                            indicatorSize: TabBarIndicatorSize.label,
-                            tabs: [
-                              Text(orderStatus(widget.info.status.toString())),
-                              Text('我的护工'),
-                            ],
+                          child: Builder(
+                            builder: (_) {
+                              if (widget.showNurse) {
+                                return TabBar(
+                                  labelPadding: EdgeInsets.only(bottom: 2),
+                                  controller: tabController,
+                                  indicatorColor: Colors.white,
+                                  indicatorSize: TabBarIndicatorSize.label,
+                                  tabs: [
+                                    Text(orderStatus(widget.info.status.toString())),
+                                    Text('我的护工'),
+                                  ],
+                                );
+                              }
+                              return Center(
+                                child: Text(
+                                  orderStatus(widget.info.status.toString()),
+                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                                ),
+                              );
+                            },
                           ),
                         ),
                       )
@@ -118,7 +133,7 @@ class _OrderDetailState extends State<OrderDetail> with SingleTickerProviderStat
                 Expanded(
                   child: TabBarView(
                     controller: tabController,
-                    children: [buildInfo(), buildNurseList()],
+                    children: widget.showNurse ? [buildInfo(), buildNurseList()] : [buildInfo()],
                   ),
                 )
               ],

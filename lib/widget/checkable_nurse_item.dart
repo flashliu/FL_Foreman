@@ -26,7 +26,7 @@ class _CheckabledNurseItemState extends State<CheckabledNurseItem> {
   @override
   Widget build(BuildContext context) {
     return Pannel(
-      margin: const EdgeInsets.only(bottom: 32, left: 16, right: 16),
+      margin: const EdgeInsets.only(top: 32, left: 16, right: 16),
       child: Stack(
         overflow: Overflow.visible,
         children: [

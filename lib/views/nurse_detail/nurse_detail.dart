@@ -6,6 +6,7 @@ import 'package:FL_Foreman/views/my_order_list/order_page.dart';
 import 'package:FL_Foreman/widget/nurse_item.dart';
 import 'package:FL_Foreman/widget/pannel.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class NurseDetail extends StatefulWidget {
   final Nurse info;
@@ -147,7 +148,12 @@ class _NurseDetailState extends State<NurseDetail> with SingleTickerProviderStat
           ),
         ),
         SizedBox(height: 16),
-        Expanded(child: OrderPage(status: status, nurseId: widget.info.id))
+        Expanded(
+          child: Provider<bool>.value(
+            value: false,
+            child: OrderPage(status: status, nurseId: widget.info.id),
+          ),
+        )
       ],
     );
   }
