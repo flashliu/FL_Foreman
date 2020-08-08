@@ -42,48 +42,37 @@ class _NeedListState extends State<NeedList> with SingleTickerProviderStateMixin
   }
 
   Widget buildNeedTab() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Row(
-        children: [
-          Expanded(
-            child: TabBar(
-              controller: tabController,
-              tabs: serverSites.map((e) => Text(e)).toList(),
-              isScrollable: true,
-              indicatorSize: TabBarIndicatorSize.label,
-              indicatorColor: ColorCenter.themeColor,
-              labelColor: ColorCenter.themeColor,
-              unselectedLabelColor: Colors.black,
-              unselectedLabelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              labelStyle: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
+    return Row(
+      children: [
+        Expanded(
+          child: TabBar(
+            controller: tabController,
+            tabs: serverSites.map((e) => Text(e)).toList(),
+            isScrollable: true,
+            indicatorSize: TabBarIndicatorSize.label,
+            indicatorColor: ColorCenter.themeColor,
+            labelColor: ColorCenter.themeColor,
+            unselectedLabelColor: Colors.black,
+            unselectedLabelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            labelStyle: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
             ),
           ),
-          Row(
-            children: [
-              InkWell(
-                onTap: () {
-                  showSearch(context: context, delegate: NeedSearchDelegate());
-                },
-                child: Hero(
-                  tag: 'search',
-                  child: Icon(
-                    Icons.search,
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 10,
-              )
-            ],
-            mainAxisAlignment: MainAxisAlignment.end,
+        ),
+        InkWell(
+          onTap: () {
+            showSearch(context: context, delegate: NeedSearchDelegate());
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Icon(
+              Icons.search,
+              color: Colors.grey,
+            ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -100,13 +89,11 @@ class _NeedListState extends State<NeedList> with SingleTickerProviderStateMixin
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Container(
-          child: Column(
-            children: [
-              buildNeedTab(),
-              buildTabPage(),
-            ],
-          ),
+        Column(
+          children: [
+            buildNeedTab(),
+            buildTabPage(),
+          ],
         ),
         Align(
           alignment: Alignment.bottomRight,

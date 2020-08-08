@@ -20,12 +20,13 @@ class NurseList extends StatefulWidget {
 
 class _NurseListState extends State<NurseList> with SingleTickerProviderStateMixin {
   final List<Map> levels = [
-    {"name": '全部', "value": ""},
-    {"name": '特级', "value": "0"},
-    {"name": '一级', "value": "1"},
-    {"name": '二级', "value": "2"},
-    {"name": '三级', "value": "3"},
+    {"name": '全部', "value": "", "controller": NursePageController()},
+    {"name": '特级', "value": "0", "controller": NursePageController()},
+    {"name": '一级', "value": "1", "controller": NursePageController()},
+    {"name": '二级', "value": "2", "controller": NursePageController()},
+    {"name": '三级', "value": "3", "controller": NursePageController()},
   ];
+  List<Widget> tabView;
   TabController tabController;
   bool showLocation = false;
 
@@ -39,7 +40,8 @@ class _NurseListState extends State<NurseList> with SingleTickerProviderStateMix
     final user = await Global.scanQrcode(context);
     final res = await NurseApi.addNurse(user.id);
     if (res['code'] == 200) {
-      setState(() {});
+      NursePageController currentPageController = levels[tabController.index]['controller'];
+      currentPageController.refresh();
     }
     ToastUtils.showLong(res['message']);
   }
@@ -47,51 +49,56 @@ class _NurseListState extends State<NurseList> with SingleTickerProviderStateMix
   Widget buildTabPage() {
     return Expanded(
       child: TabBarView(
-        children: levels.map((e) => NursePage(level: e['value'], showLocation: showLocation)).toList(),
+        children: levels
+            .map(
+              (e) => NursePage(
+                level: e['value'],
+                showLocation: showLocation,
+                nursePageController: e['controller'],
+              ),
+            )
+            .toList(),
         controller: tabController,
       ),
     );
   }
 
   Widget buildTab() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Row(
-        children: [
-          Expanded(
-            child: TabBar(
-              controller: tabController,
-              tabs: levels.map((e) => Text(e['name'])).toList(),
-              isScrollable: true,
-              indicatorSize: TabBarIndicatorSize.label,
-              indicatorColor: ColorCenter.themeColor,
-              labelColor: ColorCenter.themeColor,
-              unselectedLabelColor: Colors.black,
-              unselectedLabelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              labelStyle: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
+    return Row(
+      children: [
+        Expanded(
+          child: TabBar(
+            controller: tabController,
+            tabs: levels.map((e) => Text(e['name'])).toList(),
+            isScrollable: true,
+            indicatorSize: TabBarIndicatorSize.label,
+            indicatorColor: ColorCenter.themeColor,
+            labelColor: ColorCenter.themeColor,
+            unselectedLabelColor: Colors.black,
+            unselectedLabelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            labelStyle: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
             ),
           ),
-          Row(
-            children: [
-              InkWell(
-                onTap: () {
-                  setState(() {
-                    showLocation = !showLocation;
-                  });
-                },
+        ),
+        Row(
+          children: [
+            InkWell(
+              onTap: () {
+                setState(() {
+                  showLocation = !showLocation;
+                });
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(16),
                 child: Svgs.show,
               ),
-              SizedBox(
-                width: 16,
-              )
-            ],
-            mainAxisAlignment: MainAxisAlignment.end,
-          ),
-        ],
-      ),
+            ),
+          ],
+          mainAxisAlignment: MainAxisAlignment.end,
+        ),
+      ],
     );
   }
 
@@ -141,13 +148,11 @@ class _NurseListState extends State<NurseList> with SingleTickerProviderStateMix
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Container(
-          child: Column(
-            children: [
-              buildTab(),
-              buildTabPage(),
-            ],
-          ),
+        Column(
+          children: [
+            buildTab(),
+            buildTabPage(),
+          ],
         ),
         Align(
           alignment: Alignment.bottomCenter,
