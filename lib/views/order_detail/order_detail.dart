@@ -281,6 +281,7 @@ class _OrderDetailState extends State<OrderDetail> with SingleTickerProviderStat
     final nurseList = widget.info.nurseList.map((e) {
       final json = e.toJson();
       json['sex'] = json['sex'].toString();
+      json['id'] = json['nurseId'];
       return NurseItem(
         info: Nurse.fromJson(json),
         showAction: false,
