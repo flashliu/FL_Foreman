@@ -20,6 +20,7 @@ class _ProfitState extends State<Profit> with AutomaticKeepAliveClientMixin {
   String todayAmount = '0';
   String weekAmount = '0';
   String monthAmount = '0';
+  bool hideAmount = false;
   List<Nurse> list = [];
 
   @override
@@ -182,10 +183,20 @@ class _ProfitState extends State<Profit> with AutomaticKeepAliveClientMixin {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('我的资产', style: TextStyles.title.copyWith(fontSize: 18)),
-                Svgs.eye,
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      hideAmount = !hideAmount;
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Svgs.eye,
+                  ),
+                ),
               ],
             ),
-            SizedBox(height: 14),
+            SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [Text('账户余额'), Text('今日进账')],
@@ -194,8 +205,14 @@ class _ProfitState extends State<Profit> with AutomaticKeepAliveClientMixin {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(user.info.loginUser.balance.toString(), style: TextStyles.price),
-                Text(todayAmount, style: TextStyles.price.copyWith(fontWeight: FontWeight.normal)),
+                Text(
+                  hideAmount ? '****' : user.info.loginUser.balance.toString(),
+                  style: TextStyles.price,
+                ),
+                Text(
+                  hideAmount ? '****' : todayAmount,
+                  style: TextStyles.price.copyWith(fontWeight: FontWeight.normal),
+                ),
               ],
             ),
             SizedBox(height: 20),
@@ -204,7 +221,7 @@ class _ProfitState extends State<Profit> with AutomaticKeepAliveClientMixin {
               children: [
                 Text('本周进账'),
                 Text(
-                  weekAmount,
+                  hideAmount ? '****' : weekAmount,
                   style: TextStyles.price.copyWith(fontWeight: FontWeight.normal, fontSize: 14),
                 )
               ],
@@ -215,7 +232,7 @@ class _ProfitState extends State<Profit> with AutomaticKeepAliveClientMixin {
               children: [
                 Text('本月进账'),
                 Text(
-                  monthAmount,
+                  hideAmount ? '****' : monthAmount,
                   style: TextStyles.price.copyWith(fontWeight: FontWeight.normal, fontSize: 14),
                 )
               ],
