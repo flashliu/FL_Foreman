@@ -5,6 +5,7 @@ import 'package:FL_Foreman/views/my_order_list/my_order_list.dart';
 import 'package:FL_Foreman/views/my_order_list/order_page.dart';
 import 'package:FL_Foreman/widget/nurse_item.dart';
 import 'package:FL_Foreman/widget/pannel.dart';
+import 'package:fijkplayer/fijkplayer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,14 +20,23 @@ class NurseDetail extends StatefulWidget {
 class _NurseDetailState extends State<NurseDetail> with SingleTickerProviderStateMixin {
   TabController tabController;
   int status = 0;
+  final FijkPlayer player = FijkPlayer();
   @override
   void initState() {
     super.initState();
+    setPlayer();
     tabController = TabController(length: 2, vsync: this);
+  }
+
+  setPlayer() async {
+    if (widget.info.nurseVideo.isNotEmpty) {
+      await player.setDataSource(widget.info.nurseVideo, showCover: true);
+    }
   }
 
   @override
   void dispose() {
+    player.dispose();
     tabController.dispose();
     super.dispose();
   }
@@ -99,7 +109,24 @@ class _NurseDetailState extends State<NurseDetail> with SingleTickerProviderStat
                 style: TextStyles.black_Bold_16,
               ),
               SizedBox(height: 16),
-              Image.asset('assets/images/empty_video.png')
+              SizedBox(
+                width: double.infinity,
+                height: 170,
+                child: Builder(builder: (_) {
+                  if (widget.info.nurseVideo.isEmpty) {
+                    return Image.asset(
+                      'assets/images/empty_video.png',
+                      fit: BoxFit.cover,
+                    );
+                  }
+                  return FijkView(
+                    fit: FijkFit.cover,
+                    player: player,
+                    color: Colors.grey,
+                    panelBuilder: fijkPanel2Builder(),
+                  );
+                }),
+              )
             ],
           ),
         ),

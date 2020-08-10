@@ -19,6 +19,7 @@ class Nurse {
   int hasNurseCard;
   int hasHealthCard;
   int hasGoodCard;
+  String nurseVideo;
   int state;
 
   Nurse(
@@ -42,6 +43,7 @@ class Nurse {
       this.hasNurseCard,
       this.hasHealthCard,
       this.hasGoodCard,
+      this.nurseVideo,
       this.state});
 
   Nurse.fromJson(Map<String, dynamic> json) {
@@ -65,6 +67,7 @@ class Nurse {
     hasNurseCard = json['hasNurseCard'];
     hasHealthCard = json['hasHealthCard'];
     hasGoodCard = json['hasGoodCard'];
+    nurseVideo = json['nurseVideo'];
     state = json['state'];
   }
 
@@ -90,6 +93,7 @@ class Nurse {
     data['hasNurseCard'] = this.hasNurseCard;
     data['hasHealthCard'] = this.hasHealthCard;
     data['hasGoodCard'] = this.hasGoodCard;
+    data['nurseVideo'] = this.nurseVideo;
     data['state'] = this.state;
     return data;
   }

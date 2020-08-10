@@ -7,7 +7,11 @@ PODS:
   - AlicloudUTDID (1.5.0.91)
   - AlicloudUtils (1.3.9):
     - AlicloudUTDID
+  - BIJKPlayer (0.7.8)
   - Bugly (2.5.71)
+  - fijkplayer (0.8.7):
+    - BIJKPlayer (~> 0.7.8)
+    - Flutter
   - Flutter (1.0.0)
   - flutter_app_upgrade (0.0.1):
     - Flutter
@@ -41,6 +45,7 @@ PODS:
   - WechatOpenSDK (1.8.7.1)
 
 DEPENDENCIES:
+  - fijkplayer (from `.symlinks/plugins/fijkplayer/ios`)
   - Flutter (from `Flutter`)
   - flutter_app_upgrade (from `.symlinks/plugins/flutter_app_upgrade/ios`)
   - flutter_bugly (from `.symlinks/plugins/flutter_bugly/ios`)
@@ -62,11 +67,14 @@ SPEC REPOS:
     - AlicloudUTDID
     - AlicloudUtils
   https://github.com/CocoaPods/Specs.git:
+    - BIJKPlayer
     - Bugly
     - MTBBarcodeScanner
     - WechatOpenSDK
 
 EXTERNAL SOURCES:
+  fijkplayer:
+    :path: ".symlinks/plugins/fijkplayer/ios"
   Flutter:
     :path: Flutter
   flutter_app_upgrade:
@@ -99,7 +107,9 @@ SPEC CHECKSUMS:
   AlicloudUT: 6d1cf30d57d096b7e9bb4b069dd0ba6ad59a3338
   AlicloudUTDID: 5f008f2ac35e3969a5cbf8557ef8d285525be948
   AlicloudUtils: 66e0ba6ece62d7dd05e9dd95674b2c7811624c2f
+  BIJKPlayer: 464bcb8d263331228758bfa34b45d00f399c9fb8
   Bugly: fd066c75c4a0eca1440f9b6a84bd37d51bfc85ac
+  fijkplayer: 0c8728bf3b222203e1fddb08f6899719d88b2b6d
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_app_upgrade: a62fbe2a09a2176a7b44211c8355adfcfb969779
   flutter_bugly: c9800f4d5bc5bdc27ffdde3417a26ba44266e0c3
