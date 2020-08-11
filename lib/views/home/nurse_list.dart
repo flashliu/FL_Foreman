@@ -48,7 +48,7 @@ class _NurseListState extends State<NurseList> with SingleTickerProviderStateMix
 
   refresh() {
     tabView.forEach((element) {
-      element.nursePageState.refresh();
+      element.nursePageState?.refresh();
     });
   }
 
