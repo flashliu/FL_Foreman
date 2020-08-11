@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:FL_Foreman/models/countdown_model.dart';
+import 'package:FL_Foreman/models/nurse_model.dart';
 import 'package:FL_Foreman/models/order_model.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
+import 'package:FL_Foreman/views/nurse_detail/nurse_detail.dart';
 import 'package:FL_Foreman/views/order_detail/order_detail.dart';
 import 'package:FL_Foreman/widget/pannel.dart';
 import 'package:flutter/cupertino.dart';
@@ -76,18 +78,32 @@ class _OrderItemState extends State<OrderItem> {
         child: Stack(
           children: [
             Positioned.fill(
-              child: Builder(builder: (_) {
-                if (item.headImg == null || item.headImg.isEmpty) {
-                  return Image.asset(
-                    'assets/images/nurse_avatar.png',
+              child: InkWell(
+                onTap: () {
+                  final json = item.toJson();
+                  json['sex'] = json['sex'].toString();
+                  json['id'] = json['nurseId'];
+                  return Navigator.of(context).push(
+                    CupertinoPageRoute(
+                      builder: (_) => NurseDetail(
+                        info: Nurse.fromJson(json),
+                      ),
+                    ),
+                  );
+                },
+                child: Builder(builder: (_) {
+                  if (item.headImg == null || item.headImg.isEmpty) {
+                    return Image.asset(
+                      'assets/images/nurse_avatar.png',
+                      fit: BoxFit.cover,
+                    );
+                  }
+                  return Image.network(
+                    item.headImg,
                     fit: BoxFit.cover,
                   );
-                }
-                return Image.network(
-                  item.headImg,
-                  fit: BoxFit.cover,
-                );
-              }),
+                }),
+              ),
             ),
             Align(
               alignment: Alignment.bottomCenter,
@@ -97,7 +113,7 @@ class _OrderItemState extends State<OrderItem> {
                 alignment: Alignment.center,
                 color: Color.fromRGBO(0, 0, 0, 0.4),
                 child: Text(
-                  widget.info.beNursed.realName,
+                  item.realName,
                   style: TextStyle(color: Colors.white, fontSize: 12),
                 ),
               ),

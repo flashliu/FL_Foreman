@@ -150,7 +150,7 @@ class _ChooseNurseState extends State<ChooseNurse> {
                   ),
                 ),
                 Expanded(
-                  child: SingleChildScrollView(child: buildNurseList()),
+                  child: buildNurseList(),
                 ),
                 Container(
                   width: double.infinity,
@@ -182,25 +182,27 @@ class _ChooseNurseState extends State<ChooseNurse> {
         child: CircularProgressIndicator(),
       );
     }
-    return ListContent(
-      itemBuilder: (BuildContext context, int index) {
-        final checked = checkedNurse.indexOf(list[index].id) >= 0;
-        return CheckabledNurseItem(
-          info: list[index],
-          checked: checked,
-          onCheck: (info) {
-            setState(() {
-              if (checked) {
-                checkedNurse.remove(info.id);
-              } else {
-                checkedNurse.add(info.id);
-              }
-            });
-          },
-        );
-      },
-      emptyText: '你暂时还没有护工，先去添加护工吧',
-      itemCount: list.length,
+    return SingleChildScrollView(
+      child: ListContent(
+        itemBuilder: (BuildContext context, int index) {
+          final checked = checkedNurse.indexOf(list[index].id) >= 0;
+          return CheckabledNurseItem(
+            info: list[index],
+            checked: checked,
+            onCheck: (info) {
+              setState(() {
+                if (checked) {
+                  checkedNurse.remove(info.id);
+                } else {
+                  checkedNurse.add(info.id);
+                }
+              });
+            },
+          );
+        },
+        emptyText: '你暂时还没有护工，先去添加护工吧',
+        itemCount: list.length,
+      ),
     );
   }
 }

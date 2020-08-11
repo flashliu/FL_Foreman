@@ -10,14 +10,13 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 class NursePage extends StatefulWidget {
   final String level;
   final bool showLocation;
-  final NursePageController nursePageController;
-  NursePage({Key key, this.level, this.showLocation = false, @required this.nursePageController}) : super(key: key);
+  NursePage({Key key, this.level, this.showLocation = false}) : super(key: key);
 
   @override
-  NursePageController createState() => nursePageController;
+  _NursePageState createState() => _NursePageState();
 }
 
-class NursePageController extends State<NursePage> with AutomaticKeepAliveClientMixin {
+class _NursePageState extends State<NursePage> with AutomaticKeepAliveClientMixin {
   List<Nurse> list = [];
   bool loading = true;
   RefreshController refreshController = RefreshController();

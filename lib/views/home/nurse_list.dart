@@ -20,19 +20,20 @@ class NurseList extends StatefulWidget {
 
 class _NurseListState extends State<NurseList> with SingleTickerProviderStateMixin {
   final List<Map> levels = [
-    {"name": '全部', "value": "", "controller": NursePageController()},
-    {"name": '特级', "value": "0", "controller": NursePageController()},
-    {"name": '一级', "value": "1", "controller": NursePageController()},
-    {"name": '二级', "value": "2", "controller": NursePageController()},
-    {"name": '三级', "value": "3", "controller": NursePageController()},
+    {"name": '全部', "value": ""},
+    {"name": '特级', "value": "0"},
+    {"name": '一级', "value": "1"},
+    {"name": '二级', "value": "2"},
+    {"name": '三级', "value": "3"},
   ];
-  List<Widget> tabView;
+  List<NursePage> tabView;
   TabController tabController;
   bool showLocation = false;
 
   @override
   void initState() {
     super.initState();
+    tabView = levels.map((e) => NursePage(level: e['value'], showLocation: showLocation)).toList();
     tabController = TabController(length: levels.length, vsync: this);
   }
 
@@ -40,8 +41,9 @@ class _NurseListState extends State<NurseList> with SingleTickerProviderStateMix
     final user = await Global.scanQrcode(context);
     final res = await NurseApi.addNurse(user.id);
     if (res['code'] == 200) {
-      NursePageController currentPageController = levels[tabController.index]['controller'];
-      currentPageController.refresh();
+      setState(() {
+        tabView = tabView;
+      });
     }
     ToastUtils.showLong(res['message']);
   }
@@ -49,15 +51,7 @@ class _NurseListState extends State<NurseList> with SingleTickerProviderStateMix
   Widget buildTabPage() {
     return Expanded(
       child: TabBarView(
-        children: levels
-            .map(
-              (e) => NursePage(
-                level: e['value'],
-                showLocation: showLocation,
-                nursePageController: e['controller'],
-              ),
-            )
-            .toList(),
+        children: levels.map((e) => NursePage(level: e['value'], showLocation: showLocation)).toList(),
         controller: tabController,
       ),
     );
