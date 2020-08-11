@@ -33,7 +33,7 @@ class _NurseListState extends State<NurseList> with SingleTickerProviderStateMix
   @override
   void initState() {
     super.initState();
-    tabView = levels.map((e) => NursePage(level: e['value'], showLocation: showLocation)).toList();
+    tabView = levels.map((e) => NursePage(level: e['value'], showLocation: showLocation, onDel: refresh)).toList();
     tabController = TabController(length: levels.length, vsync: this);
   }
 
@@ -41,17 +41,21 @@ class _NurseListState extends State<NurseList> with SingleTickerProviderStateMix
     final user = await Global.scanQrcode(context);
     final res = await NurseApi.addNurse(user.id);
     if (res['code'] == 200) {
-      setState(() {
-        tabView = tabView;
-      });
+      refresh();
     }
     ToastUtils.showLong(res['message']);
+  }
+
+  refresh() {
+    tabView.forEach((element) {
+      element.nursePageState.refresh();
+    });
   }
 
   Widget buildTabPage() {
     return Expanded(
       child: TabBarView(
-        children: levels.map((e) => NursePage(level: e['value'], showLocation: showLocation)).toList(),
+        children: tabView,
         controller: tabController,
       ),
     );
@@ -82,6 +86,9 @@ class _NurseListState extends State<NurseList> with SingleTickerProviderStateMix
               onTap: () {
                 setState(() {
                   showLocation = !showLocation;
+                  tabView = levels
+                      .map((e) => NursePage(level: e['value'], showLocation: showLocation, onDel: refresh))
+                      .toList();
                 });
               },
               child: Padding(

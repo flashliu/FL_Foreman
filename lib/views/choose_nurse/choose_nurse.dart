@@ -145,7 +145,17 @@ class _ChooseNurseState extends State<ChooseNurse> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('选择护工', style: TextStyles.title),
-                      Svgs.sort,
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            list = list.reversed.toList();
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Svgs.sort,
+                        ),
+                      ),
                     ],
                   ),
                 ),

@@ -7,13 +7,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+// ignore: must_be_immutable
 class NursePage extends StatefulWidget {
   final String level;
   final bool showLocation;
-  NursePage({Key key, this.level, this.showLocation = false}) : super(key: key);
+  final Function onDel;
+  _NursePageState nursePageState;
+  NursePage({Key key, this.level, this.showLocation = false, this.onDel}) : super(key: key);
 
   @override
-  _NursePageState createState() => _NursePageState();
+  _NursePageState createState() {
+    nursePageState = _NursePageState();
+    return nursePageState;
+  }
 }
 
 class _NursePageState extends State<NursePage> with AutomaticKeepAliveClientMixin {
@@ -33,7 +39,7 @@ class _NursePageState extends State<NursePage> with AutomaticKeepAliveClientMixi
   delNurse(id) async {
     final res = await NurseApi.delNurse(id);
     if (res['code'] == 200) {
-      refresh();
+      widget.onDel();
     }
     ToastUtils.showLong(res['message']);
   }
@@ -75,7 +81,6 @@ class _NursePageState extends State<NursePage> with AutomaticKeepAliveClientMixi
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
     if (loading) {
       return Wrap(
         children: [
