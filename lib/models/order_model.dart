@@ -1,3 +1,5 @@
+import 'package:FL_Foreman/models/nurse_model.dart';
+
 class Order {
   String id;
   String orderId;
@@ -9,7 +11,7 @@ class Order {
   String endTime;
   String preferPrice;
   int status;
-  List<NurseList> nurseList;
+  List<Nurse> nurseList;
   BeNursed beNursed;
   String createTime;
   String notes;
@@ -48,9 +50,9 @@ class Order {
     preferPrice = json['preferPrice'];
     status = json['status'];
     if (json['nurseList'] != null) {
-      nurseList = new List<NurseList>();
+      nurseList = new List<Nurse>();
       json['nurseList'].forEach((v) {
-        nurseList.add(new NurseList.fromJson(v));
+        nurseList.add(new Nurse.fromJson(v));
       });
     }
     beNursed = json['beNursed'] != null ? new BeNursed.fromJson(json['beNursed']) : null;
@@ -84,55 +86,6 @@ class Order {
     data['price'] = this.price;
     data['sumtime'] = this.sumtime;
     data['times'] = this.times;
-    return data;
-  }
-}
-
-class NurseList {
-  int age;
-  String nurseId;
-  String extraPrice;
-  String starNum;
-  String realName;
-  int sex;
-  int workTimes;
-  String headImg;
-  String nurseLevel;
-
-  NurseList(
-      {this.age,
-      this.nurseId,
-      this.extraPrice,
-      this.starNum,
-      this.realName,
-      this.sex,
-      this.workTimes,
-      this.headImg,
-      this.nurseLevel});
-
-  NurseList.fromJson(Map<String, dynamic> json) {
-    age = json['age'];
-    nurseId = json['nurseId'];
-    extraPrice = json['extraPrice'];
-    starNum = json['starNum'];
-    realName = json['realName'];
-    sex = json['sex'];
-    workTimes = json['workTimes'];
-    headImg = json['headImg'];
-    nurseLevel = json['nurseLevel'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['age'] = this.age;
-    data['nurseId'] = this.nurseId;
-    data['extraPrice'] = this.extraPrice;
-    data['starNum'] = this.starNum;
-    data['realName'] = this.realName;
-    data['sex'] = this.sex;
-    data['workTimes'] = this.workTimes;
-    data['headImg'] = this.headImg;
-    data['nurseLevel'] = this.nurseLevel;
     return data;
   }
 }

@@ -50,7 +50,7 @@ class Nurse {
     id = json['id'];
     username = json['username'];
     realName = json['realName'];
-    sex = json['sex'];
+    sex = json['sex'].toString();
     headImg = json['headImg'];
     identIdFront = json['identIdFront'];
     identIdBack = json['identIdBack'];

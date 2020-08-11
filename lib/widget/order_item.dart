@@ -80,13 +80,10 @@ class _OrderItemState extends State<OrderItem> {
             Positioned.fill(
               child: InkWell(
                 onTap: () {
-                  final json = item.toJson();
-                  json['sex'] = json['sex'].toString();
-                  json['id'] = json['nurseId'];
                   return Navigator.of(context).push(
                     CupertinoPageRoute(
                       builder: (_) => NurseDetail(
-                        info: Nurse.fromJson(json),
+                        info: item,
                       ),
                     ),
                   );
