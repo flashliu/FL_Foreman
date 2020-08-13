@@ -3,5 +3,6 @@ name: 打包测试
 
 steps:
   - name: test
+    image: cirrusci/flutter
     commands: 
-      - echo test
+      - flutter doctor
