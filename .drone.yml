@@ -3,6 +3,5 @@ name: 打包测试
 
 steps:
   - name: test
-    image: cirrusci/flutter:master
     commands: 
-      - flutter doctor
+      - echo test
