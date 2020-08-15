@@ -17,7 +17,7 @@ class NeedList extends StatefulWidget {
 }
 
 class _NeedListState extends State<NeedList> with SingleTickerProviderStateMixin {
-  final List<String> serverSites = ['推荐', '医院', '居家', '敬老院'];
+  final List<String> serverSites = ['推荐', '医院', '居家', '敬老院', '其他'];
   TabController tabController;
 
   @override

@@ -37,8 +37,11 @@ class _NeedPageState extends State<NeedPage> with AutomaticKeepAliveClientMixin 
   }
 
   Future<List<Need>> getNeedList() async {
-    if (widget.site.isEmpty) {
+    if (widget.site == '推荐') {
       return OrderApi.getNeedSuggestList();
+    }
+    if (widget.site == '其他') {
+      return OrderApi.getNeedOtherList();
     }
     return OrderApi.getNeedList(site: widget.site, page: page, pageSize: pageSize);
   }

@@ -25,6 +25,7 @@ class Need {
   String phone;
   int defaultState;
   int peopleNumber;
+  String orderNumber;
 
   Need(
       {this.id,
@@ -52,7 +53,8 @@ class Need {
       this.area,
       this.phone,
       this.defaultState,
-      this.peopleNumber});
+      this.peopleNumber,
+      this.orderNumber});
 
   Need.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -81,6 +83,7 @@ class Need {
     phone = json['phone'];
     defaultState = json['defaultState'];
     peopleNumber = json['peopleNumber'];
+    orderNumber = json['orderNumber'];
   }
 
   Map<String, dynamic> toJson() {
@@ -111,6 +114,7 @@ class Need {
     data['phone'] = this.phone;
     data['defaultState'] = this.defaultState;
     data['peopleNumber'] = this.peopleNumber;
+    data['orderNumber'] = this.orderNumber;
     return data;
   }
 }

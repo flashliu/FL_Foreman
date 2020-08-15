@@ -184,7 +184,9 @@ class _NeedDetailState extends State<NeedDetail> {
                       text: TextSpan(
                         style: TextStyles.grey_14,
                         children: [
-                          TextSpan(text: widget.info.peopleNumber.toString(), style: TextStyles.black_14),
+                          TextSpan(
+                              text: widget.info.peopleNumber == null ? '0' : widget.info.peopleNumber.toString(),
+                              style: TextStyles.black_14),
                           TextSpan(text: '人抢单'),
                         ],
                       ),
@@ -208,10 +210,10 @@ class _NeedDetailState extends State<NeedDetail> {
                     Column(
                       children: [
                         Text(
-                          '总收入￥${widget.info.price * int.parse(widget.info.totalTime)}',
+                          '总收入￥${widget.info.price}',
                           style: TextStyles.price.copyWith(fontSize: 16),
                         ),
-                        Text('￥${widget.info.price}/天', style: TextStyles.price.copyWith(fontSize: 12)),
+                        // Text('￥${widget.info.price}/天', style: TextStyles.price.copyWith(fontSize: 12)),
                       ],
                     ),
                     SizedBox(width: 10),

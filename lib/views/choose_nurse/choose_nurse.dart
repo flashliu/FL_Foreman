@@ -4,6 +4,7 @@ import 'package:FL_Foreman/common/toast_utils.dart';
 import 'package:FL_Foreman/models/need_model.dart';
 import 'package:FL_Foreman/models/nurse_model.dart';
 import 'package:FL_Foreman/res/colors.dart';
+import 'package:FL_Foreman/res/styles.dart';
 import 'package:FL_Foreman/res/svgs.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
 import 'package:FL_Foreman/views/my_order_list/my_order_list.dart';
@@ -26,15 +27,15 @@ class _ChooseNurseState extends State<ChooseNurse> {
   List<Nurse> list = [];
   bool loading = true;
   List<String> checkedNurse = [];
+  TextEditingController textEditingController = TextEditingController();
   @override
   void initState() {
     super.initState();
     getNurseList();
   }
 
-  getNurseList() async {
-    final data = await NurseApi.getNurseList(nurseLevel: '');
-    await Future.delayed(Duration(seconds: 1));
+  getNurseList({String keyworld = ''}) async {
+    final data = await NurseApi.searchNurseList(keyworld);
     if (this.mounted) {
       setState(() {
         loading = false;
@@ -54,6 +55,14 @@ class _ChooseNurseState extends State<ChooseNurse> {
     ToastUtils.showLong(res['message']);
     if (res['code'] == 200) {
       Navigator.of(context).pushReplacement(CupertinoPageRoute(builder: (_) => MyOrderList()));
+    }
+  }
+
+  assignNurse({@required String nurseId}) async {
+    final res = await OrderApi.assignNurse(nurseId: nurseId, orderNum: widget.info.orderNumber);
+    ToastUtils.showLong(res['message']);
+    if (res['code'] == 200) {
+      Navigator.of(context).pop();
     }
   }
 
@@ -145,6 +154,31 @@ class _ChooseNurseState extends State<ChooseNurse> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('选择护工', style: TextStyles.title),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: Container(
+                          alignment: Alignment.center,
+                          decoration: kBoxDecorationStyle3,
+                          height: 36,
+                          child: TextField(
+                            cursorColor: ColorCenter.themeColor,
+                            controller: textEditingController,
+                            style: TextStyles.black_14,
+                            textInputAction: TextInputAction.search,
+                            onSubmitted: (_) => getNurseList(keyworld: textEditingController.value.text),
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: '请输入护工等级、姓名',
+                              isDense: true,
+                              contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                              suffixIcon: GestureDetector(
+                                onTap: () => getNurseList(keyworld: textEditingController.value.text),
+                                child: Icon(Icons.search, color: Colors.black54),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                       InkWell(
                         onTap: () {
                           setState(() {
@@ -159,21 +193,25 @@ class _ChooseNurseState extends State<ChooseNurse> {
                     ],
                   ),
                 ),
+                SizedBox(height: 10),
                 Expanded(
                   child: buildNurseList(),
                 ),
-                Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(color: Colors.white),
-                  padding: EdgeInsets.only(bottom: 32, left: 16, right: 16),
-                  child: FlatButton(
-                    onPressed: checkedNurse.length > 0 ? confirm : null,
-                    disabledColor: Colors.grey[300],
-                    child: Text('确认（${checkedNurse.length}人）'),
-                    color: ColorCenter.themeColor,
-                    textColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
+                Visibility(
+                  visible: widget.info.orderNumber == null,
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(color: Colors.white),
+                    padding: EdgeInsets.only(bottom: 32, left: 16, right: 16),
+                    child: FlatButton(
+                      onPressed: checkedNurse.length > 0 ? confirm : null,
+                      disabledColor: Colors.grey[300],
+                      child: Text('确认（${checkedNurse.length}人）'),
+                      color: ColorCenter.themeColor,
+                      textColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
                     ),
                   ),
                 ),
@@ -200,13 +238,17 @@ class _ChooseNurseState extends State<ChooseNurse> {
             info: list[index],
             checked: checked,
             onCheck: (info) {
-              setState(() {
-                if (checked) {
-                  checkedNurse.remove(info.id);
-                } else {
-                  checkedNurse.add(info.id);
-                }
-              });
+              if (widget.info.orderNumber == null) {
+                setState(() {
+                  if (checked) {
+                    checkedNurse.remove(info.id);
+                  } else {
+                    checkedNurse.add(info.id);
+                  }
+                });
+              } else {
+                assignNurse(nurseId: info.id);
+              }
             },
           );
         },
