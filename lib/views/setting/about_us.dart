@@ -1,4 +1,3 @@
-import 'package:FL_Foreman/common/toast_utils.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/styles.dart';
 import 'package:FL_Foreman/res/svgs.dart';
@@ -205,15 +204,6 @@ class AboutUs extends StatelessWidget {
                   ],
                   crossAxisAlignment: CrossAxisAlignment.start,
                 ),
-                GestureDetector(
-                  onLongPress: () {
-                    ToastUtils.showShort("请打开微信,搜索【护工云】");
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Image.asset('assets/images/img_about.png'),
-                  ),
-                )
               ],
             ),
           ),

@@ -13,7 +13,7 @@ class Global {
   static Dio http = Dio(
     BaseOptions(
       baseUrl: "http://www.yihut.cn/uni-api",
-      // baseUrl: "http://192.168.0.119:8027",
+      // baseUrl: "http://192.168.0.4:8027",
       connectTimeout: 30000,
       receiveTimeout: 30000,
       responseType: ResponseType.json,
