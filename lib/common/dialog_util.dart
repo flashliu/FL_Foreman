@@ -1,3 +1,5 @@
+import 'package:FL_Foreman/res/colors.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DialogUtils {
@@ -41,5 +43,29 @@ class DialogUtils {
         child: child,
       ),
     );
+  }
+
+  static Future showLoading({@required BuildContext context, @required String msg}) {
+    final dialog = showGeneralDialog(
+      context: context,
+      pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(child: CircularProgressIndicator()),
+            SizedBox(height: 10),
+            Text(
+              msg,
+              style: TextStyle(
+                fontSize: 14.0,
+                color: ColorCenter.themeColor,
+                decoration: TextDecoration.none,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+    return dialog;
   }
 }

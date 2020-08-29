@@ -33,6 +33,7 @@ class _NeedPageState extends State<NeedPage> with AutomaticKeepAliveClientMixin 
     super.initState();
     refresh();
     listener = Global.eventBus.on().listen((event) {
+      print('refreshNeedList');
       if (event == 'refreshNeedList') {
         refresh();
       }

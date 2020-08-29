@@ -63,6 +63,7 @@ class _CreateOrderState extends State<CreateOrder> {
     if (!RegexUtil.isIDCard(idCard)) return ToastUtils.showShort("请输入正确的身份证号！");
     if (amount.isEmpty) return ToastUtils.showShort("请输入押金！");
     if (preferPrice.isEmpty) return ToastUtils.showShort("请输入每日单价！");
+    DialogUtils.showLoading(context: context, msg: '下单中');
 
     final res = await OrderApi.createOrder(
       beNurseCard: idCard,
@@ -76,6 +77,7 @@ class _CreateOrderState extends State<CreateOrder> {
     );
     if (res['code'] == 200) {
       final qr = await OrderApi.getPayQrcode(res['data']['id']);
+      Navigator.of(context).pop();
       await DialogUtils.showElasticDialog(
         barrierDismissible: true,
         context: context,
