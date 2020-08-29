@@ -113,7 +113,7 @@ class _OrderDetailState extends State<OrderDetail> with SingleTickerProviderStat
                                   indicatorSize: TabBarIndicatorSize.label,
                                   tabs: [
                                     Text(orderStatus(widget.info.status.toString())),
-                                    Text('我的护工'),
+                                    Text('执行护工'),
                                   ],
                                 );
                               }

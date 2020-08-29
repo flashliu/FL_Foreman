@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:FL_Foreman/apis/user_api.dart';
+import 'package:FL_Foreman/common/dialog_util.dart';
 import 'package:FL_Foreman/common/storage.dart';
 import 'package:FL_Foreman/common/toast_utils.dart';
 import 'package:FL_Foreman/providers/user_provider.dart';
@@ -46,11 +47,13 @@ class _LoginState extends State<Login> {
     if (code.length != 6) {
       return ToastUtils.showShort("验证码错误！");
     }
+    DialogUtils.showLoading(context: context, msg: '登录中');
     final user = await Provider.of<UserProvider>(context, listen: false).smsLogin(
       username: username,
       code: code,
       key: key,
     );
+    Navigator.of(context).pop();
     if (user != null) {
       loginSuccess(user);
     }

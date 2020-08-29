@@ -214,7 +214,11 @@ class _CreateOrderState extends State<CreateOrder> {
                         children: [
                           Text('押金', style: TextStyles.title),
                           SizedBox(height: 16),
-                          buildInput('请输入', controller: depositController, keyboardType: TextInputType.number),
+                          buildInput(
+                            '请输入',
+                            controller: depositController,
+                            keyboardType: TextInputType.numberWithOptions(decimal: true),
+                          ),
                         ],
                       ),
                     ),
