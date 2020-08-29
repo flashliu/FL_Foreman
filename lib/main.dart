@@ -14,6 +14,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bugly/flutter_bugly.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:fluwx/fluwx.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -72,7 +73,10 @@ setAndroidStatusBar() {
     // 以下两行 设置android状态栏为透明的沉浸。写在组件渲染之后，
     // 是为了在渲染后进行set赋值，覆盖状态栏，写在渲染之前MaterialApp组件会覆盖掉这个值。
     SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(statusBarColor: Colors.transparent, statusBarBrightness: Brightness.dark),
+      SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+      ),
     );
   }
 }
@@ -89,6 +93,16 @@ class App extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => AppProvider()),
       ],
       child: MaterialApp(
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale('zh', 'CH'),
+          const Locale('en', 'US'),
+        ],
+        locale: Locale('zh'),
         key: Global.key,
         debugShowCheckedModeBanner: false,
         theme: ThemeData(

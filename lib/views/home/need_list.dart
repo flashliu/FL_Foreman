@@ -2,6 +2,7 @@ import 'package:FL_Foreman/apis/order_api.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/svgs.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
+import 'package:FL_Foreman/views/home/create_order.dart';
 import 'package:FL_Foreman/views/home/need_page.dart';
 import 'package:FL_Foreman/views/my_order_list/my_order_list.dart';
 import 'package:FL_Foreman/widget/need_item.dart';
@@ -17,7 +18,8 @@ class NeedList extends StatefulWidget {
 }
 
 class _NeedListState extends State<NeedList> with SingleTickerProviderStateMixin {
-  final List<String> serverSites = ['推荐', '医院', '居家', '敬老院', '其他'];
+  // final List<String> serverSites = ['推荐', '医院', '居家', '敬老院', '线上订单'];
+  final List<String> serverSites = ['医院', '线上订单'];
   TabController tabController;
 
   @override
@@ -76,12 +78,23 @@ class _NeedListState extends State<NeedList> with SingleTickerProviderStateMixin
     );
   }
 
-  buildFloat() {
+  buildOrderButton() {
     return FloatingActionButton(
+      heroTag: null,
       onPressed: () {
         Navigator.of(context).push(CupertinoPageRoute(builder: (_) => MyOrderList()));
       },
       child: Svgs.order,
+    );
+  }
+
+  buildAddButton() {
+    return FloatingActionButton(
+      heroTag: null,
+      onPressed: () {
+        Navigator.of(context).push(CupertinoPageRoute(builder: (_) => CreateOrder()));
+      },
+      child: Icon(Icons.add),
     );
   }
 
@@ -99,7 +112,14 @@ class _NeedListState extends State<NeedList> with SingleTickerProviderStateMixin
           alignment: Alignment.bottomRight,
           child: Padding(
             padding: EdgeInsets.only(bottom: 40, right: 16),
-            child: buildFloat(),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                buildAddButton(),
+                SizedBox(height: 24),
+                buildOrderButton(),
+              ],
+            ),
           ),
         )
       ],

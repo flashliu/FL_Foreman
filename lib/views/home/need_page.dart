@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:FL_Foreman/apis/order_api.dart';
+import 'package:FL_Foreman/common/global.dart';
 import 'package:FL_Foreman/models/need_model.dart';
 import 'package:FL_Foreman/widget/list_content.dart';
 import 'package:FL_Foreman/widget/need_item.dart';
@@ -20,6 +23,7 @@ class _NeedPageState extends State<NeedPage> with AutomaticKeepAliveClientMixin 
   RefreshController refreshController = RefreshController();
   int page = 1;
   int pageSize = 5;
+  StreamSubscription listener;
 
   @override
   bool get wantKeepAlive => true;
@@ -28,22 +32,33 @@ class _NeedPageState extends State<NeedPage> with AutomaticKeepAliveClientMixin 
   void initState() {
     super.initState();
     refresh();
+    listener = Global.eventBus.on().listen((event) {
+      if (event == 'refreshNeedList') {
+        refresh();
+      }
+    });
   }
 
   @override
   void dispose() {
     refreshController.dispose();
+    listener.cancel();
     super.dispose();
   }
 
   Future<List<Need>> getNeedList() async {
-    if (widget.site == '推荐') {
-      return OrderApi.getNeedSuggestList();
+    // if (widget.site == '推荐') {
+    //   return OrderApi.getNeedSuggestList();
+    // }
+    // if (widget.site == '已付款') {
+    //   return OrderApi.getNeedOtherList();
+    // }
+
+    if (widget.site == '医院') {
+      return OrderApi.getNeedOtherList({"parentId": Global.userId});
     }
-    if (widget.site == '其他') {
-      return OrderApi.getNeedOtherList();
-    }
-    return OrderApi.getNeedList(site: widget.site, page: page, pageSize: pageSize);
+    return OrderApi.getNeedOtherList({});
+    // return OrderApi.getNeedList(site: widget.site, page: page, pageSize: pageSize);
   }
 
   refresh() async {

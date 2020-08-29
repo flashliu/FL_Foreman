@@ -18,8 +18,8 @@ class ModalWithCloseDialog extends StatelessWidget {
           child: Center(
             child: child,
           ),
+          padding: EdgeInsets.symmetric(vertical: 16),
           width: 300,
-          height: 300,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.all(

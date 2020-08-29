@@ -26,14 +26,12 @@ class _NurseListState extends State<NurseList> with SingleTickerProviderStateMix
     {"name": '二级', "value": "2"},
     {"name": '三级', "value": "3"},
   ];
-  List<NursePage> tabView;
   TabController tabController;
   bool showLocation = false;
 
   @override
   void initState() {
     super.initState();
-    tabView = levels.map((e) => NursePage(level: e['value'], showLocation: showLocation, onDel: refresh)).toList();
     tabController = TabController(length: levels.length, vsync: this);
   }
 
@@ -41,21 +39,21 @@ class _NurseListState extends State<NurseList> with SingleTickerProviderStateMix
     final user = await Global.scanQrcode(context);
     final res = await NurseApi.addNurse(user.id);
     if (res['code'] == 200) {
-      refresh();
+      Global.eventBus.fire('refreshNurseList');
     }
     ToastUtils.showLong(res['message']);
-  }
-
-  refresh() {
-    tabView.forEach((element) {
-      element.nursePageState?.refresh();
-    });
   }
 
   Widget buildTabPage() {
     return Expanded(
       child: TabBarView(
-        children: tabView,
+        children: levels
+            .map((e) => NursePage(
+                  level: e['value'],
+                  showLocation: showLocation,
+                  onDel: () => Global.eventBus.fire('refreshNurseList'),
+                ))
+            .toList(),
         controller: tabController,
       ),
     );
@@ -86,9 +84,6 @@ class _NurseListState extends State<NurseList> with SingleTickerProviderStateMix
               onTap: () {
                 setState(() {
                   showLocation = !showLocation;
-                  tabView = levels
-                      .map((e) => NursePage(level: e['value'], showLocation: showLocation, onDel: refresh))
-                      .toList();
                 });
               },
               child: Padding(

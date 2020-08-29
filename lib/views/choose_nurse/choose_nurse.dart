@@ -1,5 +1,6 @@
 import 'package:FL_Foreman/apis/nurse_api.dart';
 import 'package:FL_Foreman/apis/order_api.dart';
+import 'package:FL_Foreman/common/global.dart';
 import 'package:FL_Foreman/common/toast_utils.dart';
 import 'package:FL_Foreman/models/need_model.dart';
 import 'package:FL_Foreman/models/nurse_model.dart';
@@ -231,6 +232,7 @@ class _ChooseNurseState extends State<ChooseNurse> {
       );
     }
     return SingleChildScrollView(
+      physics: AlwaysScrollableScrollPhysics(),
       child: ListContent(
         itemBuilder: (BuildContext context, int index) {
           final checked = checkedNurse.indexOf(list[index].id) >= 0;
@@ -249,6 +251,7 @@ class _ChooseNurseState extends State<ChooseNurse> {
               } else {
                 assignNurse(nurseId: info.id);
               }
+              Global.eventBus.fire('refreshNeedList');
             },
           );
         },

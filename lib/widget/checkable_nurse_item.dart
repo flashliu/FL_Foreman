@@ -45,7 +45,7 @@ class _CheckabledNurseItemState extends State<CheckabledNurseItem> {
                           style: TextStyles.title,
                         ),
                         SizedBox(width: 8),
-                        Text('34岁', style: TextStyle(color: ColorCenter.textGrey, fontSize: 12)),
+                        Text('${widget.info.age}岁', style: TextStyle(color: ColorCenter.textGrey, fontSize: 12)),
                         SizedBox(width: 4),
                         Image.asset(
                           'assets/images/icon_official.png',
@@ -58,7 +58,8 @@ class _CheckabledNurseItemState extends State<CheckabledNurseItem> {
                             children: [
                               Svgs.start,
                               SizedBox(width: 4),
-                              Text('4.9星', style: TextStyle(color: ColorCenter.textGrey, fontSize: 10)),
+                              Text('${widget.info.starNum}星',
+                                  style: TextStyle(color: ColorCenter.textGrey, fontSize: 10)),
                             ],
                           ),
                         ),
@@ -87,22 +88,23 @@ class _CheckabledNurseItemState extends State<CheckabledNurseItem> {
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 16, right: 4),
-                            child: RichText(
-                              text: TextSpan(
-                                style: TextStyles.price.copyWith(fontSize: 12),
-                                children: [
-                                  TextSpan(text: '￥'),
-                                  TextSpan(
-                                    text: '140',
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                  TextSpan(text: '/天'),
-                                ],
-                              ),
-                            ),
-                          )
+                          SizedBox(width: 80)
+                          // Padding(
+                          //   padding: const EdgeInsets.only(left: 16, right: 4),
+                          //   child: RichText(
+                          //     text: TextSpan(
+                          //       style: TextStyles.price.copyWith(fontSize: 12),
+                          //       children: [
+                          //         TextSpan(text: '￥'),
+                          //         TextSpan(
+                          //           text: '140',
+                          //           style: TextStyle(fontSize: 16),
+                          //         ),
+                          //         TextSpan(text: '/天'),
+                          //       ],
+                          //     ),
+                          //   ),
+                          // )
                         ],
                       ),
                     ),

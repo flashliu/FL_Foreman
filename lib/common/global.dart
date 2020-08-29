@@ -4,6 +4,7 @@ import 'package:FL_Foreman/models/user_model.dart';
 import 'package:FL_Foreman/providers/user_provider.dart';
 import 'package:FL_Foreman/widget/qr_page.dart';
 import 'package:dio/dio.dart';
+import 'package:event_bus/event_bus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -19,6 +20,8 @@ class Global {
       responseType: ResponseType.json,
     ),
   );
+
+  static final eventBus = EventBus();
 
   static final key = GlobalKey();
   static get userId => Provider.of<UserProvider>(key.currentContext, listen: false).info.loginUser.id;

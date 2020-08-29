@@ -21,6 +21,8 @@ class Nurse {
   int hasGoodCard;
   String nurseVideo;
   int state;
+  String starNum;
+  int age;
 
   Nurse(
       {this.id,
@@ -44,7 +46,9 @@ class Nurse {
       this.hasHealthCard,
       this.hasGoodCard,
       this.nurseVideo,
-      this.state});
+      this.state,
+      this.starNum,
+      this.age});
 
   Nurse.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -69,6 +73,8 @@ class Nurse {
     hasGoodCard = json['hasGoodCard'];
     nurseVideo = json['nurseVideo'];
     state = json['state'];
+    starNum = json['starNum'].toString();
+    age = json['age'];
   }
 
   Map<String, dynamic> toJson() {
@@ -95,6 +101,8 @@ class Nurse {
     data['hasGoodCard'] = this.hasGoodCard;
     data['nurseVideo'] = this.nurseVideo;
     data['state'] = this.state;
+    data['starNum'] = this.starNum;
+    data['age'] = this.age;
     return data;
   }
 }

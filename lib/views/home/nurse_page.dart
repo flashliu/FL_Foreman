@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:FL_Foreman/apis/nurse_api.dart';
+import 'package:FL_Foreman/common/global.dart';
 import 'package:FL_Foreman/common/toast_utils.dart';
 import 'package:FL_Foreman/models/nurse_model.dart';
 import 'package:FL_Foreman/widget/list_content.dart';
@@ -7,19 +10,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-// ignore: must_be_immutable
 class NursePage extends StatefulWidget {
   final String level;
   final bool showLocation;
   final Function onDel;
-  _NursePageState nursePageState;
   NursePage({Key key, this.level, this.showLocation = false, this.onDel}) : super(key: key);
 
   @override
-  _NursePageState createState() {
-    nursePageState = _NursePageState();
-    return nursePageState;
-  }
+  _NursePageState createState() => _NursePageState();
 }
 
 class _NursePageState extends State<NursePage> with AutomaticKeepAliveClientMixin {
@@ -28,6 +26,7 @@ class _NursePageState extends State<NursePage> with AutomaticKeepAliveClientMixi
   RefreshController refreshController = RefreshController();
   int page = 1;
   int pageSize = 10;
+  StreamSubscription listener;
 
   @override
   bool get wantKeepAlive => true;
@@ -48,6 +47,18 @@ class _NursePageState extends State<NursePage> with AutomaticKeepAliveClientMixi
   void initState() {
     super.initState();
     refresh();
+    listener = Global.eventBus.on().listen((event) {
+      if (event == 'refreshNurseList') {
+        refresh();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    listener.cancel();
+    refreshController.dispose();
+    super.dispose();
   }
 
   refresh() async {

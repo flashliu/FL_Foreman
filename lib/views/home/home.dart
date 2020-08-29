@@ -55,12 +55,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     final current = await FlutterUpgrade.appInfo;
     appProvider.setVersion(versionInfo);
     appProvider.setCurrentVersion(current);
-    if (versionInfo.vesionStable == current.versionName) return null;
+    if (versionInfo.versionShort == current.versionName) return null;
     return AppUpgradeInfo(
-      title: '新版本V' + versionInfo.vesionStable,
-      contents: [versionInfo.updateContent ?? ""],
-      force: versionInfo.updateType == 1,
-      apkDownloadUrl: versionInfo.versionStableUrl,
+      title: '新版本V' + versionInfo.versionShort,
+      contents: [versionInfo.changelog ?? ""],
+      apkDownloadUrl: versionInfo.installUrl,
     );
   }
 
