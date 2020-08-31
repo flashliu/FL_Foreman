@@ -56,9 +56,9 @@ class _NeedPageState extends State<NeedPage> with AutomaticKeepAliveClientMixin 
     // }
 
     if (widget.site == '医院') {
-      return OrderApi.getNeedOtherList({"parentId": Global.userId});
+      return OrderApi.getNeedOtherList(page: page, pageSize: pageSize, parentId: Global.userId);
     }
-    return OrderApi.getNeedOtherList({});
+    return OrderApi.getNeedOtherList(page: page, pageSize: pageSize);
     // return OrderApi.getNeedList(site: widget.site, page: page, pageSize: pageSize);
   }
 
