@@ -1,5 +1,6 @@
 import 'package:FL_Foreman/common/global.dart';
 import 'package:FL_Foreman/models/nurse_model.dart';
+import 'package:flutter/material.dart';
 
 class NurseApi {
   static Future<List<Nurse>> getNurseList({String nurseLevel, int page = 1, int pageSize = 10}) async {
@@ -19,6 +20,22 @@ class NurseApi {
       "context": keyworld,
       "pageNumber": 1,
       "pageSize": 1000,
+      "parentId": Global.userId,
+    });
+    if (res.data['code'] != 200) return [];
+
+    return List<Nurse>.from(res.data['data'].map((json) => Nurse.fromJson(json)));
+  }
+
+  static Future<List<Nurse>> searchNurseListWithShare(
+    String keyworld, {
+    @required int page,
+    @required int pageSize,
+  }) async {
+    final res = await Global.http.get('/appSecondNurse/selectNurseByIsShare', queryParameters: {
+      "context": keyworld,
+      "pageNumber": page,
+      "pageSize": pageSize,
       "parentId": Global.userId,
     });
     if (res.data['code'] != 200) return [];

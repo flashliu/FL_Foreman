@@ -62,6 +62,7 @@ class _NursePageState extends State<NursePage> with AutomaticKeepAliveClientMixi
   }
 
   refresh() async {
+    refreshController.resetNoData();
     page = 1;
     await Future.delayed(Duration(milliseconds: 300));
     final res = await getNurseList();
@@ -80,12 +81,12 @@ class _NursePageState extends State<NursePage> with AutomaticKeepAliveClientMixi
   loadMore() async {
     page++;
     final res = await getNurseList();
-    if (res.length < pageSize) {
-      return refreshController.loadNoData();
-    }
     setState(() {
       list = list + res;
     });
+    if (res.length < pageSize) {
+      return refreshController.loadNoData();
+    }
     refreshController.loadComplete();
   }
 

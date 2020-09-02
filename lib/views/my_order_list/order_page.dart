@@ -56,6 +56,7 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
   }
 
   refresh() async {
+    refreshController.resetNoData();
     page = 1;
     await Future.delayed(Duration(milliseconds: 300));
     final res = await getOrderList();
@@ -74,12 +75,12 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
   loadMore() async {
     page++;
     final res = await getOrderList();
-    if (res.length < pageSize) {
-      return refreshController.loadNoData();
-    }
     setState(() {
       list = list + res;
     });
+    if (res.length < pageSize) {
+      return refreshController.loadNoData();
+    }
     refreshController.loadComplete();
   }
 

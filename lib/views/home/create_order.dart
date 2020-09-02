@@ -10,6 +10,7 @@ import 'package:FL_Foreman/widget/label_value.dart';
 import 'package:FL_Foreman/widget/modal_with_close_dialog.dart';
 import 'package:FL_Foreman/widget/pannel.dart';
 import 'package:common_utils/common_utils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CreateOrder extends StatefulWidget {
@@ -27,6 +28,8 @@ class _CreateOrderState extends State<CreateOrder> {
   TextEditingController unitPriceController = TextEditingController();
   TextEditingController notesController = TextEditingController();
   DateTimeRange dateTimeRange;
+  List<String> orderTypes = ['医院', '线上订单'];
+  int orderType = 0;
   final now = DateTime.now();
 
   @override
@@ -74,6 +77,7 @@ class _CreateOrderState extends State<CreateOrder> {
       remark: notesController.value.text,
       amount: amount,
       preferPrice: preferPrice,
+      orderType: orderType,
     );
     if (res['code'] == 200) {
       final qr = await OrderApi.getPayQrcode(res['data']['id']);
@@ -135,6 +139,68 @@ class _CreateOrderState extends State<CreateOrder> {
                           LabelValue(label: '顾客自理能力', value: '自理'),
                           SizedBox(height: 12),
                           LabelValue(label: '顾客需要照护时间段', value: '白天(8:00 - 20:00)'),
+                        ],
+                      ),
+                    ),
+                    Pannel(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('订单类型', style: TextStyles.title),
+                          SizedBox(height: 16),
+                          InkWell(
+                            onTap: () async {
+                              final val = await showCupertinoModalPopup(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return CupertinoActionSheet(
+                                    // message: Text('是否要删除当前项？'),
+                                    actions: orderTypes
+                                        .asMap()
+                                        .map(
+                                          (key, value) => MapEntry(
+                                            key,
+                                            CupertinoActionSheetAction(
+                                              child: Text(value),
+                                              onPressed: () => Navigator.of(context).pop(key),
+                                            ),
+                                          ),
+                                        )
+                                        .values
+                                        .toList(),
+                                    cancelButton: CupertinoActionSheetAction(
+                                      onPressed: () => Navigator.of(context).pop(null),
+                                      child: Text('取消'),
+                                      isDestructiveAction: true,
+                                    ),
+                                  );
+                                },
+                              );
+                              if (val == null) return;
+                              setState(() {
+                                orderType = val;
+                              });
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(vertical: 13, horizontal: 16),
+                              decoration: BoxDecoration(
+                                color: Color(0xFFF5F7F8),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(orderTypes[orderType]),
+                                  ),
+                                  Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: ColorCenter.textBlack,
+                                    size: 12,
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -228,7 +294,11 @@ class _CreateOrderState extends State<CreateOrder> {
                         children: [
                           Text('每日单价', style: TextStyles.title),
                           SizedBox(height: 16),
-                          buildInput('请输入', controller: unitPriceController, keyboardType: TextInputType.number),
+                          buildInput(
+                            '请输入',
+                            controller: unitPriceController,
+                            keyboardType: TextInputType.numberWithOptions(decimal: true),
+                          ),
                         ],
                       ),
                     ),

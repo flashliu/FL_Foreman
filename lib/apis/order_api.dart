@@ -124,6 +124,7 @@ class OrderApi {
     @required String remark,
     @required String amount,
     @required String preferPrice,
+    @required int orderType,
   }) async {
     final beNurse = await Global.http.post('/app-be-nursed/add', data: {
       "identId": beNurseCard,
@@ -150,7 +151,7 @@ class OrderApi {
 
     final res = await Global.http.get('/app-pay/createOrder', queryParameters: {
       "needId": need.data['data']['id'],
-      "parentId": Global.userId,
+      "parentId": orderType == 0 ? Global.userId : null,
     });
     // final res = await Global.http.post('/ParentOrder/createOrder', data: {
     //   "beNurseCard": beNurseCard,

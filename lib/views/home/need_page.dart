@@ -47,7 +47,7 @@ class _NeedPageState extends State<NeedPage> with AutomaticKeepAliveClientMixin 
     super.dispose();
   }
 
-  Future<List<Need>> getNeedList() async {
+  Future<List<Need>> getNeedList() {
     // if (widget.site == '推荐') {
     //   return OrderApi.getNeedSuggestList();
     // }
@@ -63,6 +63,7 @@ class _NeedPageState extends State<NeedPage> with AutomaticKeepAliveClientMixin 
   }
 
   refresh() async {
+    refreshController.resetNoData();
     page = 1;
     await Future.delayed(Duration(milliseconds: 300));
     final res = await getNeedList();
@@ -81,12 +82,12 @@ class _NeedPageState extends State<NeedPage> with AutomaticKeepAliveClientMixin 
   loadMore() async {
     page++;
     final res = await getNeedList();
-    if (res.length < pageSize) {
-      return refreshController.loadNoData();
-    }
     setState(() {
       list = list + res;
     });
+    if (res.length < pageSize) {
+      return refreshController.loadNoData();
+    }
     refreshController.loadComplete();
   }
 

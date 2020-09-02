@@ -15,6 +15,7 @@ import 'package:FL_Foreman/widget/list_content.dart';
 import 'package:FL_Foreman/widget/pannel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ChooseNurse extends StatefulWidget {
   final Need info;
@@ -29,20 +30,57 @@ class _ChooseNurseState extends State<ChooseNurse> {
   bool loading = true;
   List<String> checkedNurse = [];
   TextEditingController textEditingController = TextEditingController();
+  RefreshController refreshController = RefreshController();
+  int page = 1;
+  int pageSize = 5;
   @override
   void initState() {
     super.initState();
-    getNurseList();
+    refresh();
   }
 
-  getNurseList({String keyworld = ''}) async {
-    final data = await NurseApi.searchNurseList(keyworld);
-    if (this.mounted) {
+  @override
+  void dispose() {
+    textEditingController.dispose();
+    refreshController.dispose();
+    super.dispose();
+  }
+
+  Future<List<Nurse>> getNurseList({String keyworld = ''}) {
+    return NurseApi.searchNurseListWithShare(
+      keyworld,
+      page: page,
+      pageSize: pageSize,
+    );
+  }
+
+  refresh({String keyworld = ''}) async {
+    if (keyworld.isEmpty) textEditingController.clear();
+    refreshController.resetNoData();
+    page = 1;
+    final res = await getNurseList(keyworld: keyworld);
+    if (mounted) {
       setState(() {
+        list = res;
         loading = false;
-        list = data;
       });
     }
+    if (res.length == 0) {
+      refreshController.loadNoData();
+    }
+    refreshController.refreshCompleted();
+  }
+
+  loadMore() async {
+    page++;
+    final res = await getNurseList();
+    setState(() {
+      list = list + res;
+    });
+    if (res.length < pageSize) {
+      return refreshController.loadNoData();
+    }
+    refreshController.loadComplete();
   }
 
   confirm() async {
@@ -166,14 +204,14 @@ class _ChooseNurseState extends State<ChooseNurse> {
                             controller: textEditingController,
                             style: TextStyles.black_14,
                             textInputAction: TextInputAction.search,
-                            onSubmitted: (_) => getNurseList(keyworld: textEditingController.value.text),
+                            onSubmitted: (_) => refresh(keyworld: textEditingController.value.text),
                             decoration: InputDecoration(
                               border: InputBorder.none,
                               hintText: '请输入护工等级、姓名',
                               isDense: true,
                               contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                               suffixIcon: GestureDetector(
-                                onTap: () => getNurseList(keyworld: textEditingController.value.text),
+                                onTap: () => refresh(keyworld: textEditingController.value.text),
                                 child: Icon(Icons.search, color: Colors.black54),
                               ),
                             ),
@@ -231,8 +269,35 @@ class _ChooseNurseState extends State<ChooseNurse> {
         child: CircularProgressIndicator(),
       );
     }
-    return SingleChildScrollView(
-      physics: AlwaysScrollableScrollPhysics(),
+    return SmartRefresher(
+      enablePullUp: list.length >= pageSize,
+      header: WaterDropHeader(
+        complete: Text('刷新成功！'),
+        refresh: CupertinoActivityIndicator(),
+      ),
+      footer: CustomFooter(
+        builder: (BuildContext context, LoadStatus mode) {
+          Widget body;
+          if (mode == LoadStatus.idle) {
+            body = Text("上拉加载更多");
+          } else if (mode == LoadStatus.loading) {
+            body = CupertinoActivityIndicator();
+          } else if (mode == LoadStatus.failed) {
+            body = Text("加载失败");
+          } else if (mode == LoadStatus.canLoading) {
+            body = Text("松开加载");
+          } else {
+            body = Text("没有更多数据");
+          }
+          return Container(
+            height: 55.0,
+            child: Center(child: body),
+          );
+        },
+      ),
+      onRefresh: () => refresh(),
+      onLoading: () => loadMore(),
+      controller: refreshController,
       child: ListContent(
         itemBuilder: (BuildContext context, int index) {
           final checked = checkedNurse.indexOf(list[index].id) >= 0;
