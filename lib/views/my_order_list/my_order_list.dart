@@ -6,8 +6,8 @@ import 'package:provider/provider.dart';
 
 List<Map> tabMaps = [
   {"text": '全部', "status": 0},
-  {"text": '抢单中', "status": 99},
-  {"text": '待付款', "status": 1},
+  // {"text": '抢单中', "status": 99},
+  // {"text": '待付款', "status": 1},
   {"text": '待执行', "status": 20},
   {"text": '执行中', "status": 21},
   {"text": '已结束', "status": 100},
@@ -78,6 +78,7 @@ class _MyOrderListState extends State<MyOrderList> with SingleTickerProviderStat
         titleSpacing: 0,
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [buildTabBar(), buildTabPage()],
       ),
     );

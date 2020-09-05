@@ -46,24 +46,17 @@ Future<User> getStorageUser() async {
 setDeBugLog() {
   if (kDebugMode) {
     Global.http.interceptors.add(
-      InterceptorsWrapper(
-        onRequest: (options) {
-          if (kDebugMode) {
-            print('uri----------------------------');
-            print(options.uri);
-            print('queryParameters----------------------------');
-            print(options.queryParameters);
-            print('data----------------------------');
-            print(options.data);
-          }
-        },
-        onResponse: (Response res) {
-          if (kDebugMode) {
-            print('response----------------------------');
-            print(res.toString());
-          }
-        },
-      ),
+      InterceptorsWrapper(onRequest: (options) {
+        print('uri----------------------------');
+        print(options.uri);
+        print('queryParameters----------------------------');
+        print(options.queryParameters);
+        print('data----------------------------');
+        print(options.data);
+      }, onResponse: (Response res) {
+        print('response----------------------------');
+        print(res.toString());
+      }),
     );
   }
 }

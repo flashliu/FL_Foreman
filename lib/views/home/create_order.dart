@@ -57,7 +57,7 @@ class _CreateOrderState extends State<CreateOrder> {
 
   submit() async {
     final phone = phoneController.value.text;
-    final idCard = idcardController.value.text;
+    final idCard = idcardController.value.text.toUpperCase();
     final name = nameController.value.text;
     final amount = depositController.value.text;
     final preferPrice = unitPriceController.value.text;
@@ -65,7 +65,9 @@ class _CreateOrderState extends State<CreateOrder> {
     if (!RegexUtil.isMobileExact(phone)) return ToastUtils.showShort("请输入正确的电话！");
     if (!RegexUtil.isIDCard(idCard)) return ToastUtils.showShort("请输入正确的身份证号！");
     if (amount.isEmpty) return ToastUtils.showShort("请输入押金！");
+    if (double.tryParse(amount) == null) return ToastUtils.showShort("请输入正确的押金！");
     if (preferPrice.isEmpty) return ToastUtils.showShort("请输入每日单价！");
+    if (double.tryParse(preferPrice) == null) return ToastUtils.showShort("请输入正确的每日单价！");
     DialogUtils.showLoading(context: context, msg: '下单中');
 
     final res = await OrderApi.createOrder(
