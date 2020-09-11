@@ -65,7 +65,6 @@ class _NeedPageState extends State<NeedPage> with AutomaticKeepAliveClientMixin 
   refresh() async {
     refreshController.resetNoData();
     page = 1;
-    await Future.delayed(Duration(milliseconds: 300));
     final res = await getNeedList();
     if (mounted) {
       setState(() {

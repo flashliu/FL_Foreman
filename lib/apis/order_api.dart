@@ -153,20 +153,6 @@ class OrderApi {
       "needId": need.data['data']['id'],
       "parentId": orderType == 0 ? Global.userId : null,
     });
-    // final res = await Global.http.post('/ParentOrder/createOrder', data: {
-    //   "beNurseCard": beNurseCard,
-    //   "beNurseName": beNurseName,
-    //   "beNursePhone": beNursePhone,
-    //   "startTime": startTime,
-    //   "endTime": endTime,
-    //   "remark": remark,
-    //   "amount": amount,
-    //   "preferPrice": preferPrice,
-    //   "selfCare": "自理",
-    //   "serverSite": "医院",
-    //   "serverTime": "白天(8:00 - 20:00)",
-    //   "userId": Global.userId
-    // });
     return res.data;
   }
 

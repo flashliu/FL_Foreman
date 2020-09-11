@@ -58,7 +58,6 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
   refresh() async {
     refreshController.resetNoData();
     page = 1;
-    await Future.delayed(Duration(milliseconds: 300));
     final res = await getOrderList();
     if (mounted) {
       setState(() {

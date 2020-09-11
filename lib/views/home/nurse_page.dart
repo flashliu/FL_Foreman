@@ -64,7 +64,6 @@ class _NursePageState extends State<NursePage> with AutomaticKeepAliveClientMixi
   refresh() async {
     refreshController.resetNoData();
     page = 1;
-    await Future.delayed(Duration(milliseconds: 300));
     final res = await getNurseList();
     if (mounted) {
       setState(() {
