@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:FL_Foreman/apis/user_api.dart';
 import 'package:FL_Foreman/models/nurse_model.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
@@ -21,11 +24,20 @@ class _NurseDetailState extends State<NurseDetail> with SingleTickerProviderStat
   TabController tabController;
   int status = 0;
   final FijkPlayer player = FijkPlayer();
+  String qrcode;
   @override
   void initState() {
     super.initState();
     setPlayer();
     tabController = TabController(length: 2, vsync: this);
+    getQrcode();
+  }
+
+  getQrcode() async {
+    String data = await UserApi.getMiniQrcode(page: 'pages/nurseDetail/index', id: widget.info.id);
+    setState(() {
+      qrcode = data;
+    });
   }
 
   setPlayer() async {
@@ -97,64 +109,106 @@ class _NurseDetailState extends State<NurseDetail> with SingleTickerProviderStat
   }
 
   Widget buildDetailPage() {
-    return Column(
-      children: [
-        SizedBox(height: 16),
-        Pannel(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '视频介绍',
-                style: TextStyles.black_Bold_16,
-              ),
-              SizedBox(height: 16),
-              SizedBox(
-                width: double.infinity,
-                height: 170,
-                child: Builder(builder: (_) {
-                  if (widget.info.nurseVideo.isEmpty) {
-                    return Image.asset(
-                      'assets/images/empty_video.png',
-                      fit: BoxFit.cover,
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          SizedBox(height: 16),
+          Pannel(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '视频介绍',
+                  style: TextStyles.black_Bold_16,
+                ),
+                SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  height: 170,
+                  child: Builder(builder: (_) {
+                    if (widget.info.nurseVideo.isEmpty) {
+                      return Image.asset(
+                        'assets/images/empty_video.png',
+                        fit: BoxFit.cover,
+                      );
+                    }
+                    return FijkView(
+                      fit: FijkFit.cover,
+                      player: player,
+                      color: Colors.grey,
+                      panelBuilder: fijkPanel2Builder(),
                     );
-                  }
-                  return FijkView(
-                    fit: FijkFit.cover,
-                    player: player,
-                    color: Colors.grey,
-                    panelBuilder: fijkPanel2Builder(),
-                  );
-                }),
-              )
-            ],
+                  }),
+                )
+              ],
+            ),
           ),
-        ),
-        Pannel(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '用户评价',
-                style: TextStyles.black_Bold_16,
-              ),
-              SizedBox(height: 16),
-              Align(
-                alignment: Alignment.center,
-                child: Text('暂时还没有评价，期待您的评价~'),
-              )
-            ],
+          Pannel(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '用户评价',
+                  style: TextStyles.black_Bold_16,
+                ),
+                SizedBox(height: 16),
+                Align(
+                  alignment: Alignment.center,
+                  child: Text('暂时还没有评价，期待您的评价~'),
+                )
+              ],
+            ),
           ),
-        )
-      ],
+          Pannel(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '小程序码',
+                  style: TextStyles.black_Bold_16,
+                ),
+                SizedBox(height: 16),
+                Align(
+                  alignment: Alignment.center,
+                  child: Builder(builder: (context) {
+                    if (qrcode != null) {
+                      return Column(
+                        children: [
+                          SizedBox(
+                            height: 200,
+                            child: Image.memory(
+                              Base64Decoder().convert(qrcode),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          SizedBox(height: 16),
+                          Text(
+                            '扫码快速下单',
+                            style: TextStyles.black_14,
+                          )
+                        ],
+                      );
+                    }
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 40),
+                      child: CircularProgressIndicator(),
+                    );
+                  }),
+                )
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 
   Widget buildOrderPage() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         DefaultTabController(
-          length: 6,
+          length: tabMaps.length,
           child: TabBar(
             isScrollable: true,
             indicatorSize: TabBarIndicatorSize.label,

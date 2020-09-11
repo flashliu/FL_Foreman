@@ -46,7 +46,7 @@ class OrderApi {
     final res = await Global.http.get('/app-v2-needs/selectBySpecial', queryParameters: {
       "page": page,
       "pageSize": pageSize,
-      "parentId": parentId,
+      "flowId": parentId,
     });
     if (res.data['code'] == 200) {
       return List<Need>.from(res.data['data'].map((json) => Need.fromJson(json)));
@@ -151,7 +151,7 @@ class OrderApi {
 
     final res = await Global.http.get('/app-pay/createOrder', queryParameters: {
       "needId": need.data['data']['id'],
-      "parentId": orderType == 0 ? Global.userId : null,
+      "flowId": orderType == 0 ? Global.userId : null,
     });
     return res.data;
   }

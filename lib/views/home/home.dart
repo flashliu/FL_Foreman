@@ -112,24 +112,56 @@ class UserDrawer extends StatelessWidget {
     this.parentContext,
   }) : super(key: key);
 
-  showQrcode(BuildContext context) async {
+  showQrcode(BuildContext context, {String type = ''}) async {
     Navigator.of(context).pop();
-    final data = await UserApi.getQrcode();
-    DialogUtils.showElasticDialog(
-      barrierDismissible: true,
-      context: parentContext,
-      builder: (_) => ModalWithCloseDialog(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.memory(
-              Base64Decoder().convert(data),
-              fit: BoxFit.cover,
-            )
-          ],
+    String data;
+    if (type == 'mini') {
+      data = await UserApi.getMiniQrcode(page: 'pages/index/index');
+      DialogUtils.showElasticDialog(
+        barrierDismissible: true,
+        context: parentContext,
+        builder: (_) => ModalWithCloseDialog(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.memory(
+                  Base64Decoder().convert(data),
+                  fit: BoxFit.cover,
+                ),
+                SizedBox(height: 16),
+                Text(
+                  '微信扫秒该二维码下单，订单完成时即可参与分成',
+                  style: TextStyle(
+                    fontSize: 12.0,
+                    color: ColorCenter.textBlack,
+                    decoration: TextDecoration.none,
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
-      ),
-    );
+      );
+    } else {
+      data = await UserApi.getQrcode();
+      DialogUtils.showElasticDialog(
+        barrierDismissible: true,
+        context: parentContext,
+        builder: (_) => ModalWithCloseDialog(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.memory(
+                Base64Decoder().convert(data),
+                fit: BoxFit.cover,
+              )
+            ],
+          ),
+        ),
+      );
+    }
   }
 
   @override
@@ -188,6 +220,11 @@ class UserDrawer extends StatelessWidget {
                 icon: Svgs.scanner,
                 text: '我的二维码',
                 onTap: () => showQrcode(context),
+              ),
+              buildActionCell(
+                icon: Svgs.scanner,
+                text: '小程序码',
+                onTap: () => showQrcode(context, type: 'mini'),
               ),
               buildActionCell(
                 icon: Svgs.setting,
