@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:FL_Foreman/apis/user_api.dart';
+import 'package:FL_Foreman/common/global.dart';
 import 'package:FL_Foreman/models/nurse_model.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
@@ -9,6 +10,7 @@ import 'package:FL_Foreman/views/my_order_list/order_page.dart';
 import 'package:FL_Foreman/widget/nurse_item.dart';
 import 'package:FL_Foreman/widget/pannel.dart';
 import 'package:fijkplayer/fijkplayer.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -174,18 +176,16 @@ class _NurseDetailState extends State<NurseDetail> with SingleTickerProviderStat
                     if (qrcode != null) {
                       return Column(
                         children: [
-                          SizedBox(
-                            height: 200,
-                            child: Image.memory(
-                              Base64Decoder().convert(qrcode),
-                              fit: BoxFit.cover,
+                          GestureDetector(
+                            onLongPress: () => Global.saveQrcode(context, qrcode: qrcode),
+                            child: SizedBox(
+                              height: 200,
+                              child: Image.memory(
+                                Base64Decoder().convert(qrcode),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
-                          SizedBox(height: 16),
-                          Text(
-                            '扫码快速下单',
-                            style: TextStyles.black_14,
-                          )
                         ],
                       );
                     }

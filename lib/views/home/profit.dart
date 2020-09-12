@@ -1,13 +1,14 @@
 import 'package:FL_Foreman/apis/nurse_api.dart';
-import 'package:FL_Foreman/apis/user_api.dart';
 import 'package:FL_Foreman/models/nurse_model.dart';
 import 'package:FL_Foreman/providers/user_provider.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/svgs.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
 import 'package:FL_Foreman/widget/pannel.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class Profit extends StatefulWidget {
   Profit({Key key}) : super(key: key);
@@ -17,11 +18,9 @@ class Profit extends StatefulWidget {
 }
 
 class _ProfitState extends State<Profit> with AutomaticKeepAliveClientMixin {
-  String todayAmount = '0';
-  String weekAmount = '0';
-  String monthAmount = '0';
   bool hideAmount = false;
   List<Nurse> list = [];
+  RefreshController refreshController = RefreshController();
 
   @override
   bool get wantKeepAlive => true;
@@ -29,8 +28,15 @@ class _ProfitState extends State<Profit> with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
-    getAmout();
-    getNurseList();
+    refresh();
+  }
+
+  refresh() async {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    await userProvider.setBalance();
+    await userProvider.setAmount();
+    await getNurseList();
+    refreshController.refreshCompleted();
   }
 
   getNurseList() async {
@@ -39,21 +45,6 @@ class _ProfitState extends State<Profit> with AutomaticKeepAliveClientMixin {
       data.sort((a, b) => b.workTimes.compareTo(a.workTimes));
       setState(() {
         list = data;
-      });
-    }
-  }
-
-  getAmout() async {
-    final res = await Future.wait([
-      UserApi.getTodayAmount(),
-      UserApi.getWeekAmount(),
-      UserApi.getMonthAmount(),
-    ]);
-    if (mounted) {
-      setState(() {
-        todayAmount = res[0];
-        weekAmount = res[1];
-        monthAmount = res[2];
       });
     }
   }
@@ -108,67 +99,75 @@ class _ProfitState extends State<Profit> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return SingleChildScrollView(
-      physics: AlwaysScrollableScrollPhysics(),
-      child: Column(
-        children: [
-          SizedBox(height: 16),
-          Pannel(
-            child: buildAmountPannel(),
-          ),
-          Pannel(
-            child: Column(
-              children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    '服务数据',
-                    style: TextStyles.title.copyWith(fontSize: 18),
-                  ),
-                ),
-                SizedBox(height: 14),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Column(
-                      children: [
-                        Text(
-                          list.map((e) => e.workTimes).fold(0, (p, n) => p + n).toString(),
-                          style: TextStyle(
-                            color: Color(0xFF00A2E6),
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          '服务单数',
-                          style: TextStyle(color: ColorCenter.textBlack, fontSize: 12),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          list.length.toString(),
-                          style: TextStyle(
-                            color: Color(0xFF00A2E6),
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          '护工人数',
-                          style: TextStyle(color: ColorCenter.textBlack, fontSize: 12),
-                        ),
-                      ],
-                    )
-                  ],
-                )
-              ],
+    return SmartRefresher(
+      enablePullDown: true,
+      header: WaterDropHeader(
+        complete: Text('刷新成功！'),
+        refresh: CupertinoActivityIndicator(),
+      ),
+      controller: refreshController,
+      onRefresh: () => refresh(),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(height: 16),
+            Pannel(
+              child: buildAmountPannel(),
             ),
-          ),
-          buildNurseList()
-        ],
+            Pannel(
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      '服务数据',
+                      style: TextStyles.title.copyWith(fontSize: 18),
+                    ),
+                  ),
+                  SizedBox(height: 14),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Column(
+                        children: [
+                          Text(
+                            list.map((e) => e.workTimes).fold(0, (p, n) => p + n).toString(),
+                            style: TextStyle(
+                              color: Color(0xFF00A2E6),
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            '服务单数',
+                            style: TextStyle(color: ColorCenter.textBlack, fontSize: 12),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text(
+                            list.length.toString(),
+                            style: TextStyle(
+                              color: Color(0xFF00A2E6),
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            '护工人数',
+                            style: TextStyle(color: ColorCenter.textBlack, fontSize: 12),
+                          ),
+                        ],
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+            buildNurseList()
+          ],
+        ),
       ),
     );
   }
@@ -206,11 +205,11 @@ class _ProfitState extends State<Profit> with AutomaticKeepAliveClientMixin {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  hideAmount ? '****' : user.info.loginUser.balance.toString(),
+                  hideAmount ? '****' : user.balance,
                   style: TextStyles.price,
                 ),
                 Text(
-                  hideAmount ? '****' : todayAmount,
+                  hideAmount ? '****' : user.todayAmount,
                   style: TextStyles.price.copyWith(fontWeight: FontWeight.normal),
                 ),
               ],
@@ -221,7 +220,7 @@ class _ProfitState extends State<Profit> with AutomaticKeepAliveClientMixin {
               children: [
                 Text('本周进账'),
                 Text(
-                  hideAmount ? '****' : weekAmount,
+                  hideAmount ? '****' : user.weekAmount,
                   style: TextStyles.price.copyWith(fontWeight: FontWeight.normal, fontSize: 14),
                 )
               ],
@@ -232,7 +231,7 @@ class _ProfitState extends State<Profit> with AutomaticKeepAliveClientMixin {
               children: [
                 Text('本月进账'),
                 Text(
-                  hideAmount ? '****' : monthAmount,
+                  hideAmount ? '****' : user.monthAmount,
                   style: TextStyles.price.copyWith(fontWeight: FontWeight.normal, fontSize: 14),
                 )
               ],

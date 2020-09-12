@@ -19,6 +19,10 @@ class UserProvider with ChangeNotifier {
   bool allNotification = true;
   bool systemNotification = true;
   bool preferentialNotification = true;
+  String balance = '0';
+  String todayAmount = '0';
+  String weekAmount = '0';
+  String monthAmount = '0';
 
   UserProvider(this.info);
 
@@ -55,6 +59,24 @@ class UserProvider with ChangeNotifier {
 
   void setUser(User user) {
     info = user;
+    notifyListeners();
+  }
+
+  setBalance() async {
+    final value = await UserApi.selectBalance();
+    balance = value;
+    notifyListeners();
+  }
+
+  setAmount() async {
+    final res = await Future.wait([
+      UserApi.getTodayAmount(),
+      UserApi.getWeekAmount(),
+      UserApi.getMonthAmount(),
+    ]);
+    todayAmount = res[0];
+    weekAmount = res[1];
+    monthAmount = res[2];
     notifyListeners();
   }
 

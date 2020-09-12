@@ -154,4 +154,11 @@ class UserApi {
       return '';
     }
   }
+
+  static Future<String> selectBalance() async {
+    final res = await Global.http.get('/appUser/selectBalance', queryParameters: {
+      "id": Global.userId,
+    });
+    return res.data['data']['balance'].toString();
+  }
 }

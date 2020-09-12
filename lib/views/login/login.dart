@@ -79,7 +79,9 @@ class _LoginState extends State<Login> {
 
   void loginSuccess(user) async {
     await Storage().set('userinfo', jsonEncode(user));
-    Provider.of<UserProvider>(context, listen: false).setUser(user);
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    userProvider.setUser(user);
+    userProvider.setAmount();
     ToastUtils.showLong("登录成功");
     Navigator.of(context).pushReplacement(CupertinoPageRoute(builder: (_) => Home()));
   }

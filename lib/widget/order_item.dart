@@ -1,7 +1,11 @@
 import 'dart:async';
 
+import 'package:FL_Foreman/apis/order_api.dart';
+import 'package:FL_Foreman/common/global.dart';
+import 'package:FL_Foreman/common/toast_utils.dart';
 import 'package:FL_Foreman/models/countdown_model.dart';
 import 'package:FL_Foreman/models/order_model.dart';
+import 'package:FL_Foreman/providers/user_provider.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
 import 'package:FL_Foreman/views/nurse_detail/nurse_detail.dart';
@@ -63,6 +67,38 @@ class _OrderItemState extends State<OrderItem> {
         });
       });
     }
+  }
+
+  settlement() async {
+    final isConfirm = await showDialog<bool>(
+      context: context,
+      builder: (ctx) {
+        return AlertDialog(
+          title: Text('提示'),
+          content: Text('结算后不可撤回，是否确认结算？'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("确认"),
+              onPressed: () => Navigator.of(context).pop(true), //关闭对话框
+            ),
+            FlatButton(
+              child: Text("取消"),
+              onPressed: () {
+                Navigator.of(context).pop(false); //关闭对话框
+              },
+            ),
+          ],
+        );
+      },
+    );
+    if (!isConfirm) return;
+    final res = await OrderApi.settlement(widget.info.orderId);
+    if (res['code'] != 200) return;
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    userProvider.setBalance();
+    userProvider.setAmount();
+    Global.eventBus.fire('refreshOrderList');
+    ToastUtils.showShort(res['message']);
   }
 
   @override
@@ -155,6 +191,26 @@ class _OrderItemState extends State<OrderItem> {
           )
         ],
       ),
+    );
+  }
+
+  Widget buildActions() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Visibility(
+          visible: widget.info.isSettlement == 1,
+          child: FlatButton(
+            onPressed: () => settlement(),
+            child: Text('立即结算', style: TextStyle(fontSize: 12)),
+            color: ColorCenter.themeColor,
+            textColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18.0),
+            ),
+          ),
+        )
+      ],
     );
   }
 
@@ -252,7 +308,8 @@ class _OrderItemState extends State<OrderItem> {
           SizedBox(height: 8),
           Text('预约编号：${widget.info.id}', style: nomalText),
           SizedBox(height: 8),
-          buildNurseList()
+          buildNurseList(),
+          buildActions(),
         ],
       ),
     );

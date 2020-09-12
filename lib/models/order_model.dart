@@ -18,25 +18,28 @@ class Order {
   double price;
   int sumtime;
   int times;
+  int isSettlement;
 
-  Order(
-      {this.id,
-      this.demandName,
-      this.serverSite,
-      this.serverTime,
-      this.selfCare,
-      this.startTime,
-      this.endTime,
-      this.preferPrice,
-      this.status,
-      this.nurseList,
-      this.beNursed,
-      this.createTime,
-      this.notes,
-      this.price,
-      this.sumtime,
-      this.times,
-      this.orderId});
+  Order({
+    this.id,
+    this.demandName,
+    this.serverSite,
+    this.serverTime,
+    this.selfCare,
+    this.startTime,
+    this.endTime,
+    this.preferPrice,
+    this.status,
+    this.nurseList,
+    this.beNursed,
+    this.createTime,
+    this.notes,
+    this.price,
+    this.sumtime,
+    this.times,
+    this.orderId,
+    this.isSettlement,
+  });
 
   Order.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -61,6 +64,7 @@ class Order {
     price = json['price'];
     sumtime = json['sumtime'];
     times = json['times'];
+    isSettlement = json['isSettlement'];
   }
 
   Map<String, dynamic> toJson() {
@@ -86,6 +90,7 @@ class Order {
     data['price'] = this.price;
     data['sumtime'] = this.sumtime;
     data['times'] = this.times;
+    data['isSettlement'] = this.isSettlement;
     return data;
   }
 }

@@ -100,6 +100,7 @@ class _ChooseNurseState extends State<ChooseNurse> {
   assignNurse({@required String nurseId}) async {
     final res = await OrderApi.assignNurse(nurseId: nurseId, orderNum: widget.info.orderNumber);
     ToastUtils.showLong(res['message']);
+    Global.eventBus.fire('refreshNeedList');
     if (res['code'] == 200) {
       Navigator.of(context).pop();
     }
@@ -316,7 +317,6 @@ class _ChooseNurseState extends State<ChooseNurse> {
               } else {
                 assignNurse(nurseId: info.id);
               }
-              Global.eventBus.fire('refreshNeedList');
             },
           );
         },

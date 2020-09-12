@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:FL_Foreman/apis/order_api.dart';
+import 'package:FL_Foreman/common/global.dart';
 import 'package:FL_Foreman/models/order_model.dart';
 import 'package:FL_Foreman/widget/list_content.dart';
 import 'package:FL_Foreman/widget/order_item.dart';
@@ -21,6 +24,7 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
   RefreshController refreshController = RefreshController();
   int page = 1;
   int pageSize = 5;
+  StreamSubscription listener;
 
   @override
   bool get wantKeepAlive => true;
@@ -29,11 +33,18 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
   void initState() {
     super.initState();
     refresh();
+    listener = Global.eventBus.on().listen((event) {
+      print('refreshOrderList');
+      if (event == 'refreshOrderList') {
+        refresh();
+      }
+    });
   }
 
   @override
   void dispose() {
     refreshController.dispose();
+    listener?.cancel();
     super.dispose();
   }
 

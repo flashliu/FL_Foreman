@@ -162,4 +162,11 @@ class OrderApi {
     });
     return res.data['data']['qrcode'];
   }
+
+  static Future<Map> settlement(String orderId) async {
+    final res = await Global.http.put('/app-pay/confirmSettlement', queryParameters: {
+      "orderId": orderId,
+    });
+    return res.data;
+  }
 }

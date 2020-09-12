@@ -1,5 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
 
+import 'package:FL_Foreman/common/toast_utils.dart';
 import 'package:FL_Foreman/models/user_model.dart';
 import 'package:FL_Foreman/providers/user_provider.dart';
 import 'package:FL_Foreman/widget/qr_page.dart';
@@ -7,6 +10,7 @@ import 'package:dio/dio.dart';
 import 'package:event_bus/event_bus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
@@ -62,5 +66,35 @@ class Global {
       );
     }
     return completer.future;
+  }
+
+  static saveQrcode(context, {@required String qrcode}) async {
+    final pop = await showCupertinoModalPopup<String>(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoActionSheet(
+          actions: <Widget>[
+            CupertinoActionSheetAction(
+              child: Text('保存到本地'),
+              onPressed: () => Navigator.of(context).pop('save'),
+            ),
+          ],
+          cancelButton: CupertinoActionSheetAction(
+            onPressed: () => Navigator.of(context).pop('cancel'),
+            child: Text("取消"),
+          ),
+        );
+      },
+    );
+    if (pop == 'save') {
+      try {
+        await [Permission.photos, Permission.storage].request();
+        Uint8List bytes = base64Decode(qrcode);
+        await ImageGallerySaver.saveImage(bytes, quality: 100, name: 'qrcode');
+        ToastUtils.showShort('保存成功');
+      } catch (e) {
+        ToastUtils.showShort('保存失败');
+      }
+    }
   }
 }

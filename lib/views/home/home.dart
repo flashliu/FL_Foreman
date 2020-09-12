@@ -126,9 +126,12 @@ class UserDrawer extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.memory(
-                  Base64Decoder().convert(data),
-                  fit: BoxFit.cover,
+                GestureDetector(
+                  onLongPress: () => Global.saveQrcode(parentContext, qrcode: data),
+                  child: Image.memory(
+                    Base64Decoder().convert(data),
+                    fit: BoxFit.cover,
+                  ),
                 ),
                 SizedBox(height: 16),
                 Text(
