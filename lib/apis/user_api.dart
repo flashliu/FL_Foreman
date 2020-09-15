@@ -159,6 +159,26 @@ class UserApi {
     final res = await Global.http.get('/appUser/selectBalance', queryParameters: {
       "id": Global.userId,
     });
-    return res.data['data']['balance'].toString();
+    double balance = res.data['data']['balance'];
+    return balance.toString().replaceAll(RegExp(r"([.]*0)(?!.*\d)"), "");
+  }
+
+  static Future<String> getOpenid(String code) async {
+    final res = await Global.http.post('/appUser/wx-applet-openid', data: {code: code});
+    return res.data['data'];
+  }
+
+  static Future<Map> reflect({
+    @required String code,
+    @required String amount,
+    @required String payPassword,
+  }) async {
+    final res = await Global.http.post('/app-pay/cash', data: {
+      "amount": amount,
+      "code": code,
+      "userId": Global.userId,
+      "payPassword": payPassword,
+    });
+    return res.data;
   }
 }

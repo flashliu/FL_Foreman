@@ -1,4 +1,7 @@
 import 'package:FL_Foreman/res/colors.dart';
+import 'package:FL_Foreman/res/text_styles.dart';
+import 'package:FL_Foreman/widget/pannel.dart';
+import 'package:FL_Foreman/widget/password_input.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -46,7 +49,7 @@ class DialogUtils {
   }
 
   static Future showLoading({@required BuildContext context, @required String msg}) {
-    final dialog = showGeneralDialog(
+    return showGeneralDialog(
       context: context,
       pageBuilder: (BuildContext buildContext, Animation<double> animation, Animation<double> secondaryAnimation) {
         return Column(
@@ -66,6 +69,50 @@ class DialogUtils {
         );
       },
     );
-    return dialog;
+  }
+
+  static Future<String> showPaymentPassword({
+    @required BuildContext context,
+  }) {
+    return showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (_) {
+        return Align(
+          alignment: Alignment.topCenter,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 140),
+            child: SizedBox(
+              height: 220,
+              child: Pannel(
+                margin: EdgeInsets.symmetric(horizontal: 30),
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: InkWell(
+                        onTap: () => Navigator.of(context).pop(),
+                        child: Icon(Icons.close),
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      '请输入支付密码',
+                      style: TextStyles.black_Bold_16,
+                    ),
+                    SizedBox(height: 32),
+                    PasswordInput(
+                      onFinsh: (value) {
+                        Navigator.of(context).pop(value);
+                      },
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 }

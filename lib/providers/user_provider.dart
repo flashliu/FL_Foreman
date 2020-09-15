@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:FL_Foreman/apis/user_api.dart';
 import 'package:FL_Foreman/common/storage.dart';
 import 'package:FL_Foreman/common/toast_utils.dart';
+import 'package:FL_Foreman/common/wechat_action.dart';
 import 'package:FL_Foreman/models/message_model.dart';
 import 'package:FL_Foreman/models/user_model.dart';
 import 'package:FL_Foreman/views/login/login.dart';
@@ -10,7 +11,6 @@ import 'package:FL_Foreman/widget/fade_page_route.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluwx/fluwx.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class UserProvider with ChangeNotifier {
@@ -97,27 +97,11 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<User> wechatLogin() async {
-    Completer<User> completer = Completer();
-    StreamSubscription<BaseWeChatResponse> listener;
-    if (listener == null) {
-      listener = weChatResponseEventHandler.listen((response) async {
-        if (response is WeChatAuthResponse) {
-          final res = await UserApi.wechatLogin(
-            wxcode: response.code,
-          );
-          listener.cancel();
-          completer.complete(res);
-        }
-      });
-    }
-
-    try {
-      sendWeChatAuth(scope: "snsapi_userinfo", state: "wechat_auth");
-    } catch (e) {
-      ToastUtils.showLong("微信授权失败！");
-    }
-
-    return completer.future;
+    final response = await WechatAction.sendAuth();
+    final res = await UserApi.wechatLogin(
+      wxcode: response.code,
+    );
+    return res;
   }
 
   Future<User> appleLogin() async {

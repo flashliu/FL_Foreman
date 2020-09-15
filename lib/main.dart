@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:FL_Foreman/common/global.dart';
 import 'package:FL_Foreman/common/storage.dart';
+import 'package:FL_Foreman/common/toast_utils.dart';
 import 'package:FL_Foreman/models/user_model.dart';
 import 'package:FL_Foreman/providers/app_provider.dart';
 import 'package:FL_Foreman/providers/user_provider.dart';
@@ -44,21 +45,32 @@ Future<User> getStorageUser() async {
 }
 
 setDeBugLog() {
-  if (kDebugMode) {
-    Global.http.interceptors.add(
-      InterceptorsWrapper(onRequest: (options) {
-        print('uri----------------------------');
-        print(options.uri);
-        print('queryParameters----------------------------');
-        print(options.queryParameters);
-        print('data----------------------------');
-        print(options.data);
-      }, onResponse: (Response res) {
-        print('response----------------------------');
-        print(res.toString());
-      }),
-    );
-  }
+  Global.http.interceptors.add(
+    InterceptorsWrapper(
+      onRequest: (options) {
+        if (kDebugMode) {
+          print('uri----------------------------');
+          print(options.uri);
+          print('queryParameters----------------------------');
+          print(options.queryParameters);
+          print('data----------------------------');
+          print(options.data);
+        }
+      },
+      onResponse: (Response res) {
+        if (kDebugMode) {
+          print('response----------------------------');
+          print(res.toString());
+        }
+        if (res.data['code'] == 500) {
+          ToastUtils.showLong(res.data['message']);
+        }
+      },
+      onError: (DioError error) {
+        ToastUtils.showLong(error.message);
+      },
+    ),
+  );
 }
 
 setAndroidStatusBar() {

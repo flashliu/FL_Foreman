@@ -4,6 +4,7 @@ import 'package:FL_Foreman/providers/user_provider.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/svgs.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
+import 'package:FL_Foreman/views/reflect/reflect.dart';
 import 'package:FL_Foreman/widget/pannel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -236,9 +237,8 @@ class _ProfitState extends State<Profit> with AutomaticKeepAliveClientMixin {
                 )
               ],
             ),
-            // Divider(
-            //   height: 30,
-            // ),
+            SizedBox(height: 10),
+            Divider(),
             // Material(
             //   color: Colors.transparent,
             //   child: InkWell(
@@ -292,33 +292,32 @@ class _ProfitState extends State<Profit> with AutomaticKeepAliveClientMixin {
             //     ),
             //   ),
             // ),
-            // SizedBox(height: 10),
-            // Material(
-            //   color: Colors.transparent,
-            //   child: InkWell(
-            //     borderRadius: BorderRadius.all(Radius.circular(8)),
-            //     onTap: () {},
-            //     child: Padding(
-            //       padding: EdgeInsets.symmetric(vertical: 2),
-            //       child: Row(
-            //         children: [
-            //           Svgs.withdrawal,
-            //           SizedBox(width: 8),
-            //           Text('我要提现'),
-            //           Expanded(
-            //             child: Align(
-            //               alignment: Alignment.centerRight,
-            //               child: Icon(
-            //                 Icons.keyboard_arrow_right,
-            //                 color: ColorCenter.textGrey,
-            //               ),
-            //             ),
-            //           )
-            //         ],
-            //       ),
-            //     ),
-            //   ),
-            // ),
+            Material(
+              color: Colors.transparent,
+              child: InkWell(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+                onTap: () => Navigator.of(context).push(CupertinoPageRoute(builder: (_) => Reflect())),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                  child: Row(
+                    children: [
+                      Svgs.withdrawal,
+                      SizedBox(width: 8),
+                      Text('我要提现'),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Icon(
+                            Icons.keyboard_arrow_right,
+                            color: ColorCenter.textGrey,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ],
         );
       },
