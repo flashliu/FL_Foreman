@@ -26,35 +26,38 @@ class Need {
   int defaultState;
   int peopleNumber;
   String orderNumber;
+  double amount;
 
-  Need(
-      {this.id,
-      this.createTime,
-      this.updateTime,
-      this.deleted,
-      this.userId,
-      this.notes,
-      this.demandName,
-      this.serverSite,
-      this.serverTime,
-      this.selfCare,
-      this.beNursedId,
-      this.price,
-      this.unit,
-      this.startTime,
-      this.endTime,
-      this.status,
-      this.totalTime,
-      this.preferPrice,
-      this.commend,
-      this.realName,
-      this.identId,
-      this.address,
-      this.area,
-      this.phone,
-      this.defaultState,
-      this.peopleNumber,
-      this.orderNumber});
+  Need({
+    this.id,
+    this.createTime,
+    this.updateTime,
+    this.deleted,
+    this.userId,
+    this.notes,
+    this.demandName,
+    this.serverSite,
+    this.serverTime,
+    this.selfCare,
+    this.beNursedId,
+    this.price,
+    this.unit,
+    this.startTime,
+    this.endTime,
+    this.status,
+    this.totalTime,
+    this.preferPrice,
+    this.commend,
+    this.realName,
+    this.identId,
+    this.address,
+    this.area,
+    this.phone,
+    this.defaultState,
+    this.peopleNumber,
+    this.orderNumber,
+    this.amount,
+  });
 
   Need.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -84,6 +87,7 @@ class Need {
     defaultState = json['defaultState'];
     peopleNumber = json['peopleNumber'];
     orderNumber = json['orderNumber'];
+    amount = json['amount'];
   }
 
   Map<String, dynamic> toJson() {
@@ -115,6 +119,7 @@ class Need {
     data['defaultState'] = this.defaultState;
     data['peopleNumber'] = this.peopleNumber;
     data['orderNumber'] = this.orderNumber;
+    data['amount'] = this.amount;
     return data;
   }
 }

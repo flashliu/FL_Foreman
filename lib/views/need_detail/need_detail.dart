@@ -210,7 +210,7 @@ class _NeedDetailState extends State<NeedDetail> {
                     Column(
                       children: [
                         Text(
-                          '总收入￥${widget.info.price}',
+                          '总收入￥${widget.info.amount}',
                           style: TextStyles.price.copyWith(fontSize: 16),
                         ),
                         // Text('￥${widget.info.price}/天', style: TextStyles.price.copyWith(fontSize: 12)),

@@ -85,7 +85,7 @@ class _ChooseNurseState extends State<ChooseNurse> {
 
   confirm() async {
     final res = await OrderApi.bindingNurse(
-      bidMoney: (widget.info.price * double.parse(widget.info.totalTime)).toString(),
+      bidMoney: widget.info.amount.toString(),
       needId: widget.info.id,
       userId: widget.info.userId,
       status: widget.info.status,
@@ -157,8 +157,8 @@ class _ChooseNurseState extends State<ChooseNurse> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('预计价格', style: TextStyles.black_14.copyWith(fontSize: 12)),
-                          Text('￥130 /天', style: TextStyles.price.copyWith(fontSize: 16)),
+                          Text('订单价格', style: TextStyles.black_14.copyWith(fontSize: 12)),
+                          Text('￥${widget.info.amount}', style: TextStyles.price.copyWith(fontSize: 16)),
                         ],
                       ),
                       SizedBox(height: 12),

@@ -16,6 +16,7 @@ class Order {
   String createTime;
   String notes;
   double price;
+  double amount;
   int sumtime;
   int times;
   int isSettlement;
@@ -39,6 +40,7 @@ class Order {
     this.times,
     this.orderId,
     this.isSettlement,
+    this.amount,
   });
 
   Order.fromJson(Map<String, dynamic> json) {
@@ -65,6 +67,7 @@ class Order {
     sumtime = json['sumtime'];
     times = json['times'];
     isSettlement = json['isSettlement'];
+    amount = json['amount'];
   }
 
   Map<String, dynamic> toJson() {
@@ -91,6 +94,7 @@ class Order {
     data['sumtime'] = this.sumtime;
     data['times'] = this.times;
     data['isSettlement'] = this.isSettlement;
+    data['amount'] = this.amount;
     return data;
   }
 }

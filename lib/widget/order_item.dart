@@ -297,7 +297,7 @@ class _OrderItemState extends State<OrderItem> {
                       style: TextStyles.price.copyWith(fontSize: 12, height: 1.7),
                     ),
                     Text(
-                      widget.info.price.toString(),
+                      widget.info.amount.toString(),
                       style: TextStyles.price.copyWith(fontSize: 18),
                     )
                   ],
