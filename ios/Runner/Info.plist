@@ -18,7 +18,7 @@
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>NSCameraUsageDescription</key>
-	<string>$(PRODUCT_NAME)需要使用您的相机来扫描二维码</string>
+	<string>$(PRODUCT_NAME)需要使用您的相机来扫描二维码添加护工</string>
 	<key>io.flutter.embedded_views_preview</key>
 	<string>YES</string>
 	<key>CFBundlePackageType</key>
@@ -85,7 +85,7 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>$(PRODUCT_NAME)需要使用您的相册来识别二维码</string>
+	<string>$(PRODUCT_NAME)需要使用您的相册来识别二维码添加护工</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>$(PRODUCT_NAME)需要使用您的相册来保存二维码</string>
 </dict>
