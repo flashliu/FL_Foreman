@@ -1,14 +1,15 @@
-import 'dart:async';
-
-import 'package:FL_Foreman/models/countdown_model.dart';
 import 'package:FL_Foreman/models/nurse_model.dart';
 import 'package:FL_Foreman/models/order_model.dart';
+import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/svgs.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
+import 'package:FL_Foreman/views/home/create_order.dart';
+import 'package:FL_Foreman/views/refund/refund.dart';
 import 'package:FL_Foreman/widget/label_value.dart';
 import 'package:FL_Foreman/widget/nurse_item.dart';
 import 'package:FL_Foreman/widget/order_item.dart';
 import 'package:FL_Foreman/widget/pannel.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class OrderDetail extends StatefulWidget {
@@ -24,13 +25,10 @@ class OrderDetail extends StatefulWidget {
 class _OrderDetailState extends State<OrderDetail> with SingleTickerProviderStateMixin {
   TabController tabController;
   double bottom;
-  CountDown countDown = CountDown(day: '00', hour: '00', min: '00', sec: '00');
-  Timer timer;
 
   @override
   void initState() {
     super.initState();
-    setCountDown();
     bottom = widget.index == 0 ? 0 : -70;
     tabController = TabController(length: widget.showNurse ? 2 : 1, vsync: this, initialIndex: widget.index)
       ..addListener(() {
@@ -44,29 +42,9 @@ class _OrderDetailState extends State<OrderDetail> with SingleTickerProviderStat
       });
   }
 
-  setCountDown() {
-    final startTime = DateTime.parse(widget.info.startTime);
-
-    if (startTime.isAfter(DateTime.now())) {
-      setState(() {
-        countDown = CountDown.fromTime(startTime);
-      });
-      timer = Timer.periodic(Duration(seconds: 1), (_) {
-        final newCountDown = CountDown.fromTime(startTime);
-        if (int.parse(newCountDown.day) < 0) {
-          return timer.cancel();
-        }
-        setState(() {
-          countDown = newCountDown;
-        });
-      });
-    }
-  }
-
   @override
   void dispose() {
     tabController.dispose();
-    timer?.cancel();
     super.dispose();
   }
 
@@ -150,20 +128,32 @@ class _OrderDetailState extends State<OrderDetail> with SingleTickerProviderStat
               ),
               padding: EdgeInsets.only(top: 16, right: 16, bottom: 32, left: 16),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  RichText(
-                    text: TextSpan(
-                      style: TextStyles.grey_14,
-                      children: [
-                        TextSpan(text: widget.info.nurseList.length.toString(), style: TextStyles.black_14),
-                        TextSpan(text: '人抢单'),
-                      ],
+                  OutlineButton(
+                    onPressed: () {
+                      Navigator.of(context).push(CupertinoPageRoute(builder: (_) => Refund(info: widget.info)));
+                    },
+                    child: Text('退款', style: TextStyles.black_14),
+                    borderSide: BorderSide(width: 1, color: Colors.grey),
+                    highlightedBorderColor: Colors.grey,
+                    color: Colors.white,
+                    textColor: ColorCenter.textBlack,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
                     ),
                   ),
-                  Text(
-                    '结束倒计时：${countDown.day}天 ${countDown.hour}:${countDown.min}:${countDown.sec}',
-                    style: TextStyle(color: Color(0xFF00A2E6), fontSize: 12),
+                  SizedBox(width: 8),
+                  FlatButton(
+                    onPressed: () {
+                      Navigator.of(context).push(CupertinoPageRoute(builder: (_) => CreateOrder()));
+                    },
+                    child: Text('再下一单', style: TextStyle(fontSize: 14)),
+                    color: ColorCenter.themeColor,
+                    textColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                    ),
                   )
                 ],
               ),
@@ -266,6 +256,8 @@ class _OrderDetailState extends State<OrderDetail> with SingleTickerProviderStat
                 Text('订单信息', style: TextStyles.black_16),
                 SizedBox(height: 16),
                 LabelValue(label: '预约编号', value: widget.info.id),
+                SizedBox(height: 16),
+                LabelValue(label: '订单编号', value: widget.info.orderNumber),
                 SizedBox(height: 16),
                 LabelValue(label: '创建时间', value: widget.info.createTime),
               ],

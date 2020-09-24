@@ -169,4 +169,28 @@ class OrderApi {
     });
     return res.data;
   }
+
+  static Future<Map> refund({
+    @required String orderAmout,
+    @required String orderNo,
+    @required String refundAmout,
+    @required String refundDays,
+    @required String refundNo,
+    @required String refundNote,
+    @required String voucher,
+  }) async {
+    final res = await Global.http.post('/app-pay/refund', data: {
+      "orderAmout": orderAmout,
+      "orderNo": orderNo,
+      "refundAmout": refundAmout,
+      "refundDays": refundDays,
+      "refundNo": refundNo,
+      "refundNote": refundNote,
+      "refundPlatform": "foreman",
+      "type": 0,
+      "userId": Global.userId,
+      "voucher": voucher
+    });
+    return res.data;
+  }
 }
