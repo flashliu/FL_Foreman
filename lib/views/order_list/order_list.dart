@@ -1,6 +1,7 @@
+import 'package:FL_Foreman/providers/style_provider.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
-import 'package:FL_Foreman/views/my_order_list/order_page.dart';
+import 'package:FL_Foreman/views/order_list/order_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -13,14 +14,22 @@ List<Map> tabMaps = [
   {"text": '已结束', "status": 100},
 ];
 
-class MyOrderList extends StatefulWidget {
-  MyOrderList({Key key}) : super(key: key);
+class OrderList extends StatefulWidget {
+  final String parentId;
+  final String nurseId;
+  final bool showAppbar;
+  OrderList({
+    Key key,
+    this.parentId,
+    this.showAppbar = true,
+    this.nurseId,
+  }) : super(key: key);
 
   @override
-  _MyOrderListState createState() => _MyOrderListState();
+  _OrderListState createState() => _OrderListState();
 }
 
-class _MyOrderListState extends State<MyOrderList> with SingleTickerProviderStateMixin {
+class _OrderListState extends State<OrderList> with SingleTickerProviderStateMixin {
   TabController tabController;
 
   @override
@@ -56,10 +65,21 @@ class _MyOrderListState extends State<MyOrderList> with SingleTickerProviderStat
 
   Widget buildTabPage() {
     return Expanded(
-      child: Provider<bool>.value(
-        value: true,
+      child: Provider(
+        create: (context) => StyleProvider(
+          listShowPaddingTop: false,
+          showNurse: Provider.of<StyleProvider>(context, listen: false).showNurse,
+        ),
         child: TabBarView(
-          children: tabMaps.map((e) => OrderPage(status: e['status'])).toList(),
+          children: tabMaps
+              .map(
+                (e) => OrderPage(
+                  status: e['status'],
+                  parentId: widget.parentId,
+                  nurseId: widget.nurseId,
+                ),
+              )
+              .toList(),
           controller: tabController,
         ),
       ),
@@ -69,14 +89,16 @@ class _MyOrderListState extends State<MyOrderList> with SingleTickerProviderStat
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: InkWell(
-          child: Icon(Icons.chevron_left),
-          onTap: () => Navigator.of(context).pop(),
-        ),
-        title: Text('我的派单'),
-        titleSpacing: 0,
-      ),
+      appBar: widget.showAppbar
+          ? AppBar(
+              leading: InkWell(
+                child: Icon(Icons.chevron_left),
+                onTap: () => Navigator.of(context).pop(),
+              ),
+              title: Text('我的派单'),
+              titleSpacing: 0,
+            )
+          : null,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [buildTabBar(), buildTabPage()],

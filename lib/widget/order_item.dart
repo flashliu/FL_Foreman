@@ -5,6 +5,7 @@ import 'package:FL_Foreman/common/global.dart';
 import 'package:FL_Foreman/common/toast_utils.dart';
 import 'package:FL_Foreman/models/countdown_model.dart';
 import 'package:FL_Foreman/models/order_model.dart';
+import 'package:FL_Foreman/providers/style_provider.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
 import 'package:FL_Foreman/views/nurse_detail/nurse_detail.dart';
@@ -221,7 +222,7 @@ class _OrderItemState extends State<OrderItem> {
         CupertinoPageRoute(
           builder: (_) => OrderDetail(
             info: widget.info,
-            showNurse: Provider.of<bool>(context),
+            showNurse: Provider.of<StyleProvider>(context).showNurse,
           ),
         ),
       ),

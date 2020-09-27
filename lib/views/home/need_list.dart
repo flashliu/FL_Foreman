@@ -1,16 +1,18 @@
 import 'package:FL_Foreman/apis/order_api.dart';
 import 'package:FL_Foreman/common/global.dart';
 import 'package:FL_Foreman/models/tab_page_data.dart';
+import 'package:FL_Foreman/providers/style_provider.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/svgs.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
 import 'package:FL_Foreman/views/home/create_order.dart';
 import 'package:FL_Foreman/views/home/need_page.dart';
-import 'package:FL_Foreman/views/my_order_list/my_order_list.dart';
+import 'package:FL_Foreman/views/order_list/order_list.dart';
 import 'package:FL_Foreman/widget/need_item.dart';
 import 'package:FL_Foreman/widget/state_layout.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class NeedList extends StatefulWidget {
   NeedList({Key key}) : super(key: key);
@@ -46,9 +48,12 @@ class _NeedListState extends State<NeedList> with SingleTickerProviderStateMixin
 
   Widget buildTabPage() {
     return Expanded(
-      child: TabBarView(
-        children: serverSites.map((e) => e.view).toList(),
-        controller: tabController,
+      child: Provider(
+        create: (context) => StyleProvider(listShowPaddingTop: false),
+        child: TabBarView(
+          children: serverSites.map((e) => e.view).toList(),
+          controller: tabController,
+        ),
       ),
     );
   }
@@ -95,7 +100,7 @@ class _NeedListState extends State<NeedList> with SingleTickerProviderStateMixin
     return FloatingActionButton(
       heroTag: null,
       onPressed: () {
-        Navigator.of(context).push(CupertinoPageRoute(builder: (_) => MyOrderList()));
+        Navigator.of(context).push(CupertinoPageRoute(builder: (_) => OrderList()));
       },
       child: Svgs.order,
     );

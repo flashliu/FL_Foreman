@@ -68,12 +68,13 @@ class OrderApi {
     return [];
   }
 
-  static Future<List<Order>> getOrderList({int status, String nurseId, int page = 1, int pageSize = 5}) async {
+  static Future<List<Order>> getOrderList(
+      {int status, String nurseId, int page = 1, int pageSize = 5, String parentId}) async {
     final params = {
       "status": status,
       "pageSize": pageSize,
       "page": page,
-      "parentId": Global.userId,
+      "parentId": parentId ?? Global.userId,
     };
     if (nurseId != null) {
       params['nurseId'] = nurseId;
@@ -179,6 +180,8 @@ class OrderApi {
     @required String refundNo,
     @required String refundNote,
     @required String voucher,
+    @required String code,
+    @required String phone,
   }) async {
     final res = await Global.http.post('/app-pay/refund', data: {
       "orderAmout": orderAmout,
@@ -190,7 +193,9 @@ class OrderApi {
       "refundPlatform": "foreman",
       "type": 0,
       "userId": Global.userId,
-      "voucher": voucher
+      "voucher": voucher,
+      "code": code,
+      "phone": phone,
     });
     return res.data;
   }

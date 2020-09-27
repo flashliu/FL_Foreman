@@ -2,6 +2,7 @@ import 'package:FL_Foreman/apis/nurse_api.dart';
 import 'package:FL_Foreman/common/global.dart';
 import 'package:FL_Foreman/common/toast_utils.dart';
 import 'package:FL_Foreman/models/nurse_model.dart';
+import 'package:FL_Foreman/providers/style_provider.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/svgs.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
@@ -11,6 +12,7 @@ import 'package:FL_Foreman/widget/nurse_item.dart';
 import 'package:FL_Foreman/widget/state_layout.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class NurseList extends StatefulWidget {
   NurseList({Key key}) : super(key: key);
@@ -47,15 +49,18 @@ class _NurseListState extends State<NurseList> with SingleTickerProviderStateMix
 
   Widget buildTabPage() {
     return Expanded(
-      child: TabBarView(
-        children: levels
-            .map((e) => NursePage(
-                  level: e['value'],
-                  showLocation: showLocation,
-                  onDel: () => Global.eventBus.fire('refreshNurseList'),
-                ))
-            .toList(),
-        controller: tabController,
+      child: Provider(
+        create: (context) => StyleProvider(listShowPaddingTop: false),
+        child: TabBarView(
+          children: levels
+              .map((e) => NursePage(
+                    level: e['value'],
+                    showLocation: showLocation,
+                    onDel: () => Global.eventBus.fire('refreshNurseList'),
+                  ))
+              .toList(),
+          controller: tabController,
+        ),
       ),
     );
   }

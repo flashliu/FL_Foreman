@@ -2,6 +2,7 @@ import 'package:FL_Foreman/models/foreman_model.dart';
 import 'package:FL_Foreman/res/svgs.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
 import 'package:FL_Foreman/views/foreman_detail/foreman_detail.dart';
+import 'package:FL_Foreman/views/foreman_nurse_list/foreman_nurse_list.dart';
 import 'package:FL_Foreman/views/nurse_detail/nurse_detail.dart';
 import 'package:FL_Foreman/widget/pannel.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,7 +12,19 @@ import 'package:shimmer/shimmer.dart';
 class ForemanItem extends StatefulWidget {
   final Foreman info;
   final Function(Foreman foreman) onDelete;
-  ForemanItem({Key key, @required this.info, this.onDelete}) : super(key: key);
+  final EdgeInsetsGeometry margin;
+  final BorderRadius borderRadius;
+  final bool canGoDetail;
+  final bool showAction;
+  ForemanItem({
+    Key key,
+    @required this.info,
+    this.onDelete,
+    this.margin = const EdgeInsets.only(bottom: 16, left: 16, right: 16),
+    this.borderRadius = const BorderRadius.all(Radius.circular(12)),
+    this.canGoDetail = true,
+    this.showAction = true,
+  }) : super(key: key);
 
   @override
   _ForemanItemState createState() => _ForemanItemState();
@@ -71,13 +84,19 @@ class _ForemanItemState extends State<ForemanItem> {
   @override
   Widget build(BuildContext context) {
     return Pannel(
-      onTap: () => Navigator.of(context).push(
-        CupertinoPageRoute(
-          builder: (_) => ForemanDetail(
-            info: widget.info,
-          ),
-        ),
-      ),
+      borderRadius: widget.borderRadius,
+      margin: widget.margin,
+      onTap: () {
+        if (widget.canGoDetail) {
+          Navigator.of(context).push(
+            CupertinoPageRoute(
+              builder: (_) => ForemanDetail(
+                info: widget.info,
+              ),
+            ),
+          );
+        }
+      },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -108,71 +127,89 @@ class _ForemanItemState extends State<ForemanItem> {
                   style: TextStyles.black_Bold_16,
                 ),
               ),
-              SizedBox(
-                height: 72,
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: InkWell(
-                    onTap: () async {
-                      final value = await showCupertinoModalPopup<String>(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return CupertinoActionSheet(
-                            // message: Text('是否要删除当前项？'),
-                            actions: <Widget>[
-                              CupertinoActionSheetAction(
-                                child: Text('删除'),
-                                onPressed: () => Navigator.of(context).pop('delete'),
-                                isDestructiveAction: true,
-                              ),
-                              CupertinoActionSheetAction(
-                                onPressed: () => Navigator.of(context).pop('cancel'),
-                                child: Text("取消"),
-                              ),
-                            ],
-                          );
-                        },
-                      );
+              Visibility(
+                visible: widget.showAction,
+                child: SizedBox(
+                  height: 72,
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: InkWell(
+                      onTap: () async {
+                        final value = await showCupertinoModalPopup<String>(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return CupertinoActionSheet(
+                              // message: Text('是否要删除当前项？'),
+                              actions: <Widget>[
+                                CupertinoActionSheetAction(
+                                  child: Text('删除'),
+                                  onPressed: () => Navigator.of(context).pop('delete'),
+                                  isDestructiveAction: true,
+                                ),
+                                CupertinoActionSheetAction(
+                                  onPressed: () => Navigator.of(context).pop('cancel'),
+                                  child: Text("取消"),
+                                ),
+                              ],
+                            );
+                          },
+                        );
 
-                      if (value == 'delete') {
-                        widget.onDelete(widget.info);
-                      }
-                    },
-                    child: Svgs.menu,
+                        if (value == 'delete') {
+                          widget.onDelete(widget.info);
+                        }
+                      },
+                      child: Svgs.menu,
+                    ),
                   ),
                 ),
               )
             ],
           ),
-          SizedBox(height: 16),
-          Text('我的护工', style: TextStyles.black_Bold_14.copyWith(fontSize: 12)),
-          SizedBox(height: 8),
-          SizedBox(
-            height: 67,
-            child: GridView(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 1,
-                mainAxisSpacing: 18,
-                childAspectRatio: 67 / 48,
-              ),
-              scrollDirection: Axis.horizontal,
+          Visibility(
+            visible: widget.info.nurseList.length > 0,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ...buildNurseItem(),
-                Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    color: Color(0xFFF5F7F8),
-                    border: Border.all(color: Color(0xFFDDDDDD)),
+                SizedBox(height: 16),
+                Text('我的护工', style: TextStyles.black_Bold_14.copyWith(fontSize: 12)),
+                SizedBox(height: 8),
+                SizedBox(
+                  height: 67,
+                  child: GridView(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 1,
+                      mainAxisSpacing: 18,
+                      childAspectRatio: 67 / 48,
+                    ),
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      ...buildNurseItem(),
+                      InkWell(
+                        onTap: () => Navigator.of(context).push(
+                          CupertinoPageRoute(
+                            builder: (_) => ForemanNurseList(parentId: widget.info.id),
+                          ),
+                        ),
+                        child: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(6),
+                            color: Color(0xFFF5F7F8),
+                            border: Border.all(color: Color(0xFFDDDDDD)),
+                          ),
+                          child: Text(
+                            '查看更多',
+                            style: TextStyle(color: Color(0xFF00A2E6), fontSize: 10),
+                          ),
+                        ),
+                      )
+                    ],
                   ),
-                  child: Text(
-                    '查看更多',
-                    style: TextStyle(color: Color(0xFF00A2E6), fontSize: 10),
-                  ),
-                )
+                ),
               ],
             ),
-          ),
+          )
         ],
       ),
     );

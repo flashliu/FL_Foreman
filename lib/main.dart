@@ -6,6 +6,7 @@ import 'package:FL_Foreman/common/storage.dart';
 import 'package:FL_Foreman/common/toast_utils.dart';
 import 'package:FL_Foreman/models/user_model.dart';
 import 'package:FL_Foreman/providers/app_provider.dart';
+import 'package:FL_Foreman/providers/style_provider.dart';
 import 'package:FL_Foreman/providers/user_provider.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/views/home/home.dart';
@@ -96,6 +97,7 @@ class App extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => UserProvider(user)),
         ChangeNotifierProvider(create: (context) => AppProvider()),
+        Provider(create: (context) => StyleProvider())
       ],
       child: MaterialApp(
         localizationsDelegates: [

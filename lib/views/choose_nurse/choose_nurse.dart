@@ -8,7 +8,7 @@ import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/styles.dart';
 import 'package:FL_Foreman/res/svgs.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
-import 'package:FL_Foreman/views/my_order_list/my_order_list.dart';
+import 'package:FL_Foreman/views/order_list/order_list.dart';
 import 'package:FL_Foreman/widget/checkable_nurse_item.dart';
 import 'package:FL_Foreman/widget/label_value.dart';
 import 'package:FL_Foreman/widget/list_content.dart';
@@ -93,7 +93,7 @@ class _ChooseNurseState extends State<ChooseNurse> {
     );
     ToastUtils.showLong(res['message']);
     if (res['code'] == 200) {
-      Navigator.of(context).pushReplacement(CupertinoPageRoute(builder: (_) => MyOrderList()));
+      Navigator.of(context).pushReplacement(CupertinoPageRoute(builder: (_) => OrderList()));
     }
   }
 

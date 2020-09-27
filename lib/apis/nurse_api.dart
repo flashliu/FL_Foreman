@@ -3,12 +3,17 @@ import 'package:FL_Foreman/models/nurse_model.dart';
 import 'package:flutter/material.dart';
 
 class NurseApi {
-  static Future<List<Nurse>> getNurseList({String nurseLevel, int page = 1, int pageSize = 10}) async {
+  static Future<List<Nurse>> getNurseList({
+    String nurseLevel,
+    int page = 1,
+    int pageSize = 10,
+    String parentId,
+  }) async {
     final res = await Global.http.get('/appSecondNurse/queryAllSecondNurse', queryParameters: {
       "nurseLevel": nurseLevel,
       "pageNumber": page,
       "pageSize": pageSize,
-      "parentId": Global.userId,
+      "parentId": parentId ?? Global.userId,
     });
     if (res.data['code'] != 200) return [];
 

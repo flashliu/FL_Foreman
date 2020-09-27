@@ -12,7 +12,13 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 class OrderPage extends StatefulWidget {
   final int status;
   final String nurseId;
-  OrderPage({Key key, this.status, this.nurseId}) : super(key: key);
+  final String parentId;
+  OrderPage({
+    Key key,
+    this.status,
+    this.nurseId,
+    this.parentId,
+  }) : super(key: key);
 
   @override
   _OrderPageState createState() => _OrderPageState();
@@ -61,6 +67,7 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
     return await OrderApi.getOrderList(
       status: widget.status,
       nurseId: widget.nurseId,
+      parentId: widget.parentId,
       page: page,
       pageSize: pageSize,
     );

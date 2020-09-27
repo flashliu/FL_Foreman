@@ -1,5 +1,7 @@
+import 'package:FL_Foreman/providers/style_provider.dart';
 import 'package:FL_Foreman/widget/state_layout.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ListContent extends StatelessWidget {
   final String emptyText;
@@ -21,12 +23,16 @@ class ListContent extends StatelessWidget {
         hintText: emptyText,
       );
     }
-    return ListView.builder(
-      padding: EdgeInsets.only(top: 0),
-      physics: NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      itemBuilder: itemBuilder,
-      itemCount: itemCount,
+    return Consumer<StyleProvider>(
+      builder: (context, style, child) {
+        return ListView.builder(
+          padding: EdgeInsets.only(top: style.listShowPaddingTop ? 16 : 0),
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemBuilder: itemBuilder,
+          itemCount: itemCount,
+        );
+      },
     );
   }
 }

@@ -5,6 +5,7 @@ import 'package:FL_Foreman/models/foreman_model.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
 import 'package:FL_Foreman/widget/float_action.dart';
 import 'package:FL_Foreman/widget/foreman_item.dart';
+import 'package:FL_Foreman/widget/list_content.dart';
 import 'package:FL_Foreman/widget/state_layout.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -90,42 +91,43 @@ class _ForemanListState extends State<ForemanList> with AutomaticKeepAliveClient
     }
     return Stack(
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20),
-          child: SmartRefresher(
-            enablePullUp: list.length >= pageSize,
-            header: WaterDropHeader(
-              complete: Text('刷新成功！'),
-              refresh: CupertinoActivityIndicator(),
-            ),
-            footer: CustomFooter(
-              builder: (BuildContext context, LoadStatus mode) {
-                Widget body;
-                if (mode == LoadStatus.idle) {
-                  body = Text("上拉加载更多");
-                } else if (mode == LoadStatus.loading) {
-                  body = CupertinoActivityIndicator();
-                } else if (mode == LoadStatus.failed) {
-                  body = Text("加载失败");
-                } else if (mode == LoadStatus.canLoading) {
-                  body = Text("松开加载");
-                } else {
-                  body = Text("没有更多数据");
-                }
-                return Container(
-                  height: 55.0,
-                  child: Center(child: body),
-                );
-              },
-            ),
-            onRefresh: () => refresh(),
-            onLoading: () => loadMore(),
-            controller: refreshController,
-            child: SingleChildScrollView(
-              child: Column(
-                children: list.map((e) => ForemanItem(info: e)).toList(),
-              ),
-            ),
+        SmartRefresher(
+          enablePullUp: list.length >= pageSize,
+          header: WaterDropHeader(
+            complete: Text('刷新成功！'),
+            refresh: CupertinoActivityIndicator(),
+          ),
+          footer: CustomFooter(
+            builder: (BuildContext context, LoadStatus mode) {
+              Widget body;
+              if (mode == LoadStatus.idle) {
+                body = Text("上拉加载更多");
+              } else if (mode == LoadStatus.loading) {
+                body = CupertinoActivityIndicator();
+              } else if (mode == LoadStatus.failed) {
+                body = Text("加载失败");
+              } else if (mode == LoadStatus.canLoading) {
+                body = Text("松开加载");
+              } else {
+                body = Text("没有更多数据");
+              }
+              return Container(
+                height: 55.0,
+                child: Center(child: body),
+              );
+            },
+          ),
+          onRefresh: () => refresh(),
+          onLoading: () => loadMore(),
+          controller: refreshController,
+          child: ListContent(
+            itemBuilder: (context, index) {
+              return ForemanItem(
+                info: list[index],
+              );
+            },
+            itemCount: list.length,
+            emptyText: "暂时没有内容～",
           ),
         ),
         Align(

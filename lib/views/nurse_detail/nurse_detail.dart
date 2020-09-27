@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:FL_Foreman/apis/user_api.dart';
 import 'package:FL_Foreman/common/global.dart';
 import 'package:FL_Foreman/models/nurse_model.dart';
+import 'package:FL_Foreman/providers/style_provider.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
-import 'package:FL_Foreman/views/my_order_list/my_order_list.dart';
-import 'package:FL_Foreman/views/my_order_list/order_page.dart';
+import 'package:FL_Foreman/views/order_list/order_list.dart';
 import 'package:FL_Foreman/widget/nurse_item.dart';
 import 'package:FL_Foreman/widget/pannel.dart';
 import 'package:fijkplayer/fijkplayer.dart';
@@ -204,38 +204,12 @@ class _NurseDetailState extends State<NurseDetail> with SingleTickerProviderStat
   }
 
   Widget buildOrderPage() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        DefaultTabController(
-          length: tabMaps.length,
-          child: TabBar(
-            isScrollable: true,
-            indicatorSize: TabBarIndicatorSize.label,
-            indicatorColor: ColorCenter.themeColor,
-            labelColor: ColorCenter.themeColor,
-            unselectedLabelColor: Colors.black,
-            unselectedLabelStyle: TextStyles.black_Bold_14,
-            labelStyle: TextStyles.black_Bold_14,
-            tabs: tabMaps
-                .map((e) => Padding(padding: const EdgeInsets.only(top: 10, bottom: 4), child: Text(e['text'])))
-                .toList(),
-            onTap: (index) {
-              final value = tabMaps.toList()[index]['status'];
-              setState(() {
-                status = value;
-              });
-            },
-          ),
-        ),
-        SizedBox(height: 16),
-        Expanded(
-          child: Provider<bool>.value(
-            value: false,
-            child: OrderPage(status: status, nurseId: widget.info.id),
-          ),
-        )
-      ],
+    return Provider(
+      create: (_) => StyleProvider(showNurse: false),
+      child: OrderList(
+        nurseId: widget.info.id,
+        showAppbar: false,
+      ),
     );
   }
 }

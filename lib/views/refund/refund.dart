@@ -23,6 +23,8 @@ class Refund extends StatefulWidget {
 class _RefundState extends State<Refund> {
   String refundAmount = '';
   String refundNumber = '';
+  String phone = '';
+  String code = '';
   String refundNote = '';
   String reason = '';
   List<String> voucher = [];
@@ -64,7 +66,8 @@ class _RefundState extends State<Refund> {
   submit() async {
     final user = Global.userProvider;
     if (refundAmount.isEmpty) return ToastUtils.showLong('请填写退款金额');
-    if (refundNumber.isEmpty) return ToastUtils.showLong('请填写退据单号');
+    if (phone.isEmpty) return ToastUtils.showLong('请填写预留手机号');
+    if (code.isEmpty) return ToastUtils.showLong('请填写授权码');
     final res = await OrderApi.refund(
       orderAmout: widget.info.amount.toString(),
       orderNo: widget.info.orderNumber,
@@ -73,6 +76,8 @@ class _RefundState extends State<Refund> {
       refundNo: refundNumber,
       refundNote: refundNote == '其他' ? reason : refundNote,
       voucher: voucher.join(','),
+      phone: phone,
+      code: code,
     );
 
     if (res['code'] == 200) {
@@ -293,17 +298,45 @@ class _RefundState extends State<Refund> {
                     ),
                     child: Row(
                       children: [
-                        Text('退据单号', style: TextStyles.black_14),
+                        Text('手机号', style: TextStyles.black_14),
                         SizedBox(width: 20),
                         Expanded(
                           child: TextFormField(
-                            initialValue: refundNumber,
+                            initialValue: phone,
                             onChanged: (value) {
-                              refundNumber = value;
+                              phone = value;
                             },
                             style: TextStyle(fontSize: 14),
                             decoration: InputDecoration(
-                              hintText: "请输入退据单号",
+                              hintText: "请输入预留手机号",
+                              border: InputBorder.none,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 12),
+                  Container(
+                    height: 46,
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    decoration: BoxDecoration(
+                      color: ColorCenter.background,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Row(
+                      children: [
+                        Text('授权码', style: TextStyles.black_14),
+                        SizedBox(width: 20),
+                        Expanded(
+                          child: TextFormField(
+                            initialValue: code,
+                            onChanged: (value) {
+                              code = value;
+                            },
+                            style: TextStyle(fontSize: 14),
+                            decoration: InputDecoration(
+                              hintText: "请输入授权码",
                               border: InputBorder.none,
                             ),
                           ),

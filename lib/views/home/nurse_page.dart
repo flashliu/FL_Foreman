@@ -14,7 +14,14 @@ class NursePage extends StatefulWidget {
   final String level;
   final bool showLocation;
   final Function onDel;
-  NursePage({Key key, this.level, this.showLocation = false, this.onDel}) : super(key: key);
+  final String parentId;
+  NursePage({
+    Key key,
+    this.level,
+    this.showLocation = false,
+    this.onDel,
+    this.parentId,
+  }) : super(key: key);
 
   @override
   _NursePageState createState() => _NursePageState();
@@ -32,7 +39,12 @@ class _NursePageState extends State<NursePage> with AutomaticKeepAliveClientMixi
   bool get wantKeepAlive => true;
 
   Future<List<Nurse>> getNurseList() async {
-    return NurseApi.getNurseList(nurseLevel: widget.level, page: page, pageSize: pageSize);
+    return NurseApi.getNurseList(
+      nurseLevel: widget.level,
+      page: page,
+      pageSize: pageSize,
+      parentId: widget.parentId,
+    );
   }
 
   delNurse(id) async {
