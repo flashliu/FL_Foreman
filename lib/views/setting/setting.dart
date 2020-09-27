@@ -1,6 +1,6 @@
+import 'package:FL_Foreman/common/global.dart';
 import 'package:FL_Foreman/common/toast_utils.dart';
 import 'package:FL_Foreman/providers/app_provider.dart';
-import 'package:FL_Foreman/providers/user_provider.dart';
 import 'package:FL_Foreman/views/protocol_privacy/protocol_privacy.dart';
 import 'package:FL_Foreman/views/setting/about_us.dart';
 import 'package:FL_Foreman/views/setting/notification_setting.dart';
@@ -14,7 +14,7 @@ class Setting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final userProvider = Global.userProvider;
     final appProvider = Provider.of<AppProvider>(context);
     return Scaffold(
       appBar: AppBar(

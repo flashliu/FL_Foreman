@@ -5,6 +5,7 @@ import 'package:FL_Foreman/models/nurse_model.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/svgs.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
+import 'package:FL_Foreman/widget/float_action.dart';
 import 'package:FL_Foreman/views/home/nurse_page.dart';
 import 'package:FL_Foreman/widget/nurse_item.dart';
 import 'package:FL_Foreman/widget/state_layout.dart';
@@ -98,48 +99,6 @@ class _NurseListState extends State<NurseList> with SingleTickerProviderStateMix
     );
   }
 
-  buildFloat() {
-    return Container(
-      height: 60,
-      width: 167,
-      padding: EdgeInsets.symmetric(horizontal: 35),
-      decoration: BoxDecoration(color: Color.fromRGBO(81, 91, 107, 0.75), borderRadius: BorderRadius.circular(30)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          GestureDetector(
-            onTap: () => addNurse(),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Svgs.add,
-                SizedBox(height: 2),
-                Text(
-                  '添加',
-                  style: TextStyle(color: Colors.white, fontSize: 12),
-                ),
-              ],
-            ),
-          ),
-          GestureDetector(
-            onTap: () => showSearch(context: context, delegate: NurseSearchDelegate()),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Svgs.search,
-                SizedBox(height: 2),
-                Text(
-                  '查找',
-                  style: TextStyle(color: Colors.white, fontSize: 12),
-                ),
-              ],
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -154,7 +113,13 @@ class _NurseListState extends State<NurseList> with SingleTickerProviderStateMix
           alignment: Alignment.bottomCenter,
           child: Padding(
             padding: EdgeInsets.only(bottom: 50),
-            child: buildFloat(),
+            child: FloatAction(
+              onAdd: () => addNurse(),
+              onSearch: () => showSearch(
+                context: context,
+                delegate: NurseSearchDelegate(),
+              ),
+            ),
           ),
         )
       ],

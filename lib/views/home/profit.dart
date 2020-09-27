@@ -1,4 +1,5 @@
 import 'package:FL_Foreman/apis/nurse_api.dart';
+import 'package:FL_Foreman/common/global.dart';
 import 'package:FL_Foreman/models/nurse_model.dart';
 import 'package:FL_Foreman/providers/user_provider.dart';
 import 'package:FL_Foreman/res/colors.dart';
@@ -33,7 +34,7 @@ class _ProfitState extends State<Profit> with AutomaticKeepAliveClientMixin {
   }
 
   refresh() async {
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final userProvider = Global.userProvider;
     await userProvider.setBalance();
     await userProvider.setAmount();
     await getNurseList();
@@ -41,7 +42,7 @@ class _ProfitState extends State<Profit> with AutomaticKeepAliveClientMixin {
   }
 
   getNurseList() async {
-    final data = await NurseApi.getNurseList(nurseLevel: '');
+    final data = await NurseApi.getNurseList(nurseLevel: '', pageSize: 1000);
     if (this.mounted) {
       data.sort((a, b) => b.workTimes.compareTo(a.workTimes));
       setState(() {

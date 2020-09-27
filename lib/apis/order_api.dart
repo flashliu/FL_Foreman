@@ -1,6 +1,7 @@
 import 'package:FL_Foreman/common/global.dart';
 import 'package:FL_Foreman/models/need_model.dart';
 import 'package:FL_Foreman/models/order_model.dart';
+import 'package:FL_Foreman/models/refund_info.dart';
 import 'package:flutter/material.dart';
 
 class OrderApi {
@@ -192,5 +193,21 @@ class OrderApi {
       "voucher": voucher
     });
     return res.data;
+  }
+
+  static Future<RefundInfo> getRefundInfo(String orderNo) async {
+    final res = await Global.http.post('/RefundController/selectRefundInfo', data: {
+      "orderNo": orderNo,
+    });
+    final List list = res.data['data']['list'];
+    return list.length > 0 ? RefundInfo.fromJson(list[0]) : null;
+  }
+
+  static Future<List<String>> getRefundReason() async {
+    final res = await Global.http.get('/app-dictionary/queryBytypeName', queryParameters: {
+      'typeName': 'reason_type',
+    });
+
+    return List<String>.from(res.data['data'].map((e) => e['label']));
   }
 }

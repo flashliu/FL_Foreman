@@ -4,9 +4,9 @@ import 'dart:io';
 
 import 'package:FL_Foreman/apis/user_api.dart';
 import 'package:FL_Foreman/common/dialog_util.dart';
+import 'package:FL_Foreman/common/global.dart';
 import 'package:FL_Foreman/common/storage.dart';
 import 'package:FL_Foreman/common/toast_utils.dart';
-import 'package:FL_Foreman/providers/user_provider.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/styles.dart';
 import 'package:FL_Foreman/res/svgs.dart';
@@ -18,7 +18,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluwx/fluwx.dart';
-import 'package:provider/provider.dart';
 
 class Login extends StatefulWidget {
   Login({Key key}) : super(key: key);
@@ -48,7 +47,7 @@ class _LoginState extends State<Login> {
       return ToastUtils.showShort("验证码错误！");
     }
     DialogUtils.showLoading(context: context, msg: '登录中');
-    final user = await Provider.of<UserProvider>(context, listen: false).smsLogin(
+    final user = await Global.userProvider.smsLogin(
       username: username,
       code: code,
       key: key,
@@ -60,26 +59,26 @@ class _LoginState extends State<Login> {
   }
 
   void wechatLogin() async {
-    final user = await Provider.of<UserProvider>(context, listen: false).wechatLogin();
+    final user = await Global.userProvider.wechatLogin();
     if (user != null) {
       loginSuccess(user);
     }
   }
 
   void appleLogin() async {
-    final user = await Provider.of<UserProvider>(context, listen: false).appleLogin();
+    final user = await Global.userProvider.appleLogin();
     if (user != null) {
       loginSuccess(user);
     }
   }
 
   void aliLogin() async {
-    Provider.of<UserProvider>(context, listen: false).aliLogin();
+    Global.userProvider.aliLogin();
   }
 
   void loginSuccess(user) async {
     await Storage().set('userinfo', jsonEncode(user));
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final userProvider = Global.userProvider;
     userProvider.setUser(user);
     userProvider.setAmount();
     ToastUtils.showLong("登录成功");

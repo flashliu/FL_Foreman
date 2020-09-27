@@ -10,34 +10,24 @@ class UserApi {
     @required String key,
     @required String md5,
   }) async {
-    try {
-      final res = await Global.http.post('/appUser/sms-login', data: {
-        "username": username,
-        "code": code,
-        "key": key,
-        "md5": md5,
-        "type": 3,
-      });
-      User user = User.fromJson(res.data['data']);
-      return user;
-    } catch (e) {
-      return null;
-    }
+    final res = await Global.http.post('/appUser/sms-login', data: {
+      "username": username,
+      "code": code,
+      "key": key,
+      "md5": md5,
+      "type": 3,
+    });
+    User user = User.fromJson(res.data['data']);
+    return user;
   }
 
-  static Future<User> wechatLogin({
-    @required String wxcode,
-  }) async {
-    try {
-      final res = await Global.http.post('/appUser/wx-app-login', data: {
-        "wxcode": wxcode,
-        "type": 3,
-      });
-      User user = User.fromJson(res.data['data']);
-      return user;
-    } catch (e) {
-      return null;
-    }
+  static Future<User> wechatLogin({@required String wxcode}) async {
+    final res = await Global.http.post('/appUser/wx-app-login', data: {
+      "wxcode": wxcode,
+      "type": 3,
+    });
+    User user = User.fromJson(res.data['data']);
+    return user;
   }
 
   static Future<User> appleLogin({

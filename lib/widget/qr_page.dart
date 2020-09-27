@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:FL_Foreman/common/toast_utils.dart';
 import 'package:FL_Foreman/models/user_model.dart';
 import 'package:FL_Foreman/res/svgs.dart';
 import 'package:flutter/material.dart';
@@ -29,11 +30,15 @@ class _QrPageState extends State<QrPage> {
   scanFromCamera() async {
     try {
       final file = await picker.getImage(source: ImageSource.gallery);
-      String scanData = await QrCodeToolsPlugin.decodeFrom(file.path);
-      Map<String, dynamic> jsonScanData = jsonDecode(scanData);
-      final user = LoginUser.fromJson(jsonScanData);
-      widget.success(user);
-    } catch (e) {}
+      if (file != null) {
+        String scanData = await QrCodeToolsPlugin.decodeFrom(file.path);
+        Map<String, dynamic> jsonScanData = jsonDecode(scanData);
+        final user = LoginUser.fromJson(jsonScanData);
+        widget.success(user);
+      }
+    } catch (e) {
+      ToastUtils.showLong('二维码识别失败');
+    }
     Navigator.of(context).pop();
   }
 

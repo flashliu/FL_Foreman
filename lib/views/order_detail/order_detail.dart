@@ -130,17 +130,20 @@ class _OrderDetailState extends State<OrderDetail> with SingleTickerProviderStat
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  OutlineButton(
-                    onPressed: () {
-                      Navigator.of(context).push(CupertinoPageRoute(builder: (_) => Refund(info: widget.info)));
-                    },
-                    child: Text('退款', style: TextStyles.black_14),
-                    borderSide: BorderSide(width: 1, color: Colors.grey),
-                    highlightedBorderColor: Colors.grey,
-                    color: Colors.white,
-                    textColor: ColorCenter.textBlack,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
+                  Visibility(
+                    visible: widget.info.isRefund != 2,
+                    child: OutlineButton(
+                      onPressed: () {
+                        Navigator.of(context).push(CupertinoPageRoute(builder: (_) => Refund(info: widget.info)));
+                      },
+                      child: Text(widget.info.isRefund == 1 ? '查看退款' : '退款', style: TextStyles.black_14),
+                      borderSide: BorderSide(width: 1, color: Colors.grey),
+                      highlightedBorderColor: Colors.grey,
+                      color: Colors.white,
+                      textColor: ColorCenter.textBlack,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
                     ),
                   ),
                   SizedBox(width: 8),

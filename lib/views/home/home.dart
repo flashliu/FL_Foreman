@@ -5,10 +5,12 @@ import 'package:FL_Foreman/apis/app_api.dart';
 import 'package:FL_Foreman/apis/user_api.dart';
 import 'package:FL_Foreman/common/dialog_util.dart';
 import 'package:FL_Foreman/common/global.dart';
+import 'package:FL_Foreman/models/tab_page_data.dart';
 import 'package:FL_Foreman/providers/app_provider.dart';
 import 'package:FL_Foreman/providers/user_provider.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/svgs.dart';
+import 'package:FL_Foreman/views/home/foreman_list.dart';
 import 'package:FL_Foreman/views/home/need_list.dart';
 import 'package:FL_Foreman/views/home/nurse_list.dart';
 import 'package:FL_Foreman/views/home/profit.dart';
@@ -30,6 +32,13 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   TabController tabController;
+  List<TabPageData> tabPages = [];
+  Map<String, TabPageData> allPermissions = {
+    "profit_manage": TabPageData(tab: Text('收益'), view: Profit()),
+    "order_manage": TabPageData(tab: Text('派单'), view: NeedList()),
+    "foreman_manage": TabPageData(tab: Text('工头'), view: ForemanList()),
+    "nurse_manage": TabPageData(tab: Text('护工'), view: NurseList()),
+  };
   @override
   void initState() {
     super.initState();
@@ -38,9 +47,13 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       _checkAppInfo(),
       iosAppId: '1524264487',
     );
-    tabController = TabController(length: 3, vsync: this);
     initAliPush();
-    Provider.of<UserProvider>(context, listen: false).getMessageList();
+    allPermissions.forEach((key, value) {
+      if (Global.permissions.contains(key)) {
+        tabPages.add(value);
+      }
+    });
+    tabController = TabController(length: tabPages.length, vsync: this);
   }
 
   @override
@@ -95,9 +108,15 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       ),
       body: Column(
         children: [
-          Header(tabController: tabController),
+          Header(
+            tabController: tabController,
+            tabs: tabPages.map((e) => e.tab).toList(),
+          ),
           Expanded(
-            child: TabView(tabController: tabController),
+            child: TabView(
+              tabController: tabController,
+              views: tabPages.map((e) => e.view).toList(),
+            ),
           )
         ],
       ),
@@ -286,9 +305,11 @@ class UserDrawer extends StatelessWidget {
 
 class Header extends StatelessWidget {
   final TabController tabController;
+  final List<Widget> tabs;
   Header({
     Key key,
     @required this.tabController,
+    @required this.tabs,
   }) : super(key: key);
 
   @override
@@ -327,11 +348,7 @@ class Header extends StatelessWidget {
                 labelStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
                 unselectedLabelStyle: TextStyle(fontWeight: FontWeight.normal, color: Colors.white54),
                 indicatorSize: TabBarIndicatorSize.label,
-                tabs: [
-                  Text('我的收益'),
-                  Text("派单"),
-                  Text("护工管理"),
-                ],
+                tabs: tabs,
                 controller: tabController,
               ),
             ),
@@ -361,15 +378,17 @@ class Header extends StatelessWidget {
 
 class TabView extends StatelessWidget {
   final TabController tabController;
+  final List<Widget> views;
   TabView({
     Key key,
     @required this.tabController,
+    @required this.views,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TabBarView(
-      children: [Profit(), NeedList(), NurseList()],
+      children: views,
       controller: tabController,
     );
   }

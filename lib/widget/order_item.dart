@@ -5,7 +5,6 @@ import 'package:FL_Foreman/common/global.dart';
 import 'package:FL_Foreman/common/toast_utils.dart';
 import 'package:FL_Foreman/models/countdown_model.dart';
 import 'package:FL_Foreman/models/order_model.dart';
-import 'package:FL_Foreman/providers/user_provider.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
 import 'package:FL_Foreman/views/nurse_detail/nurse_detail.dart';
@@ -94,7 +93,7 @@ class _OrderItemState extends State<OrderItem> {
     if (!isConfirm) return;
     final res = await OrderApi.settlement(widget.info.orderId);
     if (res['code'] != 200) return;
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    final userProvider = Global.userProvider;
     userProvider.setBalance();
     userProvider.setAmount();
     Global.eventBus.fire('refreshOrderList');

@@ -28,7 +28,11 @@ class Global {
   static final eventBus = EventBus();
 
   static final key = GlobalKey();
-  static get userId => Provider.of<UserProvider>(key.currentContext, listen: false).info.loginUser.id;
+
+  static UserProvider get userProvider => Provider.of<UserProvider>(key.currentContext, listen: false);
+  static LoginUser get user => userProvider.info.loginUser;
+  static String get userId => user.id;
+  static List<String> get permissions => user.permissions;
 
   static Future<LoginUser> scanQrcode(BuildContext context) async {
     final completer = Completer<LoginUser>();

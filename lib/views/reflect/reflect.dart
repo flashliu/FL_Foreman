@@ -1,5 +1,6 @@
 import 'package:FL_Foreman/apis/user_api.dart';
 import 'package:FL_Foreman/common/dialog_util.dart';
+import 'package:FL_Foreman/common/global.dart';
 import 'package:FL_Foreman/common/toast_utils.dart';
 import 'package:FL_Foreman/common/wechat_action.dart';
 import 'package:FL_Foreman/providers/user_provider.dart';
@@ -22,7 +23,7 @@ class _ReflectState extends State<Reflect> {
   TextEditingController textEditingController = TextEditingController();
 
   confirm() async {
-    final user = Provider.of<UserProvider>(context, listen: false);
+    final user = Global.userProvider;
     final amount = textEditingController.text;
     if (double.parse(amount) > double.parse(user.balance)) return ToastUtils.showShort('最多可提现${user.balance}');
     final payPassword = await DialogUtils.showPaymentPassword(context: context);

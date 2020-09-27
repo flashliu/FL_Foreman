@@ -1,4 +1,6 @@
 import 'package:FL_Foreman/apis/order_api.dart';
+import 'package:FL_Foreman/common/global.dart';
+import 'package:FL_Foreman/models/tab_page_data.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/svgs.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
@@ -18,13 +20,21 @@ class NeedList extends StatefulWidget {
 }
 
 class _NeedListState extends State<NeedList> with SingleTickerProviderStateMixin {
-  // final List<String> serverSites = ['推荐', '医院', '居家', '敬老院', '线上订单'];
-  final List<String> serverSites = ['医院', '线上订单'];
+  final List<TabPageData> serverSites = [];
+  Map<String, TabPageData> allPermissions = {
+    "self_order": TabPageData(tab: Text('医院'), view: NeedPage(site: '医院')),
+    "online_order": TabPageData(tab: Text('线上订单'), view: NeedPage(site: '线上订单')),
+  };
   TabController tabController;
 
   @override
   void initState() {
     super.initState();
+    allPermissions.forEach((key, value) {
+      if (Global.permissions.contains(key)) {
+        serverSites.add(value);
+      }
+    });
     tabController = TabController(length: serverSites.length, vsync: this);
   }
 
@@ -37,7 +47,7 @@ class _NeedListState extends State<NeedList> with SingleTickerProviderStateMixin
   Widget buildTabPage() {
     return Expanded(
       child: TabBarView(
-        children: serverSites.map((e) => NeedPage(site: e)).toList(),
+        children: serverSites.map((e) => e.view).toList(),
         controller: tabController,
       ),
     );
@@ -51,7 +61,7 @@ class _NeedListState extends State<NeedList> with SingleTickerProviderStateMixin
           Expanded(
             child: TabBar(
               controller: tabController,
-              tabs: serverSites.map((e) => Text(e)).toList(),
+              tabs: serverSites.map((e) => e.tab).toList(),
               isScrollable: true,
               indicatorSize: TabBarIndicatorSize.label,
               indicatorColor: ColorCenter.themeColor,
@@ -92,12 +102,15 @@ class _NeedListState extends State<NeedList> with SingleTickerProviderStateMixin
   }
 
   buildAddButton() {
-    return FloatingActionButton(
-      heroTag: null,
-      onPressed: () {
-        Navigator.of(context).push(CupertinoPageRoute(builder: (_) => CreateOrder()));
-      },
-      child: Icon(Icons.add),
+    return Visibility(
+      visible: Global.permissions.contains('push_order'),
+      child: FloatingActionButton(
+        heroTag: null,
+        onPressed: () {
+          Navigator.of(context).push(CupertinoPageRoute(builder: (_) => CreateOrder()));
+        },
+        child: Icon(Icons.add),
+      ),
     );
   }
 
