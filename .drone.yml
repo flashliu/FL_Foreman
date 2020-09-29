@@ -1,8 +1,0 @@
-kind: pipeline
-name: 打包测试
-
-steps:
-  - name: test
-    image: node
-    commands: 
-      - node -v
