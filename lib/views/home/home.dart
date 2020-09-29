@@ -54,6 +54,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       }
     });
     tabController = TabController(length: tabPages.length, vsync: this);
+    Global.userProvider.getMessageList();
   }
 
   @override

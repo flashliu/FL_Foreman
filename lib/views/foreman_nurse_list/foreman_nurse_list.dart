@@ -21,7 +21,10 @@ class _ForemanNurseListState extends State<ForemanNurseList> {
         title: Text('我的护工'),
         titleSpacing: 0,
       ),
-      body: NursePage(parentId: widget.parentId),
+      body: NursePage(
+        parentId: widget.parentId,
+        showAction: false,
+      ),
     );
   }
 }

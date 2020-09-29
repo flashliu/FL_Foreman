@@ -22,6 +22,7 @@ class Order {
   int isSettlement;
   String orderNumber;
   int isRefund;
+  String userId;
 
   Order({
     this.id,
@@ -45,6 +46,7 @@ class Order {
     this.amount,
     this.orderNumber,
     this.isRefund,
+    this.userId,
   });
 
   Order.fromJson(Map<String, dynamic> json) {
@@ -74,6 +76,7 @@ class Order {
     amount = json['amount'];
     orderNumber = json['orderNumber'];
     isRefund = json['isRefund'];
+    userId = json['userId'];
   }
 
   Map<String, dynamic> toJson() {
@@ -103,6 +106,7 @@ class Order {
     data['amount'] = this.amount;
     data['orderNumber'] = this.orderNumber;
     data['isRefund'] = this.isRefund;
+    data['userId'] = this.userId;
     return data;
   }
 }
@@ -112,6 +116,7 @@ class BeNursed {
   String area;
   String address;
   String phone;
+  String identId;
 
   BeNursed({this.realName, this.area, this.address, this.phone});
 
@@ -120,6 +125,7 @@ class BeNursed {
     area = json['area'];
     address = json['address'];
     phone = json['phone'];
+    identId = json['identId'];
   }
 
   Map<String, dynamic> toJson() {
@@ -128,6 +134,7 @@ class BeNursed {
     data['area'] = this.area;
     data['address'] = this.address;
     data['phone'] = this.phone;
+    data['identId'] = this.identId;
     return data;
   }
 }

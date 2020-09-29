@@ -171,4 +171,20 @@ class UserApi {
     });
     return res.data;
   }
+
+  static Future<String> getWorkTimes() async {
+    final res = await Global.http.get('/UserStatistics/UserStatistics', queryParameters: {
+      "id": Global.userId,
+    });
+
+    return res.data['data'].toString();
+  }
+
+  static Future<String> getTotalNurse() async {
+    final res = await Global.http.get('/UserStatistics/nursecount', queryParameters: {
+      "id": Global.userId,
+    });
+
+    return res.data['data'].toString();
+  }
 }

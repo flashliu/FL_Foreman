@@ -1,15 +1,17 @@
 import 'dart:async';
 
-import 'package:FL_Foreman/apis/order_api.dart';
 import 'package:FL_Foreman/common/global.dart';
-import 'package:FL_Foreman/common/toast_utils.dart';
+import 'package:FL_Foreman/common/order_action.dart';
 import 'package:FL_Foreman/models/countdown_model.dart';
 import 'package:FL_Foreman/models/order_model.dart';
+import 'package:FL_Foreman/providers/order_provider.dart';
 import 'package:FL_Foreman/providers/style_provider.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
+import 'package:FL_Foreman/views/home/create_order.dart';
 import 'package:FL_Foreman/views/nurse_detail/nurse_detail.dart';
 import 'package:FL_Foreman/views/order_detail/order_detail.dart';
+import 'package:FL_Foreman/views/refund/refund.dart';
 import 'package:FL_Foreman/widget/pannel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -44,10 +46,12 @@ class OrderItem extends StatefulWidget {
 class _OrderItemState extends State<OrderItem> {
   CountDown countDown = CountDown(day: '00', hour: '00', min: '00', sec: '00');
   Timer timer;
+  OrderProvider orderProvider;
 
   @override
   void initState() {
     super.initState();
+    orderProvider = OrderProvider(widget.info);
     setCountDown();
   }
 
@@ -67,38 +71,6 @@ class _OrderItemState extends State<OrderItem> {
         });
       });
     }
-  }
-
-  settlement() async {
-    final isConfirm = await showDialog<bool>(
-      context: context,
-      builder: (ctx) {
-        return AlertDialog(
-          title: Text('提示'),
-          content: Text('结算后不可撤回，是否确认结算？'),
-          actions: <Widget>[
-            FlatButton(
-              child: Text("确认"),
-              onPressed: () => Navigator.of(context).pop(true), //关闭对话框
-            ),
-            FlatButton(
-              child: Text("取消"),
-              onPressed: () {
-                Navigator.of(context).pop(false); //关闭对话框
-              },
-            ),
-          ],
-        );
-      },
-    );
-    if (!isConfirm) return;
-    final res = await OrderApi.settlement(widget.info.orderId);
-    if (res['code'] != 200) return;
-    final userProvider = Global.userProvider;
-    userProvider.setBalance();
-    userProvider.setAmount();
-    Global.eventBus.fire('refreshOrderList');
-    ToastUtils.showShort(res['message']);
   }
 
   @override
@@ -173,7 +145,10 @@ class _OrderItemState extends State<OrderItem> {
           InkWell(
             onTap: () => Navigator.of(context).push(
               CupertinoPageRoute(
-                builder: (_) => OrderDetail(info: widget.info, index: 1),
+                builder: (_) => ChangeNotifierProvider<OrderProvider>.value(
+                  value: orderProvider,
+                  child: OrderDetail(index: 1),
+                ),
               ),
             ),
             child: Container(
@@ -199,10 +174,52 @@ class _OrderItemState extends State<OrderItem> {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Visibility(
+          visible: widget.info.isRefund != 2 && widget.info.userId == Global.userId,
+          child: OutlineButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                CupertinoPageRoute(
+                  builder: (_) => ChangeNotifierProvider<OrderProvider>.value(
+                    value: orderProvider,
+                    child: Refund(),
+                  ),
+                ),
+              );
+            },
+            child: Text(widget.info.isRefund == 1 ? '查看退款' : '退款', style: TextStyles.black_14),
+            borderSide: BorderSide(width: 1, color: Colors.grey),
+            highlightedBorderColor: Colors.grey,
+            color: Colors.white,
+            textColor: ColorCenter.textBlack,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18.0),
+            ),
+          ),
+        ),
+        SizedBox(width: 8),
+        Visibility(
           visible: widget.info.isSettlement == 1,
           child: FlatButton(
-            onPressed: () => settlement(),
+            onPressed: () => OrderAction.settlement(
+              context: context,
+              orderId: widget.info.orderId,
+            ),
             child: Text('立即结算', style: TextStyle(fontSize: 12)),
+            color: ColorCenter.themeColor,
+            textColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18.0),
+            ),
+          ),
+        ),
+        SizedBox(width: 8),
+        Visibility(
+          visible: widget.info.userId == Global.userId,
+          child: FlatButton(
+            onPressed: () {
+              Navigator.of(context).push(CupertinoPageRoute(builder: (_) => CreateOrder()));
+            },
+            child: Text('再下一单', style: TextStyle(fontSize: 14)),
             color: ColorCenter.themeColor,
             textColor: Colors.white,
             shape: RoundedRectangleBorder(
@@ -220,9 +237,11 @@ class _OrderItemState extends State<OrderItem> {
     return Pannel(
       onTap: () => Navigator.of(context).push(
         CupertinoPageRoute(
-          builder: (_) => OrderDetail(
-            info: widget.info,
-            showNurse: Provider.of<StyleProvider>(context).showNurse,
+          builder: (_) => ChangeNotifierProvider<OrderProvider>.value(
+            value: orderProvider,
+            child: OrderDetail(
+              showNurse: Provider.of<StyleProvider>(context).showNurse,
+            ),
           ),
         ),
       ),
@@ -275,7 +294,7 @@ class _OrderItemState extends State<OrderItem> {
                 ),
                 SizedBox(width: 8),
                 Text(
-                  widget.info.beNursed.area.isEmpty ? '详细地址联系客户' : widget.info.beNursed.area,
+                  widget.info.beNursed.realName,
                   style: TextStyles.black_Bold_14.copyWith(fontSize: 12),
                 )
               ],

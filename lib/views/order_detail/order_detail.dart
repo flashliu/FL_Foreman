@@ -1,5 +1,6 @@
-import 'package:FL_Foreman/models/nurse_model.dart';
-import 'package:FL_Foreman/models/order_model.dart';
+import 'package:FL_Foreman/common/global.dart';
+import 'package:FL_Foreman/common/order_action.dart';
+import 'package:FL_Foreman/providers/order_provider.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/svgs.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
@@ -11,12 +12,16 @@ import 'package:FL_Foreman/widget/order_item.dart';
 import 'package:FL_Foreman/widget/pannel.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class OrderDetail extends StatefulWidget {
-  final Order info;
   final int index;
   final bool showNurse;
-  OrderDetail({Key key, @required this.info, this.index = 0, this.showNurse = true}) : super(key: key);
+  OrderDetail({
+    Key key,
+    this.index = 0,
+    this.showNurse = true,
+  }) : super(key: key);
 
   @override
   _OrderDetailState createState() => _OrderDetailState();
@@ -50,6 +55,7 @@ class _OrderDetailState extends State<OrderDetail> with SingleTickerProviderStat
 
   @override
   Widget build(BuildContext context) {
+    final info = Provider.of<OrderProvider>(context).info;
     return Scaffold(
       body: Stack(
         children: [
@@ -90,14 +96,14 @@ class _OrderDetailState extends State<OrderDetail> with SingleTickerProviderStat
                                   indicatorColor: Colors.white,
                                   indicatorSize: TabBarIndicatorSize.label,
                                   tabs: [
-                                    Text(orderStatus(widget.info.status.toString())),
+                                    Text(orderStatus(info.status.toString())),
                                     Text('执行护工'),
                                   ],
                                 );
                               }
                               return Center(
                                 child: Text(
-                                  orderStatus(widget.info.status.toString()),
+                                  orderStatus(info.status.toString()),
                                   style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                 ),
                               );
@@ -131,12 +137,19 @@ class _OrderDetailState extends State<OrderDetail> with SingleTickerProviderStat
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Visibility(
-                    visible: widget.info.isRefund != 2,
+                    visible: info.isRefund != 2 && info.userId == Global.userId,
                     child: OutlineButton(
                       onPressed: () {
-                        Navigator.of(context).push(CupertinoPageRoute(builder: (_) => Refund(info: widget.info)));
+                        Navigator.of(context).push(
+                          CupertinoPageRoute(
+                            builder: (_) => ChangeNotifierProvider<OrderProvider>.value(
+                              value: Provider.of<OrderProvider>(context, listen: false),
+                              child: Refund(),
+                            ),
+                          ),
+                        );
                       },
-                      child: Text(widget.info.isRefund == 1 ? '查看退款' : '退款', style: TextStyles.black_14),
+                      child: Text(info.isRefund == 1 ? '查看退款' : '退款', style: TextStyles.black_14),
                       borderSide: BorderSide(width: 1, color: Colors.grey),
                       highlightedBorderColor: Colors.grey,
                       color: Colors.white,
@@ -147,15 +160,34 @@ class _OrderDetailState extends State<OrderDetail> with SingleTickerProviderStat
                     ),
                   ),
                   SizedBox(width: 8),
-                  FlatButton(
-                    onPressed: () {
-                      Navigator.of(context).push(CupertinoPageRoute(builder: (_) => CreateOrder()));
-                    },
-                    child: Text('再下一单', style: TextStyle(fontSize: 14)),
-                    color: ColorCenter.themeColor,
-                    textColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
+                  Visibility(
+                    visible: info.isSettlement == 1,
+                    child: FlatButton(
+                      onPressed: () => OrderAction.settlement(
+                        context: context,
+                        orderId: info.orderId,
+                      ),
+                      child: Text('立即结算', style: TextStyle(fontSize: 12)),
+                      color: ColorCenter.themeColor,
+                      textColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 8),
+                  Visibility(
+                    visible: info.userId == Global.userId,
+                    child: FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).push(CupertinoPageRoute(builder: (_) => CreateOrder()));
+                      },
+                      child: Text('再下一单', style: TextStyle(fontSize: 14)),
+                      color: ColorCenter.themeColor,
+                      textColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
                     ),
                   )
                 ],
@@ -168,6 +200,10 @@ class _OrderDetailState extends State<OrderDetail> with SingleTickerProviderStat
   }
 
   Widget buildInfo() {
+    final info = Provider.of<OrderProvider>(context).info;
+    final startDate = DateTime.parse(info.endTime);
+    final endDate = DateTime.parse(info.startTime);
+    final totalDay = startDate.difference(endDate).inDays;
     return SingleChildScrollView(
       physics: AlwaysScrollableScrollPhysics(),
       child: Column(
@@ -194,11 +230,11 @@ class _OrderDetailState extends State<OrderDetail> with SingleTickerProviderStat
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.info.beNursed.area.isEmpty ? '详细地址联系客户' : widget.info.beNursed.area,
+                            "${info.beNursed.realName} (${info.beNursed.phone})",
                             style: TextStyles.black_Bold_14,
                           ),
                           Text(
-                            widget.info.beNursed.realName,
+                            info.beNursed.identId,
                             style: TextStyles.grey_12,
                           ),
                         ],
@@ -206,9 +242,9 @@ class _OrderDetailState extends State<OrderDetail> with SingleTickerProviderStat
                     ],
                   ),
                 ),
-                LabelValue(label: '服务地点', value: widget.info.serverSite),
+                LabelValue(label: '服务地点', value: info.serverSite),
                 SizedBox(height: 16),
-                LabelValue(label: '顾客自理能力', value: widget.info.selfCare),
+                LabelValue(label: '顾客自理能力', value: info.selfCare),
               ],
             ),
           ),
@@ -223,9 +259,11 @@ class _OrderDetailState extends State<OrderDetail> with SingleTickerProviderStat
                   ],
                 ),
                 SizedBox(height: 16),
-                LabelValue(label: '顾客需要照护时间段', value: widget.info.serverTime),
+                LabelValue(label: '顾客需要照护时间段', value: info.serverTime),
                 SizedBox(height: 16),
-                LabelValue(label: '服务日期', value: '${widget.info.startTime} 至 ${widget.info.endTime}'),
+                LabelValue(label: '服务日期', value: '${info.startTime} 至 ${info.endTime}'),
+                SizedBox(height: 16),
+                LabelValue(label: '服务天数', value: '$totalDay天'),
               ],
             ),
           ),
@@ -239,13 +277,13 @@ class _OrderDetailState extends State<OrderDetail> with SingleTickerProviderStat
                   children: [
                     Expanded(
                       child: Text(
-                        widget.info.notes,
+                        info.notes,
                         softWrap: true,
                       ),
                     ),
                     Visibility(
                       child: Text('暂无备注'),
-                      visible: widget.info.notes.length == 0,
+                      visible: info.notes.length == 0,
                     ),
                   ],
                 )
@@ -258,11 +296,17 @@ class _OrderDetailState extends State<OrderDetail> with SingleTickerProviderStat
               children: [
                 Text('订单信息', style: TextStyles.black_16),
                 SizedBox(height: 16),
-                LabelValue(label: '预约编号', value: widget.info.id),
+                LabelValue(
+                  label: '订单价格',
+                  value: "¥ ${info.amount}",
+                  valueColor: ColorCenter.red,
+                ),
                 SizedBox(height: 16),
-                LabelValue(label: '订单编号', value: widget.info.orderNumber),
+                LabelValue(label: '预约编号', value: info.id),
                 SizedBox(height: 16),
-                LabelValue(label: '创建时间', value: widget.info.createTime),
+                LabelValue(label: '订单编号', value: info.orderNumber),
+                SizedBox(height: 16),
+                LabelValue(label: '创建时间', value: info.createTime),
               ],
             ),
           ),
@@ -273,15 +317,8 @@ class _OrderDetailState extends State<OrderDetail> with SingleTickerProviderStat
   }
 
   Widget buildNurseList() {
-    final nurseList = widget.info.nurseList.map((e) {
-      final json = e.toJson();
-      json['sex'] = json['sex'].toString();
-      json['id'] = json['nurseId'];
-      return NurseItem(
-        info: Nurse.fromJson(json),
-        showAction: false,
-      );
-    }).toList();
+    final info = Provider.of<OrderProvider>(context).info;
+    final nurseList = info.nurseList.map((e) => NurseItem(info: e, showAction: false)).toList();
 
     if (nurseList.length == 0) {
       return Column(

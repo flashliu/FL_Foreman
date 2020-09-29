@@ -15,12 +15,14 @@ class NursePage extends StatefulWidget {
   final bool showLocation;
   final Function onDel;
   final String parentId;
+  final bool showAction;
   NursePage({
     Key key,
     this.level,
     this.showLocation = false,
     this.onDel,
     this.parentId,
+    this.showAction = true,
   }) : super(key: key);
 
   @override
@@ -150,6 +152,7 @@ class _NursePageState extends State<NursePage> with AutomaticKeepAliveClientMixi
             info: list[index],
             showLocation: widget.showLocation,
             onDelete: (info) => delNurse(info.id),
+            showAction: widget.showAction,
           );
         },
         itemCount: list.length,

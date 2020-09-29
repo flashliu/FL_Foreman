@@ -68,7 +68,7 @@ class _ForemanListState extends State<ForemanList> with AutomaticKeepAliveClient
     if (user.type != 3) return ToastUtils.showLong('请扫描服务商二维码');
     if (user.id == Global.userId) return ToastUtils.showLong('不能绑定自己');
     final res = await ForemanApi.addForeman(user.id);
-    if (res['code'] == 200) getList();
+    if (res['code'] == 200) refresh();
     ToastUtils.showLong(res['message']);
   }
 

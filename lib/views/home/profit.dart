@@ -35,14 +35,18 @@ class _ProfitState extends State<Profit> with AutomaticKeepAliveClientMixin {
 
   refresh() async {
     final userProvider = Global.userProvider;
-    await userProvider.setBalance();
-    await userProvider.setAmount();
-    await getNurseList();
+    await Future.wait([
+      userProvider.setBalance(),
+      userProvider.setAmount(),
+      userProvider.setWorkTimes(),
+      userProvider.setTotalNurse(),
+      getNurseList(),
+    ]);
     refreshController.refreshCompleted();
   }
 
-  getNurseList() async {
-    final data = await NurseApi.getNurseList(nurseLevel: '', pageSize: 1000);
+  Future getNurseList() async {
+    final data = await NurseApi.getNurseList(nurseLevel: '');
     if (this.mounted) {
       data.sort((a, b) => b.workTimes.compareTo(a.workTimes));
       setState(() {
@@ -127,42 +131,46 @@ class _ProfitState extends State<Profit> with AutomaticKeepAliveClientMixin {
                     ),
                   ),
                   SizedBox(height: 14),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Column(
+                  Consumer<UserProvider>(
+                    builder: (context, user, child) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Text(
-                            list.map((e) => e.workTimes).fold(0, (p, n) => p + n).toString(),
-                            style: TextStyle(
-                              color: Color(0xFF00A2E6),
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          Column(
+                            children: [
+                              Text(
+                                user.workTimes,
+                                style: TextStyle(
+                                  color: Color(0xFF00A2E6),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                '服务单数',
+                                style: TextStyle(color: ColorCenter.textBlack, fontSize: 12),
+                              ),
+                            ],
                           ),
-                          Text(
-                            '服务单数',
-                            style: TextStyle(color: ColorCenter.textBlack, fontSize: 12),
-                          ),
+                          Column(
+                            children: [
+                              Text(
+                                user.totalNurse,
+                                style: TextStyle(
+                                  color: Color(0xFF00A2E6),
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                '护工人数',
+                                style: TextStyle(color: ColorCenter.textBlack, fontSize: 12),
+                              ),
+                            ],
+                          )
                         ],
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            list.length.toString(),
-                            style: TextStyle(
-                              color: Color(0xFF00A2E6),
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            '护工人数',
-                            style: TextStyle(color: ColorCenter.textBlack, fontSize: 12),
-                          ),
-                        ],
-                      )
-                    ],
+                      );
+                    },
                   )
                 ],
               ),

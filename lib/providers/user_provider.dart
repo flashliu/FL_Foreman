@@ -23,6 +23,8 @@ class UserProvider with ChangeNotifier {
   String todayAmount = '0';
   String weekAmount = '0';
   String monthAmount = '0';
+  String workTimes = '0';
+  String totalNurse = '0';
 
   UserProvider(this.info);
 
@@ -62,13 +64,13 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  setBalance() async {
+  Future setBalance() async {
     final value = await UserApi.selectBalance();
     balance = value;
     notifyListeners();
   }
 
-  setAmount() async {
+  Future setAmount() async {
     final res = await Future.wait([
       UserApi.getTodayAmount(),
       UserApi.getWeekAmount(),
@@ -77,6 +79,18 @@ class UserProvider with ChangeNotifier {
     todayAmount = res[0];
     weekAmount = res[1];
     monthAmount = res[2];
+    notifyListeners();
+  }
+
+  Future setWorkTimes() async {
+    final res = await UserApi.getWorkTimes();
+    workTimes = res;
+    notifyListeners();
+  }
+
+  Future setTotalNurse() async {
+    final res = await UserApi.getTotalNurse();
+    totalNurse = res;
     notifyListeners();
   }
 

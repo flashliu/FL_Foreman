@@ -2,19 +2,20 @@ import 'package:FL_Foreman/apis/app_api.dart';
 import 'package:FL_Foreman/apis/order_api.dart';
 import 'package:FL_Foreman/common/global.dart';
 import 'package:FL_Foreman/common/toast_utils.dart';
-import 'package:FL_Foreman/models/order_model.dart';
 import 'package:FL_Foreman/models/refund_info.dart';
+import 'package:FL_Foreman/providers/order_provider.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
 import 'package:FL_Foreman/widget/label_value.dart';
 import 'package:FL_Foreman/widget/pannel.dart';
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class Refund extends StatefulWidget {
-  final Order info;
-  Refund({Key key, this.info}) : super(key: key);
+  Refund({Key key}) : super(key: key);
 
   @override
   _RefundState createState() => _RefundState();
@@ -33,25 +34,27 @@ class _RefundState extends State<Refund> {
   RefundInfo refundInfo;
   List<String> reasonList = [];
   bool showOther = false;
-
+  OrderProvider orderProvider;
   final picker = ImagePicker();
 
   @override
   void initState() {
+    orderProvider = Provider.of<OrderProvider>(context, listen: false);
     super.initState();
-    final startDate = DateTime.parse(widget.info.endTime);
-    final endDate = DateTime.parse(widget.info.startTime);
+    final startDate = DateTime.parse(orderProvider.info.endTime);
+    final endDate = DateTime.parse(orderProvider.info.startTime);
     refundDays = totalDay = startDate.difference(endDate).inDays.toDouble();
-    refundAmount = widget.info.amount.toString();
+    refundAmount = orderProvider.info.amount.toString();
     getRefundInfo();
     getRefundReason();
   }
 
   getRefundInfo() async {
-    final info = await OrderApi.getRefundInfo(widget.info.orderNumber);
-    if (info != null) {
+    final info = Provider.of<OrderProvider>(context, listen: false).info;
+    final res = await OrderApi.getRefundInfo(info.orderNumber);
+    if (res != null) {
       setState(() {
-        refundInfo = info;
+        refundInfo = res;
       });
     }
   }
@@ -65,16 +68,20 @@ class _RefundState extends State<Refund> {
 
   submit() async {
     final user = Global.userProvider;
+    final note = refundNote == '其他' ? reason : refundNote;
+    if (note.isEmpty) return ToastUtils.showLong('请填写退款原因');
     if (refundAmount.isEmpty) return ToastUtils.showLong('请填写退款金额');
     if (phone.isEmpty) return ToastUtils.showLong('请填写预留手机号');
+    if (!RegexUtil.isMobileExact(phone)) return ToastUtils.showLong('请填写正确的手机号');
     if (code.isEmpty) return ToastUtils.showLong('请填写授权码');
+
     final res = await OrderApi.refund(
-      orderAmout: widget.info.amount.toString(),
-      orderNo: widget.info.orderNumber,
+      orderAmout: orderProvider.info.amount.toString(),
+      orderNo: orderProvider.info.orderNumber,
       refundAmout: refundAmount,
       refundDays: refundDays.toString(),
       refundNo: refundNumber,
-      refundNote: refundNote == '其他' ? reason : refundNote,
+      refundNote: note,
       voucher: voucher.join(','),
       phone: phone,
       code: code,
@@ -85,6 +92,7 @@ class _RefundState extends State<Refund> {
       user.setBalance();
       user.setAmount();
       Global.eventBus.fire('refreshOrderList');
+      orderProvider.setIsRefund(1);
     }
   }
 
@@ -142,10 +150,12 @@ class _RefundState extends State<Refund> {
       },
     );
 
-    setState(() {
-      refundNote = value;
-      showOther = value == '其他';
-    });
+    if (value != null) {
+      setState(() {
+        refundNote = value;
+        showOther = value == '其他';
+      });
+    }
   }
 
   Widget buidSuccess() {
@@ -192,11 +202,11 @@ class _RefundState extends State<Refund> {
                 children: [
                   Text('订单信息', style: TextStyles.black_16),
                   SizedBox(height: 16),
-                  LabelValue(label: '预约编号', value: widget.info.id),
+                  LabelValue(label: '预约编号', value: orderProvider.info.id),
                   SizedBox(height: 16),
-                  LabelValue(label: '订单编号', value: widget.info.orderNumber),
+                  LabelValue(label: '订单编号', value: orderProvider.info.orderNumber),
                   SizedBox(height: 16),
-                  LabelValue(label: '创建时间', value: widget.info.createTime),
+                  LabelValue(label: '创建时间', value: orderProvider.info.createTime),
                 ],
               ),
             ),
