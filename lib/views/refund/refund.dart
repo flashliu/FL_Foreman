@@ -165,7 +165,7 @@ class _RefundState extends State<Refund> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('已退款至账号${refundInfo.username}，请注意查收', style: TextStyles.black_16),
+              Text('已退款至账号${refundInfo.refundphone ?? refundInfo.nickname}，请注意查收', style: TextStyles.black_16),
               SizedBox(height: 16, width: double.infinity),
               Text(refundInfo.updateTime, style: TextStyles.grey_12)
             ],

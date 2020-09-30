@@ -15,6 +15,8 @@ class RefundInfo {
   int type;
   double orderAmout;
   String username;
+  String nickname;
+  String refundphone;
 
   RefundInfo({
     this.id,
@@ -33,6 +35,8 @@ class RefundInfo {
     this.type,
     this.orderAmout,
     this.username,
+    this.nickname,
+    this.refundphone,
   });
 
   RefundInfo.fromJson(Map<String, dynamic> json) {
@@ -52,6 +56,8 @@ class RefundInfo {
     type = json['type'];
     orderAmout = json['orderAmout'];
     username = json['username'];
+    nickname = json['nickname'];
+    refundphone = json['refundphone'];
   }
 
   Map<String, dynamic> toJson() {
@@ -72,6 +78,8 @@ class RefundInfo {
     data['type'] = this.type;
     data['orderAmout'] = this.orderAmout;
     data['username'] = this.username;
+    data['nickname'] = this.nickname;
+    data['refundphone'] = this.refundphone;
     return data;
   }
 }
