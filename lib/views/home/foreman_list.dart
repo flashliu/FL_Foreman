@@ -3,6 +3,7 @@ import 'package:FL_Foreman/common/global.dart';
 import 'package:FL_Foreman/common/toast_utils.dart';
 import 'package:FL_Foreman/models/foreman_model.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
+import 'package:FL_Foreman/widget/base_search_delegate.dart';
 import 'package:FL_Foreman/widget/float_action.dart';
 import 'package:FL_Foreman/widget/foreman_item.dart';
 import 'package:FL_Foreman/widget/list_content.dart';
@@ -151,38 +152,11 @@ class _ForemanListState extends State<ForemanList> with AutomaticKeepAliveClient
   bool get wantKeepAlive => true;
 }
 
-class ForemanSearchDelegate extends SearchDelegate {
+class ForemanSearchDelegate extends BaseSearchDelegate {
   List<String> suggestions = [];
 
   @override
   String get searchFieldLabel => '请输入工头名字、电话';
-
-  @override
-  TextStyle get searchFieldStyle => TextStyle(fontSize: 16);
-
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return [
-      IconButton(
-        icon: Icon(
-          Icons.search,
-        ),
-        onPressed: () {
-          showResults(context);
-        },
-      )
-    ];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(
-      icon: Icon(Icons.arrow_back),
-      onPressed: () {
-        close(context, '');
-      },
-    );
-  }
 
   @override
   Widget buildResults(BuildContext context) {

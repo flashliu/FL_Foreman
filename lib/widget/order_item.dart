@@ -46,12 +46,10 @@ class OrderItem extends StatefulWidget {
 class _OrderItemState extends State<OrderItem> {
   CountDown countDown = CountDown(day: '00', hour: '00', min: '00', sec: '00');
   Timer timer;
-  OrderProvider orderProvider;
 
   @override
   void initState() {
     super.initState();
-    orderProvider = OrderProvider(widget.info);
     setCountDown();
   }
 
@@ -145,8 +143,8 @@ class _OrderItemState extends State<OrderItem> {
           InkWell(
             onTap: () => Navigator.of(context).push(
               CupertinoPageRoute(
-                builder: (_) => ChangeNotifierProvider<OrderProvider>.value(
-                  value: orderProvider,
+                builder: (_) => ChangeNotifierProvider<OrderProvider>(
+                  create: (_) => OrderProvider(widget.info),
                   child: OrderDetail(index: 1),
                 ),
               ),
@@ -179,8 +177,8 @@ class _OrderItemState extends State<OrderItem> {
             onPressed: () {
               Navigator.of(context).push(
                 CupertinoPageRoute(
-                  builder: (_) => ChangeNotifierProvider<OrderProvider>.value(
-                    value: orderProvider,
+                  builder: (_) => ChangeNotifierProvider<OrderProvider>(
+                    create: (_) => OrderProvider(widget.info),
                     child: Refund(),
                   ),
                 ),
@@ -237,8 +235,8 @@ class _OrderItemState extends State<OrderItem> {
     return Pannel(
       onTap: () => Navigator.of(context).push(
         CupertinoPageRoute(
-          builder: (_) => ChangeNotifierProvider<OrderProvider>.value(
-            value: orderProvider,
+          builder: (_) => ChangeNotifierProvider<OrderProvider>(
+            create: (_) => OrderProvider(widget.info),
             child: OrderDetail(
               showNurse: Provider.of<StyleProvider>(context).showNurse,
             ),

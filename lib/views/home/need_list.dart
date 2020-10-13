@@ -8,6 +8,7 @@ import 'package:FL_Foreman/res/text_styles.dart';
 import 'package:FL_Foreman/views/home/create_order.dart';
 import 'package:FL_Foreman/views/home/need_page.dart';
 import 'package:FL_Foreman/views/order_list/order_list.dart';
+import 'package:FL_Foreman/widget/base_search_delegate.dart';
 import 'package:FL_Foreman/widget/need_item.dart';
 import 'package:FL_Foreman/widget/state_layout.dart';
 import 'package:flutter/cupertino.dart';
@@ -148,7 +149,7 @@ class _NeedListState extends State<NeedList> with SingleTickerProviderStateMixin
   }
 }
 
-class NeedSearchDelegate extends SearchDelegate {
+class NeedSearchDelegate extends BaseSearchDelegate {
   List<String> suggestions = ['生活护理', '术后护理', '康复护理', '高级护理'];
 
   @override
@@ -156,30 +157,6 @@ class NeedSearchDelegate extends SearchDelegate {
 
   @override
   TextStyle get searchFieldStyle => TextStyle(fontSize: 16);
-
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return [
-      IconButton(
-        icon: Icon(
-          Icons.search,
-        ),
-        onPressed: () {
-          showResults(context);
-        },
-      )
-    ];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(
-      icon: Icon(Icons.arrow_back),
-      onPressed: () {
-        close(context, '');
-      },
-    );
-  }
 
   @override
   Widget buildResults(BuildContext context) {

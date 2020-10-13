@@ -6,6 +6,7 @@ import 'package:FL_Foreman/providers/style_provider.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/svgs.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
+import 'package:FL_Foreman/widget/base_search_delegate.dart';
 import 'package:FL_Foreman/widget/float_action.dart';
 import 'package:FL_Foreman/views/home/nurse_page.dart';
 import 'package:FL_Foreman/widget/nurse_item.dart';
@@ -132,38 +133,11 @@ class _NurseListState extends State<NurseList> with SingleTickerProviderStateMix
   }
 }
 
-class NurseSearchDelegate extends SearchDelegate {
+class NurseSearchDelegate extends BaseSearchDelegate {
   List<String> suggestions = ['特级护理', '一级护理', '二级护理', '三级护理'];
 
   @override
   String get searchFieldLabel => '请输入护工等级、名字';
-
-  @override
-  TextStyle get searchFieldStyle => TextStyle(fontSize: 16);
-
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return [
-      IconButton(
-        icon: Icon(
-          Icons.search,
-        ),
-        onPressed: () {
-          showResults(context);
-        },
-      )
-    ];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(
-      icon: Icon(Icons.arrow_back),
-      onPressed: () {
-        close(context, '');
-      },
-    );
-  }
 
   @override
   Widget buildResults(BuildContext context) {

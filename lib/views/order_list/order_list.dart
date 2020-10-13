@@ -2,6 +2,8 @@ import 'package:FL_Foreman/providers/style_provider.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
 import 'package:FL_Foreman/views/order_list/order_page.dart';
+import 'package:FL_Foreman/views/order_list/order_search_delegate.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -97,6 +99,15 @@ class _OrderListState extends State<OrderList> with SingleTickerProviderStateMix
               ),
               title: Text('我的派单'),
               titleSpacing: 0,
+              actions: [
+                IconButton(
+                  onPressed: () => showSearch(context: context, delegate: OrderSearchDelegate()),
+                  icon: Icon(
+                    Icons.search,
+                    color: ColorCenter.textGrey,
+                  ),
+                )
+              ],
             )
           : null,
       body: Column(
