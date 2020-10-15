@@ -68,8 +68,13 @@ class OrderApi {
     return [];
   }
 
-  static Future<List<Order>> getOrderList(
-      {int status, String nurseId, int page = 1, int pageSize = 5, String parentId}) async {
+  static Future<List<Order>> getOrderList({
+    int status,
+    String nurseId,
+    int page = 1,
+    int pageSize = 5,
+    String parentId,
+  }) async {
     final params = {
       "status": status,
       "pageSize": pageSize,
@@ -81,6 +86,28 @@ class OrderApi {
       params.remove('parentId');
     }
     final res = await Global.http.get('/app-v2-order/list', queryParameters: params);
+    if (res.data['code'] == 200) {
+      return List<Order>.from(res.data['data'].map((json) => Order.fromJson(json)));
+    }
+    return [];
+  }
+
+  static Future<List<Order>> searchOrderList({
+    String nurseId,
+    int page = 1,
+    int pageSize = 5,
+    String keyWords = '',
+    String startTime = '',
+    String endTime = '',
+  }) async {
+    final res = await Global.http.post('/app-v2-order/selectOrderByKeyWords', data: {
+      "keyWords": keyWords,
+      "pageSize": pageSize,
+      "page": page,
+      "startTime": startTime,
+      "endTime": endTime,
+      "parentId": Global.userId,
+    });
     if (res.data['code'] == 200) {
       return List<Order>.from(res.data['data'].map((json) => Order.fromJson(json)));
     }
