@@ -70,7 +70,6 @@ class _ForemanListState extends State<ForemanList> with AutomaticKeepAliveClient
     if (user.id == Global.userId) return ToastUtils.showLong('不能绑定自己');
     final res = await ForemanApi.addForeman(user.id);
     if (res['code'] == 200) refresh();
-    ToastUtils.showLong(res['message']);
   }
 
   @override

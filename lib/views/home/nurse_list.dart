@@ -45,7 +45,6 @@ class _NurseListState extends State<NurseList> with SingleTickerProviderStateMix
     if (res['code'] == 200) {
       Global.eventBus.fire('refreshNurseList');
     }
-    ToastUtils.showLong(res['message']);
   }
 
   Widget buildTabPage() {
