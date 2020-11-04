@@ -128,18 +128,10 @@ class UserApi {
     }
   }
 
-  static Future<String> getMiniQrcode({
-    @required String page,
-    String id,
-  }) async {
+  static Future<String> getMiniQrcode(Map<String, String> data) async {
     try {
-      final res = await Global.http.get('/CreateQRCode/createQRCode', queryParameters: {
-        "page": page,
-        "parentId": Global.userId,
-        "id": id,
-      });
-      final String data = res.data['data'];
-      return data.substring(23);
+      final res = await Global.http.post('/CreateQRCode/createQRCodeV2', data: data);
+      return res.data['data'];
     } catch (e) {
       return '';
     }

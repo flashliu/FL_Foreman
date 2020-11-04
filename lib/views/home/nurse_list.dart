@@ -1,6 +1,5 @@
 import 'package:FL_Foreman/apis/nurse_api.dart';
 import 'package:FL_Foreman/common/global.dart';
-import 'package:FL_Foreman/common/toast_utils.dart';
 import 'package:FL_Foreman/models/nurse_model.dart';
 import 'package:FL_Foreman/providers/style_provider.dart';
 import 'package:FL_Foreman/res/colors.dart';

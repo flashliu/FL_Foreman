@@ -136,7 +136,10 @@ class UserDrawer extends StatelessWidget {
     Navigator.of(context).pop();
     String data;
     if (type == 'mini') {
-      data = await UserApi.getMiniQrcode(page: 'pages/index/index');
+      data = await UserApi.getMiniQrcode({
+        "page": 'pages/Index/Index',
+        "flowId": Global.userId,
+      });
       DialogUtils.showElasticDialog(
         barrierDismissible: true,
         context: parentContext,

@@ -36,7 +36,10 @@ class _NurseDetailState extends State<NurseDetail> with SingleTickerProviderStat
   }
 
   getQrcode() async {
-    String data = await UserApi.getMiniQrcode(page: 'pages/nurseDetail/index', id: widget.info.id);
+    String data = await UserApi.getMiniQrcode({
+      "page": 'pages/nurseDetail/index',
+      "id": widget.info.id,
+    });
     setState(() {
       qrcode = data;
     });
