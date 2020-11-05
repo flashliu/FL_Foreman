@@ -173,6 +173,20 @@ class _OrderItemState extends State<OrderItem> {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Visibility(
+          visible: true,
+          child: OutlineButton(
+            onPressed: () => OrderAction.renew(context: context, info: widget.info),
+            child: Text('续费', style: TextStyles.black_14),
+            borderSide: BorderSide(width: 1, color: Colors.grey),
+            highlightedBorderColor: Colors.grey,
+            color: Colors.white,
+            textColor: ColorCenter.textBlack,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18.0),
+            ),
+          ),
+        ),
+        Visibility(
           visible: widget.info.isRefund != 2 && widget.info.userId == Global.userId,
           child: OutlineButton(
             onPressed: () {
