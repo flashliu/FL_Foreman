@@ -173,8 +173,7 @@ class _OrderItemState extends State<OrderItem> {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Visibility(
-          // visible: widget.info.status == 21,
-          visible: true,
+          visible: widget.info.isRefund != 1 && widget.info.isSettlement != 1 && widget.info.status == 21,
           child: OutlineButton(
             onPressed: () => OrderAction.renew(context: context, info: widget.info),
             child: Text('续费', style: TextStyles.black_14),
@@ -187,6 +186,7 @@ class _OrderItemState extends State<OrderItem> {
             ),
           ),
         ),
+        SizedBox(width: 8),
         Visibility(
           visible: widget.info.isRefund != 2 && widget.info.userId == Global.userId,
           child: OutlineButton(
