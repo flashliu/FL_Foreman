@@ -237,11 +237,11 @@ class UserDrawer extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
-              buildActionCell(
-                icon: Svgs.qr,
-                text: '扫一扫',
-                onTap: () => Global.scanQrcode(context),
-              ),
+              // buildActionCell(
+              //   icon: Svgs.qr,
+              //   text: '扫一扫',
+              //   onTap: () => Global.scanQrcode(context),
+              // ),
               buildActionCell(
                 icon: Svgs.scanner,
                 text: '我的二维码',

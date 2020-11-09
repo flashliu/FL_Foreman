@@ -40,7 +40,6 @@ class _OrderPageState extends State<OrderPage> with AutomaticKeepAliveClientMixi
     super.initState();
     refresh();
     listener = Global.eventBus.on().listen((event) {
-      print('refreshOrderList');
       if (event == 'refreshOrderList') {
         refresh();
       }

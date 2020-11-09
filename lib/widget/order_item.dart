@@ -173,6 +173,7 @@ class _OrderItemState extends State<OrderItem> {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Visibility(
+          // visible: widget.info.status == 21,
           visible: true,
           child: OutlineButton(
             onPressed: () => OrderAction.renew(context: context, info: widget.info),

@@ -1,11 +1,15 @@
 import 'package:FL_Foreman/apis/order_api.dart';
+import 'package:FL_Foreman/common/dialog_util.dart';
 import 'package:FL_Foreman/common/global.dart';
+import 'package:FL_Foreman/common/input_formatter.dart';
 import 'package:FL_Foreman/common/toast_utils.dart';
+import 'package:FL_Foreman/common/wechat_action.dart';
 import 'package:FL_Foreman/models/order_model.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
 import 'package:FL_Foreman/widget/pannel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class OrderAction {
   static settlement({@required BuildContext context, @required String orderId}) async {
@@ -63,6 +67,43 @@ class RenewPanel extends StatefulWidget {
 
 class _RenewPanelState extends State<RenewPanel> {
   DateTime renewTime;
+  TextEditingController priceEditingController;
+
+  @override
+  void initState() {
+    super.initState();
+    priceEditingController = TextEditingController()
+      ..addListener(() {
+        setState(() {});
+      });
+  }
+
+  confirm() async {
+    DialogUtils.showLoading(context: context, msg: '支付中');
+    final res = await OrderApi.renew(
+      renewTime: renewTime.toString().substring(0, 10),
+      renewAmout: priceEditingController.text,
+      orderNo: widget.info.orderNumber,
+      originalTime: widget.info.endTime,
+    );
+    DialogUtils.hideLoading(context);
+    if (res['code'] == 200) {
+      final wechatRes = await WechatAction.payment(
+        appId: res['data']['appid'],
+        partnerId: res['data']['partnerid'],
+        prepayId: res['data']['prepayid'],
+        packageValue: res['data']['packagevalue'],
+        nonceStr: res['data']['noncestr'],
+        timeStamp: int.parse(res['data']['timestamp']),
+        sign: res['data']['sign'],
+      );
+      if (wechatRes.isSuccessful) {
+        Global.eventBus.fire('refreshOrderList');
+        Navigator.of(context).pop();
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -82,7 +123,7 @@ class _RenewPanelState extends State<RenewPanel> {
                   child: Text('续费', style: TextStyles.title),
                 ),
                 SizedBox(height: 20),
-                Text('服务时间', style: TextStyles.title),
+                Text('续费时间', style: TextStyles.title),
                 SizedBox(height: 16),
                 InkWell(
                   onTap: () async {
@@ -116,7 +157,7 @@ class _RenewPanelState extends State<RenewPanel> {
                       children: [
                         Expanded(
                           child: Text(
-                            '服务时间',
+                            '续费时间',
                           ),
                         ),
                         Text(
@@ -138,6 +179,12 @@ class _RenewPanelState extends State<RenewPanel> {
                 ConstrainedBox(
                   constraints: BoxConstraints(maxHeight: 40),
                   child: TextField(
+                    controller: priceEditingController,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp("^[1-9].*")),
+                      FilteringTextInputFormatter.allow(RegExp("[0-9.]")),
+                      MoneyTextInputFormatter(),
+                    ],
                     keyboardType: TextInputType.numberWithOptions(decimal: true),
                     style: TextStyle(fontSize: 14),
                     decoration: InputDecoration(
@@ -157,7 +204,7 @@ class _RenewPanelState extends State<RenewPanel> {
                 ),
                 SizedBox(height: 20),
                 FlatButton(
-                  onPressed: () {},
+                  onPressed: renewTime != null && priceEditingController.text.isNotEmpty ? () => confirm() : null,
                   minWidth: double.infinity,
                   disabledColor: Colors.grey[300],
                   child: Text('确定'),

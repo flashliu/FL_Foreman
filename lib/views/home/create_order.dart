@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:FL_Foreman/apis/order_api.dart';
 import 'package:FL_Foreman/common/dialog_util.dart';
 import 'package:FL_Foreman/common/global.dart';
+import 'package:FL_Foreman/common/input_formatter.dart';
 import 'package:FL_Foreman/common/toast_utils.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
@@ -12,6 +13,7 @@ import 'package:FL_Foreman/widget/pannel.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CreateOrder extends StatefulWidget {
   CreateOrder({Key key}) : super(key: key);
@@ -286,6 +288,11 @@ class _CreateOrderState extends State<CreateOrder> {
                             '请输入',
                             controller: depositController,
                             keyboardType: TextInputType.numberWithOptions(decimal: true),
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(RegExp("^[1-9].*")),
+                              FilteringTextInputFormatter.allow(RegExp("[0-9.]")),
+                              MoneyTextInputFormatter(),
+                            ],
                           ),
                         ],
                       ),
@@ -300,6 +307,11 @@ class _CreateOrderState extends State<CreateOrder> {
                             '请输入',
                             controller: unitPriceController,
                             keyboardType: TextInputType.numberWithOptions(decimal: true),
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(RegExp("^[1-9].*")),
+                              FilteringTextInputFormatter.allow(RegExp("[0-9.]")),
+                              MoneyTextInputFormatter(),
+                            ],
                           ),
                         ],
                       ),
@@ -380,10 +392,16 @@ class _CreateOrderState extends State<CreateOrder> {
     );
   }
 
-  ConstrainedBox buildInput(String hintText, {TextEditingController controller, TextInputType keyboardType}) {
+  ConstrainedBox buildInput(
+    String hintText, {
+    TextEditingController controller,
+    TextInputType keyboardType,
+    List<TextInputFormatter> inputFormatters,
+  }) {
     return ConstrainedBox(
       constraints: BoxConstraints(maxHeight: 40),
       child: TextField(
+        inputFormatters: inputFormatters,
         keyboardType: keyboardType,
         controller: controller,
         style: TextStyle(fontSize: 14),

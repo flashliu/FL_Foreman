@@ -1,6 +1,7 @@
 import 'package:FL_Foreman/apis/user_api.dart';
 import 'package:FL_Foreman/common/dialog_util.dart';
 import 'package:FL_Foreman/common/global.dart';
+import 'package:FL_Foreman/common/input_formatter.dart';
 import 'package:FL_Foreman/common/toast_utils.dart';
 import 'package:FL_Foreman/common/wechat_action.dart';
 import 'package:FL_Foreman/providers/user_provider.dart';
@@ -166,27 +167,6 @@ class _ReflectState extends State<Reflect> {
           ],
         ),
       ),
-    );
-  }
-}
-
-class MoneyTextInputFormatter extends TextInputFormatter {
-  @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
-    String newvalueText = newValue.text;
-    if (newvalueText.contains(".")) {
-      if (newvalueText.lastIndexOf(".") != newvalueText.indexOf(".")) {
-        //输入了2个小数点
-        newvalueText = oldValue.text;
-      } else if (newvalueText.length - 1 - newvalueText.indexOf(".") > 2) {
-        //输入了1个小数点 小数点后两位
-        newvalueText = newvalueText.substring(0, newvalueText.indexOf(".") + 3);
-      }
-    }
-
-    return TextEditingValue(
-      text: newvalueText,
-      selection: new TextSelection.collapsed(offset: newvalueText.length),
     );
   }
 }

@@ -71,6 +71,10 @@ class DialogUtils {
     );
   }
 
+  static hideLoading(BuildContext context) {
+    Navigator.of(context).pop();
+  }
+
   static Future<String> showPaymentPassword({
     @required BuildContext context,
   }) {

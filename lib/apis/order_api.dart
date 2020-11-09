@@ -242,4 +242,20 @@ class OrderApi {
 
     return List<String>.from(res.data['data'].map((e) => e['label']));
   }
+
+  static Future renew({
+    @required String orderNo,
+    @required String renewTime,
+    @required String renewAmout,
+    @required String originalTime,
+  }) async {
+    final res = await Global.http.post('/renew/creatRenewOrder', data: {
+      "renewTime": renewTime,
+      "renewAmout": renewAmout,
+      "orderNo": orderNo,
+      "originalTime": originalTime,
+      "userId": Global.userId,
+    });
+    return res.data;
+  }
 }
