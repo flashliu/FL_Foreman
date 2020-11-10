@@ -3,7 +3,6 @@ import 'package:FL_Foreman/common/dialog_util.dart';
 import 'package:FL_Foreman/common/global.dart';
 import 'package:FL_Foreman/common/input_formatter.dart';
 import 'package:FL_Foreman/common/toast_utils.dart';
-import 'package:FL_Foreman/common/wechat_action.dart';
 import 'package:FL_Foreman/models/order_model.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
@@ -88,19 +87,9 @@ class _RenewPanelState extends State<RenewPanel> {
     );
     DialogUtils.hideLoading(context);
     if (res['code'] == 200) {
-      final wechatRes = await WechatAction.payment(
-        appId: res['data']['appid'],
-        partnerId: res['data']['partnerid'],
-        prepayId: res['data']['prepayid'],
-        packageValue: res['data']['packagevalue'],
-        nonceStr: res['data']['noncestr'],
-        timeStamp: int.parse(res['data']['timestamp']),
-        sign: res['data']['sign'],
-      );
-      if (wechatRes.isSuccessful) {
-        Global.eventBus.fire('refreshOrderList');
-        Navigator.of(context).pop();
-      }
+      await DialogUtils.showQrPay(context: context, qr: res['data']);
+      Global.eventBus.fire('refreshOrderList');
+      Navigator.of(context).pop();
     }
   }
 
@@ -123,7 +112,7 @@ class _RenewPanelState extends State<RenewPanel> {
                   child: Text('续费', style: TextStyles.title),
                 ),
                 SizedBox(height: 20),
-                Text('续费时间', style: TextStyles.title),
+                Text('续费截止时间', style: TextStyles.title),
                 SizedBox(height: 16),
                 InkWell(
                   onTap: () async {
@@ -157,7 +146,7 @@ class _RenewPanelState extends State<RenewPanel> {
                       children: [
                         Expanded(
                           child: Text(
-                            '续费时间',
+                            '续费截止时间',
                           ),
                         ),
                         Text(

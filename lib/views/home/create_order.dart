@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:FL_Foreman/apis/order_api.dart';
 import 'package:FL_Foreman/common/dialog_util.dart';
 import 'package:FL_Foreman/common/global.dart';
@@ -8,7 +6,6 @@ import 'package:FL_Foreman/common/toast_utils.dart';
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
 import 'package:FL_Foreman/widget/label_value.dart';
-import 'package:FL_Foreman/widget/modal_with_close_dialog.dart';
 import 'package:FL_Foreman/widget/pannel.dart';
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter/cupertino.dart';
@@ -83,26 +80,10 @@ class _CreateOrderState extends State<CreateOrder> {
       preferPrice: preferPrice,
       orderType: orderType,
     );
+    DialogUtils.hideLoading(context);
     if (res['code'] == 200) {
       final qr = await OrderApi.getPayQrcode(res['data']['id']);
-      Navigator.of(context).pop();
-      await DialogUtils.showElasticDialog(
-        barrierDismissible: true,
-        context: context,
-        builder: (_) => ModalWithCloseDialog(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.memory(
-                Base64Decoder().convert(qr),
-                fit: BoxFit.cover,
-              ),
-              Text('微信扫码付款', style: TextStyles.grey_12),
-              SizedBox(height: 10)
-            ],
-          ),
-        ),
-      );
+      await DialogUtils.showQrPay(context: context, qr: qr);
       Global.eventBus.fire('refreshNeedList');
       return Navigator.of(context).pop();
     }

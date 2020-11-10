@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:FL_Foreman/res/colors.dart';
 import 'package:FL_Foreman/res/text_styles.dart';
+import 'package:FL_Foreman/widget/modal_with_close_dialog.dart';
 import 'package:FL_Foreman/widget/pannel.dart';
 import 'package:FL_Foreman/widget/password_input.dart';
 import 'package:flutter/cupertino.dart';
@@ -117,6 +120,29 @@ class DialogUtils {
           ),
         );
       },
+    );
+  }
+
+  static Future showQrPay({
+    @required BuildContext context,
+    @required String qr,
+  }) async {
+    return DialogUtils.showElasticDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (_) => ModalWithCloseDialog(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.memory(
+              Base64Decoder().convert(qr),
+              fit: BoxFit.cover,
+            ),
+            Text('微信扫码付款', style: TextStyles.grey_12),
+            SizedBox(height: 10)
+          ],
+        ),
+      ),
     );
   }
 }
