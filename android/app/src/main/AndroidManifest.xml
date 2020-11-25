@@ -88,15 +88,15 @@
             android:name="com.alibaba.app.appsecret"
             android:value="96344a46bce167a8bd4a82b806666019" />
         <!--        Android更新   注意大小写-->
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="uni.UNID9A30E0.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
+<!--        <provider-->
+<!--            android:name="androidx.core.content.FileProvider"-->
+<!--            android:authorities="uni.UNID9A30E0.fileprovider"-->
+<!--            android:exported="false"-->
+<!--            android:grantUriPermissions="true">-->
+<!--            <meta-data-->
+<!--                android:name="android.support.FILE_PROVIDER_PATHS"-->
+<!--                android:resource="@xml/file_paths" />-->
+<!--        </provider>-->
 
     </application>
 </manifest>

@@ -312,7 +312,7 @@ class _ProfitState extends State<Profit> with AutomaticKeepAliveClientMixin {
                     children: [
                       Svgs.withdrawal,
                       SizedBox(width: 8),
-                      Text('我要提现'),
+                      Text('我要划付'),
                       Expanded(
                         child: Align(
                           alignment: Alignment.centerRight,

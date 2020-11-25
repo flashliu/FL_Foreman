@@ -26,7 +26,7 @@ class _ReflectState extends State<Reflect> {
   confirm() async {
     final user = Global.userProvider;
     final amount = textEditingController.text;
-    if (double.parse(amount) > double.parse(user.balance)) return ToastUtils.showShort('最多可提现${user.balance}');
+    if (double.parse(amount) > double.parse(user.balance)) return ToastUtils.showShort('最多可划付${user.balance}');
     final payPassword = await DialogUtils.showPaymentPassword(context: context);
     if (payPassword == null) return;
     final response = await WechatAction.sendAuth();
@@ -68,7 +68,7 @@ class _ReflectState extends State<Reflect> {
           child: Icon(Icons.chevron_left),
           onTap: () => Navigator.of(context).pop(),
         ),
-        title: Text('提现'),
+        title: Text('资金划付'),
         titleSpacing: 0,
       ),
       body: SingleChildScrollView(
@@ -78,7 +78,7 @@ class _ReflectState extends State<Reflect> {
               padding: const EdgeInsets.all(20),
               child: Row(
                 children: [
-                  Text('提现方式', style: TextStyles.black_Bold_16),
+                  Text('划付方式', style: TextStyles.black_Bold_16),
                   SizedBox(width: 74),
                   Expanded(
                     child: Row(
@@ -102,7 +102,7 @@ class _ReflectState extends State<Reflect> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('提现金额', style: TextStyles.black_Bold_16),
+                  Text('划付金额', style: TextStyles.black_Bold_16),
                   TextField(
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp("^[1-9].*")),
@@ -129,7 +129,7 @@ class _ReflectState extends State<Reflect> {
                             children: [
                               TextSpan(text: '全部余额'),
                               TextSpan(text: '￥${user.balance}', style: TextStyle(color: Color(0xFF00A2E6))),
-                              TextSpan(text: '（最低提现1元）'),
+                              TextSpan(text: '（最低划付1元）'),
                             ],
                           ),
                         ),
@@ -143,7 +143,7 @@ class _ReflectState extends State<Reflect> {
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: Text('全部提现', style: TextStyle(color: Color(0xFF00A2E6), fontSize: 12)),
+                          child: Text('全部划付', style: TextStyle(color: Color(0xFF00A2E6), fontSize: 12)),
                         ),
                       ),
                     ],
@@ -154,7 +154,7 @@ class _ReflectState extends State<Reflect> {
                     height: 40,
                     onPressed: amount.isEmpty || double.parse(amount) <= 0 ? null : confirm,
                     disabledColor: Colors.grey[300],
-                    child: Text('确认提现', style: TextStyle(fontWeight: FontWeight.normal)),
+                    child: Text('确认划付', style: TextStyle(fontWeight: FontWeight.normal)),
                     color: ColorCenter.themeColor,
                     textColor: Colors.white,
                     shape: RoundedRectangleBorder(
