@@ -7,34 +7,30 @@ final Tween<double> _primaryTweenFade = Tween<double>(begin: 0, end: 1.0);
 final Tween<double> _secondaryTweenFade = Tween<double>(begin: 1.0, end: 0.0);
 
 /// 动画效果从底部到顶部的参数(primary)
-final Tween<Offset> _primaryTweenSlideFromBottomToTop =
-Tween<Offset>(begin: const Offset(0.0, 1.0), end: Offset.zero);
+final Tween<Offset> _primaryTweenSlideFromBottomToTop = Tween<Offset>(begin: const Offset(0.0, 1.0), end: Offset.zero);
 
 final Tween<Offset> _secondaryTweenSlideFromBottomToTop =
-Tween<Offset>(begin: Offset.zero, end: const Offset(0.0, -1.0));
+    Tween<Offset>(begin: Offset.zero, end: const Offset(0.0, -1.0));
 
 /// 动画效果从顶部到底部的参数(primary)
-final Tween<Offset> _primaryTweenSlideFromTopToBottom =
-Tween<Offset>(begin: const Offset(0.0, -1.0), end: Offset.zero);
+final Tween<Offset> _primaryTweenSlideFromTopToBottom = Tween<Offset>(begin: const Offset(0.0, -1.0), end: Offset.zero);
 
 final Tween<Offset> _secondaryTweenSlideFromTopToBottom =
-Tween<Offset>(begin: Offset.zero, end: const Offset(0.0, 1.0));
+    Tween<Offset>(begin: Offset.zero, end: const Offset(0.0, 1.0));
 
 /// 动画效果从右边到左边的参数(primary)
-final Tween<Offset> _primaryTweenSlideFromRightToLeft =
-Tween<Offset>(begin: const Offset(1.0, 0.0), end: Offset.zero);
+final Tween<Offset> _primaryTweenSlideFromRightToLeft = Tween<Offset>(begin: const Offset(1.0, 0.0), end: Offset.zero);
 
 /// 动画效果从右边到左边的参数(secondary)
 final Tween<Offset> _secondaryTweenSlideFromRightToLeft =
-Tween<Offset>(begin: Offset.zero, end: const Offset(-1.0, 0.0));
+    Tween<Offset>(begin: Offset.zero, end: const Offset(-1.0, 0.0));
 
 /// 动画效果从左边到右边的参数(primary)
-final Tween<Offset> _primaryTweenSlideFromLeftToRight =
-Tween<Offset>(begin: const Offset(-1.0, 0.0), end: Offset.zero);
+final Tween<Offset> _primaryTweenSlideFromLeftToRight = Tween<Offset>(begin: const Offset(-1.0, 0.0), end: Offset.zero);
 
 /// 动画效果从左边到右边的参(secondary)
 final Tween<Offset> _secondaryTweenSlideFromLeftToRight =
-Tween<Offset>(begin: Offset.zero, end: const Offset(1.0, 0.0));
+    Tween<Offset>(begin: Offset.zero, end: const Offset(1.0, 0.0));
 
 /// 动画类型枚举，`SlideRL`,`SlideLR`,`SlideTB`, `SlideBT`, `Fade`
 enum AnimationType {
@@ -83,7 +79,7 @@ class AnimationPageRoute<T> extends PageRoute<T> {
         assert(animationType != null),
         assert(maintainState != null),
         assert(fullscreenDialog != null),
-        assert(opaque),
+        // assert(opaque),
         super(settings: settings, fullscreenDialog: fullscreenDialog);
 
   /// 页面构造
@@ -101,8 +97,7 @@ class AnimationPageRoute<T> extends PageRoute<T> {
   final bool maintainState;
 
   @override
-  Duration get transitionDuration =>
-      animationDuration ?? const Duration(milliseconds: 250);
+  Duration get transitionDuration => animationDuration ?? const Duration(milliseconds: 250);
 
   @override
   Color get barrierColor => null;
@@ -115,31 +110,28 @@ class AnimationPageRoute<T> extends PageRoute<T> {
       nextRoute is AnimationPageRoute && !nextRoute.fullscreenDialog;
 
   @override
-  Widget buildPage(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation) {
+  Widget buildPage(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
     final Widget result = builder(context);
     assert(() {
       if (result == null) {
         throw FlutterError.fromParts(<DiagnosticsNode>[
-          ErrorSummary(
-              'The builder for route "${settings.name}" returned null.'),
+          ErrorSummary('The builder for route "${settings.name}" returned null.'),
           ErrorDescription('Route builders must never return null.')
         ]);
       }
       return true;
     }());
-    return Semantics(
-        scopesRoute: true, explicitChildNodes: true, child: result);
+    return Semantics(scopesRoute: true, explicitChildNodes: true, child: result);
   }
 
   @override
-  Widget buildTransitions(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation, Widget child) {
+  Widget buildTransitions(
+      BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
     final Curve curve = Curves.decelerate, reverseCurve = Curves.decelerate;
     if (pageAffectedType == PageAffectedType.None) return child;
     if (animationType == AnimationType.Fade)
-      return _buildFadeTransitionAnimateWidget(animation, secondaryAnimation,
-          curve, reverseCurve, _primaryTweenFade, _secondaryTweenFade, child);
+      return _buildFadeTransitionAnimateWidget(
+          animation, secondaryAnimation, curve, reverseCurve, _primaryTweenFade, _secondaryTweenFade, child);
     final TextDirection textDirection = Directionality.of(context);
     Tween<Offset> primaryTween = _primaryTweenSlideFromRightToLeft,
         secondaryTween = _secondaryTweenSlideFromRightToLeft;
@@ -154,35 +146,17 @@ class AnimationPageRoute<T> extends PageRoute<T> {
       secondaryTween = _secondaryTweenSlideFromTopToBottom;
     }
     return _buildSlideTransitionAnimateWidget(
-        animation,
-        secondaryAnimation,
-        curve,
-        reverseCurve,
-        primaryTween,
-        secondaryTween,
-        textDirection,
-        child);
+        animation, secondaryAnimation, curve, reverseCurve, primaryTween, secondaryTween, textDirection, child);
   }
 
-  Widget _buildFadeTransitionAnimateWidget(
-      Animation<double> animation,
-      Animation<double> secondaryAnimation,
-      Curve curve,
-      Curve reverseCurve,
-      Tween<double> primaryTween,
-      Tween<double> secondaryTween,
-      Widget child) {
+  Widget _buildFadeTransitionAnimateWidget(Animation<double> animation, Animation<double> secondaryAnimation,
+      Curve curve, Curve reverseCurve, Tween<double> primaryTween, Tween<double> secondaryTween, Widget child) {
     Animation<double> childAnimation = CurvedAnimation(
-      parent: pageAffectedType != PageAffectedType.Exit
-          ? animation
-          : secondaryAnimation,
+      parent: pageAffectedType != PageAffectedType.Exit ? animation : secondaryAnimation,
       curve: curve,
       reverseCurve: reverseCurve,
-    ).drive(pageAffectedType != PageAffectedType.Exit
-        ? primaryTween
-        : secondaryTween);
-    Widget childAnimWidget =
-    FadeTransition(opacity: childAnimation, child: child);
+    ).drive(pageAffectedType != PageAffectedType.Exit ? primaryTween : secondaryTween);
+    Widget childAnimWidget = FadeTransition(opacity: childAnimation, child: child);
     if (pageAffectedType != PageAffectedType.Both) return childAnimWidget;
     return FadeTransition(
         opacity: CurvedAnimation(
@@ -203,16 +177,11 @@ class AnimationPageRoute<T> extends PageRoute<T> {
       TextDirection textDirection,
       Widget child) {
     Animation<Offset> childAnimation = CurvedAnimation(
-      parent: pageAffectedType != PageAffectedType.Exit
-          ? animation
-          : secondaryAnimation,
+      parent: pageAffectedType != PageAffectedType.Exit ? animation : secondaryAnimation,
       curve: curve,
       reverseCurve: reverseCurve,
-    ).drive(pageAffectedType != PageAffectedType.Exit
-        ? primaryTween
-        : secondaryTween);
-    Widget childAnimWidget = SlideTransition(
-        position: childAnimation, textDirection: textDirection, child: child);
+    ).drive(pageAffectedType != PageAffectedType.Exit ? primaryTween : secondaryTween);
+    Widget childAnimWidget = SlideTransition(position: childAnimation, textDirection: textDirection, child: child);
     if (pageAffectedType != PageAffectedType.Both) return childAnimWidget;
     return SlideTransition(
         position: CurvedAnimation(
@@ -243,46 +212,40 @@ class UnitaryAnimationPageRoute<T> extends PageRouteBuilder<T> {
     bool maintainState = true,
     bool fullscreenDialog = false,
   })  : assert(builder != null),
-        assert(pageAffectedType != null &&
-            pageAffectedType != PageAffectedType.Both),
+        assert(pageAffectedType != null && pageAffectedType != PageAffectedType.Both),
         assert(opaque != null),
         assert(barrierDismissible != null),
         assert(maintainState != null),
         assert(fullscreenDialog != null),
         super(
-          settings: settings,
-          pageBuilder: (ctx, _, __) => builder(ctx),
-          transitionsBuilder: (ctx, animation, secondaryAnimation, __) {
-            Widget page = builder(ctx);
-            if (pageAffectedType == PageAffectedType.None) return page;
-            Animation<double> targetAnimation =
-            (pageAffectedType ?? PageAffectedType.Enter) ==
-                PageAffectedType.Enter
-                ? animation
-                : secondaryAnimation;
-            switch (animationType) {
-              case AnimationType.Fade:
-                return _buildFadeTransition(
-                    pageAffectedType, targetAnimation, page);
-              case AnimationType.SlideBottomToTop:
-              case AnimationType.SlideTopToBottom:
-                return _buildVerticalTransition(
-                    pageAffectedType, targetAnimation, animationType, page);
-              case AnimationType.SlideLeftToRight:
-              case AnimationType.SlideRightToLeft:
-                return _buildHorizontalTransition(
-                    pageAffectedType, targetAnimation, animationType, page);
-              default:
-                return page;
-            }
-          },
-          transitionDuration: animationDuration,
-          opaque: opaque,
-          barrierDismissible: barrierDismissible,
-          barrierColor: barrierColor,
-          barrierLabel: barrierLabel,
-          maintainState: maintainState,
-          fullscreenDialog: fullscreenDialog);
+            settings: settings,
+            pageBuilder: (ctx, _, __) => builder(ctx),
+            transitionsBuilder: (ctx, animation, secondaryAnimation, __) {
+              Widget page = builder(ctx);
+              if (pageAffectedType == PageAffectedType.None) return page;
+              Animation<double> targetAnimation = (pageAffectedType ?? PageAffectedType.Enter) == PageAffectedType.Enter
+                  ? animation
+                  : secondaryAnimation;
+              switch (animationType) {
+                case AnimationType.Fade:
+                  return _buildFadeTransition(pageAffectedType, targetAnimation, page);
+                case AnimationType.SlideBottomToTop:
+                case AnimationType.SlideTopToBottom:
+                  return _buildVerticalTransition(pageAffectedType, targetAnimation, animationType, page);
+                case AnimationType.SlideLeftToRight:
+                case AnimationType.SlideRightToLeft:
+                  return _buildHorizontalTransition(pageAffectedType, targetAnimation, animationType, page);
+                default:
+                  return page;
+              }
+            },
+            transitionDuration: animationDuration,
+            opaque: opaque,
+            barrierDismissible: barrierDismissible,
+            barrierColor: barrierColor,
+            barrierLabel: barrierLabel,
+            maintainState: maintainState,
+            fullscreenDialog: fullscreenDialog);
 
   /// 页面构建
   final WidgetBuilder builder;
@@ -294,21 +257,19 @@ class UnitaryAnimationPageRoute<T> extends PageRouteBuilder<T> {
   final AnimationType animationType;
 
   /// 构建Fade效果的动画
-  static FadeTransition _buildFadeTransition(PageAffectedType affectedType,
-      Animation<double> animation, Widget child) =>
+  static FadeTransition _buildFadeTransition(
+          PageAffectedType affectedType, Animation<double> animation, Widget child) =>
       FadeTransition(
           opacity: CurvedAnimation(
             parent: animation,
             curve: Curves.decelerate,
             reverseCurve: Curves.decelerate,
-          ).drive(affectedType == PageAffectedType.Enter
-              ? _primaryTweenFade
-              : _secondaryTweenFade),
+          ).drive(affectedType == PageAffectedType.Enter ? _primaryTweenFade : _secondaryTweenFade),
           child: child);
 
   /// 构建上下向的动画
-  static SlideTransition _buildVerticalTransition(PageAffectedType affectedType,
-      Animation<double> animation, AnimationType animType, Widget child) =>
+  static SlideTransition _buildVerticalTransition(
+          PageAffectedType affectedType, Animation<double> animation, AnimationType animType, Widget child) =>
       SlideTransition(
           position: CurvedAnimation(
             parent: animation,
@@ -316,19 +277,16 @@ class UnitaryAnimationPageRoute<T> extends PageRouteBuilder<T> {
             reverseCurve: Curves.decelerate,
           ).drive(animType == AnimationType.SlideBottomToTop
               ? (affectedType == PageAffectedType.Enter
-              ? _primaryTweenSlideFromBottomToTop
-              : _secondaryTweenSlideFromBottomToTop)
+                  ? _primaryTweenSlideFromBottomToTop
+                  : _secondaryTweenSlideFromBottomToTop)
               : (affectedType == PageAffectedType.Enter
-              ? _primaryTweenSlideFromTopToBottom
-              : _secondaryTweenSlideFromTopToBottom)),
+                  ? _primaryTweenSlideFromTopToBottom
+                  : _secondaryTweenSlideFromTopToBottom)),
           child: child);
 
   /// 构建左右向的动画
   static SlideTransition _buildHorizontalTransition(
-      PageAffectedType affectedType,
-      Animation<double> animation,
-      AnimationType animType,
-      Widget child) =>
+          PageAffectedType affectedType, Animation<double> animation, AnimationType animType, Widget child) =>
       SlideTransition(
           position: CurvedAnimation(
             parent: animation,
@@ -336,10 +294,10 @@ class UnitaryAnimationPageRoute<T> extends PageRouteBuilder<T> {
             reverseCurve: Curves.decelerate,
           ).drive(animType == AnimationType.SlideLeftToRight
               ? (affectedType == PageAffectedType.Enter
-              ? _primaryTweenSlideFromLeftToRight
-              : _secondaryTweenSlideFromLeftToRight)
+                  ? _primaryTweenSlideFromLeftToRight
+                  : _secondaryTweenSlideFromLeftToRight)
               : (affectedType == PageAffectedType.Enter
-              ? _primaryTweenSlideFromRightToLeft
-              : _secondaryTweenSlideFromRightToLeft)),
+                  ? _primaryTweenSlideFromRightToLeft
+                  : _secondaryTweenSlideFromRightToLeft)),
           child: child);
 }

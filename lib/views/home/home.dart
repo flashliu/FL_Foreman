@@ -91,7 +91,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       setupNotificationManager(
         [
           NotificationChannel(
-            "123",
+            "1",
             event.title,
             event.summary,
             importance: AndroidNotificationImportance.MAX,
